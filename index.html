@@ -648,6 +648,14 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 /* levels */
 .levels{background:var(--plum);color:var(--cream);overflow:hidden;height:100svh;min-height:620px;display:flex;align-items:center;padding:84px 0 70px!important}
 .levels>.wrap{width:100%}
+.levels{transition:background-color .8s ease}
+.levels[data-l="0"]{background:#3D1B31}
+.levels[data-l="1"]{background:#A3214F}
+.levels[data-l="1"] .mv{background:rgba(42,18,34,.45)}.levels[data-l="1"] .mv b,.levels[data-l="1"] .lpanel h3 em{color:#FFD3E5}
+.levels[data-l="2"]{background:#4D5C3C}
+.levels[data-l="1"] .h2 em,.levels[data-l="2"] .h2 em{color:#FFD3E5}.levels .h2 em{transition:color .8s}
+.levels[data-l="1"] .cta .btn.rose{background:#fff;color:#A3214F}
+.levels[data-l="2"] .mv{background:rgba(20,28,14,.4)}.levels[data-l="2"] .mv b,.levels[data-l="2"] .lpanel h3 em{color:#F6C9DB}
 .levels .h2{font-size:clamp(34px,4.4vw,60px)}
 .lgrid{margin-top:clamp(20px,4vh,50px)!important}
 .stairs{height:clamp(300px,44vh,420px)!important}
@@ -775,8 +783,8 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
   <nav class="links" id="links" aria-label="Main">
     <a href="#meet" data-go>Meet <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span></a>
     <a href="#spirit" data-go>Her spirit</a>
-    <a href="#nature" data-go>Back to nature</a>
     <a href="#levels" data-go>Levels</a>
+    <a href="#nature" data-go>Back to nature</a>
     <a href="#classes" data-go>Classes</a>
     <a href="#faq" data-go>Questions</a>
     <a href="boots.html">Boots</a>
@@ -857,6 +865,27 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
   </div>
 </section>
 
+<!-- LEVELS -->
+<section class="levels band" id="levels" data-l="0">
+  <div class="wrap">
+    <div class="top2"><div><h2 class="h2">Make your bounce <em>non-stop progress.</em></h2><p class="lead">Feel your bounce grow with each class, each experience, each beat.</p></div></div>
+    <div class="lgrid">
+      <div class="stairs" id="stairs">
+        <div class="lhop" id="lHop" aria-hidden="true"><svg><use href="#bloom"/></svg></div>
+        <button class="step" type="button" data-i="0" aria-pressed="true"><small>Beginner</small><strong>Find your bounce</strong></button>
+        <button class="step" type="button" data-i="1" aria-pressed="false"><small>Intermediate</small><strong>Build your power</strong></button>
+        <button class="step" type="button" data-i="2" aria-pressed="false"><small>Advanced</small><strong>Let it fly</strong></button>
+      </div>
+      <div class="lpanel" aria-live="polite">
+        <h3 id="lT"></h3>
+        <p class="li" id="lI"></p>
+        <div class="moves" id="lM"></div>
+        <div class="cta"><a class="btn rose" href="booking.html">Start your level</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- MANIFESTO -->
 <section class="mani" id="mani" aria-label="Erika's three beats: Land soft. Rise strong. Bloom.">
   <div class="stage" id="maniStage">
@@ -875,27 +904,6 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
     <h2 id="nTitle"><span class="w">Back</span> <span class="w">to</span> <em class="w">nature.</em></h2>
     <p class="nway" id="nWay">From Hungary to Egypt.<br>From Egypt to the world.</p>
     <ul><li>Step outside, into the open sky</li><li>Bounce on grass, sand and open roads</li><li>Feel free, feel alive</li></ul>
-  </div>
-</section>
-
-<!-- LEVELS -->
-<section class="levels band" id="levels">
-  <div class="wrap">
-    <div class="top2"><div><h2 class="h2">Three levels. <em>One bounce.</em></h2><p class="lead">Start soft, grow strong, then fly. <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span> guides every step.</p></div></div>
-    <div class="lgrid">
-      <div class="stairs" id="stairs">
-        <div class="lhop" id="lHop" aria-hidden="true"><svg><use href="#bloom"/></svg></div>
-        <button class="step" type="button" data-i="0" aria-pressed="true"><small>Beginner</small><strong>Find your bounce</strong></button>
-        <button class="step" type="button" data-i="1" aria-pressed="false"><small>Intermediate</small><strong>Build your power</strong></button>
-        <button class="step" type="button" data-i="2" aria-pressed="false"><small>Advanced</small><strong>Let it fly</strong></button>
-      </div>
-      <div class="lpanel" aria-live="polite">
-        <h3 id="lT"></h3>
-        <p class="li" id="lI"></p>
-        <div class="moves" id="lM"></div>
-        <div class="cta"><a class="btn rose" href="booking.html">Start your level</a></div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -1211,7 +1219,7 @@ if(hasG&&!RM){
   const spot=i=>{const b=steps[i],r=b.getBoundingClientRect(),s=st.getBoundingClientRect(),w=hop.offsetWidth;return{x:r.left-s.left+r.width/2-w/2,y:r.top-s.top-w}};
   function show(i,anim){
     const prev=cur;cur=i;const l=L[i];
-    steps.forEach((b,j)=>b.setAttribute('aria-pressed',j===i));
+    steps.forEach((b,j)=>b.setAttribute('aria-pressed',j===i));$('#levels').dataset.l=i;
     $('#lT').innerHTML=l.t;$('#lI').textContent=l.i;$('#lM').innerHTML=l.m.map(m=>'<div class="mv"><b>'+m[0]+'</b><span>'+m[1]+'</span></div>').join('');
     const p=spot(i);
     if(!hasG||RM||!anim||prev<0){hop.style.transform=`translate(${p.x}px,${p.y}px)`;if(hasG&&!RM)idleHop(i);return}
