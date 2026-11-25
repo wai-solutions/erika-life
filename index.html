@@ -802,22 +802,7 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
   <button class="skip" type="button">Skip intro</button>
 </div>
 
-<header class="top" id="nav">
-  <a class="brand" href="#top" data-go aria-label="Erika, home"><svg aria-hidden="true"><use href="#bloom"/></svg><span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span></a>
-  <nav class="links" id="links" aria-label="Main">
-    <a href="#meet" data-go>Meet <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span></a>
-    <a href="#spirit" data-go>Her spirit</a>
-    <a href="#levels" data-go>Levels</a>
-    <a href="#classes" data-go>Classes</a>
-    <a href="#faq" data-go>Questions</a>
-    <a href="#nature" data-go>Back to nature</a>
-    <a href="boots.html">Boots</a>
-    <a class="btn rose mbook" href="booking.html">Book your class</a>
-    <div class="msoc"><a href="https://www.instagram.com/erikaszenes/">Instagram</a><a href="https://www.tiktok.com/@erikaszenes.bouncefit">TikTok</a><a href="https://www.facebook.com/ErikaSzenes">Facebook</a></div>
-  </nav>
-  <button class="menu" id="menu" type="button" aria-expanded="false" aria-controls="links"><i aria-hidden="true"></i><span>Menu</span></button>
-  <a class="btn rose" href="booking.html">Book your class</a>
-</header>
+<div data-site-nav></div><script src="js/site-nav.js"></script>
 
 <div class="stem" aria-hidden="true"><i></i><b><svg><use href="#bloom"/></svg></b></div>
 <div class="cur" aria-hidden="true"></div>
@@ -1019,21 +1004,7 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
 </section>
 </main>
 
-<footer>
-  <div class="wrap">
-    <div>
-      <a class="brand" href="#top" data-go aria-label="Erika, back to top"><svg aria-hidden="true"><use href="#bloom"/></svg><span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span></a>
-      <p style="margin:12px 0 0;max-width:34em"><span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span> Life | Bounce Experiences | Bouncing classes with boots.<br>From Hungary to Egypt, from Egypt to worldwide.<br>Where joy meets power. Where souls go back to nature.</p>
-    </div>
-    <nav aria-label="Footer">
-      <a href="#meet" data-go>Meet <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span></a><a href="#nature" data-go>Back to nature</a><a href="#classes" data-go>Classes</a><a href="#faq" data-go>Questions</a><a href="boots.html">Get your boots</a>
-      <a href="booking.html">Booking</a>
-    </nav>
-    <div>
-      <p style="margin:0">© 2026 <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span> Life</p>
-    </div>
-  </div>
-</footer>
+<div data-site-footer></div>
 
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -1054,25 +1025,20 @@ let lenis=null;
 if(hasG&&!RM&&typeof Lenis!=='undefined'){
   try{lenis=new Lenis({lerp:.085,wheelMultiplier:1});lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);}catch(e){lenis=null}
 }
-$$('[data-go]').forEach(a=>a.addEventListener('click',e=>{
+document.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(!a)return;
   const id=a.getAttribute('href');const t=document.querySelector(id);if(!t)return;e.preventDefault();
   setMenu(false);
   window.__nav=true;clearTimeout(window.__navT);
   const done=()=>{window.__navT=setTimeout(()=>{window.__nav=false},400)};
   if(lenis)lenis.scrollTo(t,{offset:0,duration:1.6,lock:true,force:true,onComplete:done});else{t.scrollIntoView({behavior:RM?'auto':'smooth'});window.__navT=setTimeout(()=>{window.__nav=false},1400)}
-}));
-function setMenu(o){const l=$('#links'),n=$('#nav');if(l.classList.contains('open')===o)return;l.classList.toggle('open',o);clearTimeout(setMenu.t);if(o)n.classList.add('open');else setMenu.t=setTimeout(()=>n.classList.remove('open'),460);$('#menu').setAttribute('aria-expanded',o);$('#menu span').textContent=o?'Close':'Menu';
-  document.body.style.overflow=o?'hidden':'';if(lenis)o?lenis.stop():lenis.start();
-  if(o&&hasG&&!RM)gsap.fromTo('#links > *',{y:-60,opacity:0},{y:0,opacity:1,duration:.8,ease:'bounce.out',stagger:.06,overwrite:true});}
-$('#menu').addEventListener('click',()=>setMenu(!$('#links').classList.contains('open')));
-addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
-$$('#links a:not([data-go])').forEach(a=>a.addEventListener('click',()=>setMenu(false)));
+});
+function setMenu(o){if(window.SiteNav)o?SiteNav.open():SiteNav.close()}
+addEventListener('sitenav',e=>{if(lenis)e.detail.open?lenis.stop():lenis.start()});
 
 /* ---------- nav + stem ---------- */
-const nav=$('#nav');
+
 const onScroll=()=>{
   const y=scrollY,h=document.documentElement.scrollHeight-innerHeight;
-  nav.classList.toggle('solid',y>innerHeight*.8);
   const p=h>0?y/h:0;$('.stem i').style.transform=`scaleY(${p})`;$('.stem b').style.bottom=`calc(${p*100}% - 9px)`;
 };
 addEventListener('scroll',onScroll,{passive:true});onScroll();
