@@ -202,9 +202,6 @@ footer .ek{height:1.7em;vertical-align:-.55em;color:#FBF7F4}
   <div class="acts">
     <button class="btn rose" id="mWa" type="button">Send on WhatsApp</button>
     <p class="wa-hint">WhatsApp opens with your order already written. Attach your screenshot and press send.</p>
-    <button class="btn line" id="mIg" type="button">Copy &amp; send on Instagram</button>
-    <a class="btn line" href="https://m.me/ErikaSzenes" target="_blank" rel="noopener">Send on Facebook Messenger</a>
-    <button class="btn line" id="mCopy" type="button">Copy message</button>
     <button class="btn" id="mClose" type="button" style="background:none">Close</button>
   </div>
 </div></div>
@@ -290,11 +287,9 @@ WhatsApp: ${$('#phone').value.trim()}${$('#notes').value.trim()?'\nNote: '+$('#n
   $('#mDep').textContent=egp(dep);$('#mNum').textContent=PAY;$('#mMsg').textContent=lastMsg;$('#modal').classList.add('on');$('#mClose').focus();
 });
 $('#mCopyNum').addEventListener('click',()=>copyText(PAY.replace(/\s/g,''),'Number copied'));
-$('#mCopy').addEventListener('click',()=>copyText(lastMsg,'Message copied'));
 const WA_NUM=(window.ERIKA_WHATSAPP||'').replace(/\D/g,'');
 function sendWa(msg){const u='https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(msg);const w=window.open(u,'_blank','noopener');if(!w)location.href=u;try{navigator.clipboard.writeText(msg)}catch(e){}}
 $('#mWa').addEventListener('click',()=>sendWa(lastMsg));
-$('#mIg').addEventListener('click',async()=>{await copyText(lastMsg,'Message copied');window.open(IG,'_blank','noopener')});
 $('#mClose').addEventListener('click',()=>$('#modal').classList.remove('on'));
 $('#modal').addEventListener('click',e=>{if(e.target.id==='modal')$('#modal').classList.remove('on')});
 addEventListener('keydown',e=>{if(e.key==='Escape')$('#modal').classList.remove('on')});
