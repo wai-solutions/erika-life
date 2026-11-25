@@ -762,7 +762,7 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 .join p{font-size:clamp(18px,1.6vw,21px);margin:18px auto 32px;max-width:30em}
 .join .row{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
 .join .btn.ghost{box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);background:rgba(255,255,255,.1)}
-.join .petals svg{opacity:.5}
+.join{position:relative;overflow:hidden}.jlogo{position:absolute;left:50%;top:50%;width:min(120vw,1100px);aspect-ratio:1;margin:calc(min(120vw,1100px)/-2) 0 0 calc(min(120vw,1100px)/-2);color:#fff;opacity:.08;pointer-events:none}.jsoc{justify-content:center;margin-top:26px;color:var(--cream)}.jsoc a:hover{background:var(--cream)!important;color:var(--rose)!important;border-color:var(--cream)!important}
 footer{background:var(--plum);color:rgba(251,247,244,.85);padding:56px 0 90px;font-size:15px}
 footer .wrap{display:flex;flex-wrap:wrap;gap:24px 40px;justify-content:space-between;align-items:flex-start}
 footer .brand{color:var(--cream)}
@@ -989,18 +989,16 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
 
 <!-- JOIN -->
 <section class="join band" id="join">
-  <div class="petals" id="joinPetals"></div>
+  <svg class="jlogo" id="jLogo" aria-hidden="true"><use href="#bloom"/></svg>
   <div class="wrap" style="position:relative">
     <div class="big"><svg class="bob pulse" aria-hidden="true"><use href="#bloom"/></svg></div>
-    <h2>Join <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span>'s <em style="color:var(--cream)">daily life.</em></h2>
+    <h2>Join <span style="white-space:nowrap"><span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span>'s</span> <em style="color:var(--cream)">daily life.</em></h2>
     <p>Be part of the community. Bounce with us in the studio, in nature, everywhere.</p>
     <div class="row">
       <a class="btn cream" href="booking.html">Book your class</a>
       <a class="btn ghost" href="boots.html">Get your boots</a>
-      <a class="btn ghost" href="https://www.instagram.com/erikaszenes/">Instagram</a>
-      <a class="btn ghost" href="https://www.tiktok.com/@erikaszenes.bouncefit">TikTok</a>
-      <a class="btn ghost" href="https://www.facebook.com/ErikaSzenes">Facebook</a>
     </div>
+    <div class="soc jsoc"><a href="https://www.instagram.com/erikaszenes/" target="_blank" rel="noopener" aria-label="Erika on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></svg></a><a href="https://www.tiktok.com/@erikaszenes.bouncefit" target="_blank" rel="noopener" aria-label="Erika on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.3 2.2 1.6 3.6 3.9 3.8v3.1c-1.4.1-2.7-.3-3.9-1.1v6.1c0 3.9-3.2 6.1-6.3 5.9-2.9-.2-5.1-2.6-5-5.5.1-3.3 3-5.8 6.4-5.3v3.2c-1.6-.4-3.2.6-3.3 2.1-.1 1.4 1 2.5 2.3 2.5 1.4 0 2.5-1 2.5-2.7V3h3.4z"/></svg></a><a href="https://www.facebook.com/ErikaSzenes" target="_blank" rel="noopener" aria-label="Erika on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.4 21v-7.6h2.6l.4-3h-3V8.5c0-.9.3-1.5 1.5-1.5h1.6V4.3c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.7v3h2.6V21h3.1z"/></svg></a></div>
   </div>
 </section>
 </main>
@@ -1059,7 +1057,6 @@ function petals(box,n,colors){
   return out;
 }
 const hp=petals($('#heroPetals'),22,['#F1CFE0','#E5639A','#FBF7F4','#CC3370']);
-const jp=petals($('#joinPetals'),14,['#FBF7F4','#F1CFE0']);
 
 /* ---------- intro ---------- */
 function introDone(){const i=$('#intro');if(!i||i.dataset.done)return;i.dataset.done=1;
@@ -1104,7 +1101,7 @@ if(hasG&&!RM){
     gsap.to(p.el,{y:-p.d*420,rotation:p.r*2,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
     gsap.to(p.el,{x:`+=${rnd(-14,14)}`,duration:rnd(2.4,4),repeat:-1,yoyo:true,ease:'sine.inOut'});
   });
-  jp.forEach(p=>gsap.fromTo(p.el,{y:p.d*200},{y:-p.d*200,ease:'none',scrollTrigger:{trigger:'.join',start:'top bottom',end:'bottom top',scrub:true}}));
+  gsap.fromTo('#jLogo',{yPercent:-12,rotation:-8,scale:.9},{yPercent:12,rotation:8,scale:1.05,ease:'none',scrollTrigger:{trigger:'.join',start:'top bottom',end:'bottom top',scrub:true}});
   // mouse depth on hero
   const hero=$('.hero');
   hero.addEventListener('pointermove',e=>{
