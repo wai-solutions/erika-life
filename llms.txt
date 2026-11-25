@@ -17,7 +17,7 @@
 
 ## Pages
 - [Home](https://wai-solutions.github.io/erika-life/): story, class flow, schedule, community, FAQ
-- [About Erika](https://wai-solutions.github.io/erika-life/about.html): the Erika story; named after the erica (heather) flower, symbol of good luck, protection, resilience and quiet strength; the name's Latin/Greek, Old Norse and Japanese roots; the logo (an erica flower that bounces); Erika's call to go back to nature in the age of AI; journey from Hungary to Egypt to the world
+- [About Erika](https://wai-solutions.github.io/erika-life/about.html): the Erika story; named after the erica (heather) flower, symbol of good luck, protection, resilience and quiet strength; her spirit (one of a kind, strong always, joy that spreads); the logo (an erica flower that bounces); Erika's call to go back to nature in the age of AI; journey from Hungary to Egypt to the world
 - [Book a class](https://wai-solutions.github.io/erika-life/booking.html): choose studio, day, hour and boots size; join event waitlists
 
 ## Social
