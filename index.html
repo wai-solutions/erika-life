@@ -646,44 +646,68 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 .ncopy .k .ek{height:1.7em;vertical-align:-.55em}
 
 /* levels */
-.levels{background:var(--plum);color:var(--cream);overflow:hidden;height:100svh;min-height:620px;display:flex;align-items:center;padding:84px 0 70px!important}
+.levels{position:relative;overflow:hidden;height:100svh;min-height:600px;display:flex;align-items:center;padding:80px 0 40px!important;background:#F6E6EE;color:var(--plum);transition:background-color .8s ease,color .8s ease}
+.levels[data-l="1"]{background:var(--rose);color:#fff}
+.levels[data-l="2"]{background:var(--plum);color:var(--cream)}
 .levels>.wrap{width:100%}
-.levels{transition:background-color .8s ease}
-.levels[data-l="0"]{background:#3D1B31}
-.levels[data-l="1"]{background:#A3214F}
-.levels[data-l="1"] .mv{background:rgba(42,18,34,.45)}.levels[data-l="1"] .mv b,.levels[data-l="1"] .lpanel h3 em{color:#FFD3E5}
-.levels[data-l="2"]{background:#4D5C3C}
-.levels[data-l="1"] .h2 em,.levels[data-l="2"] .h2 em{color:#FFD3E5}.levels .h2 em{transition:color .8s}
-.levels[data-l="1"] .cta .btn.rose{background:#fff;color:#A3214F}
-.levels[data-l="2"] .mv{background:rgba(20,28,14,.4)}.levels[data-l="2"] .mv b,.levels[data-l="2"] .lpanel h3 em{color:#F6C9DB}
-.levels .h2{font-size:clamp(34px,4.4vw,60px)}
-.lgrid{margin-top:clamp(20px,4vh,50px)!important}
-.stairs{height:clamp(300px,44vh,420px)!important}
-.levels .top2{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px}
-.levels .lead{opacity:.9;margin-top:14px}
-.lgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(30px,5vw,80px);align-items:end;margin-top:clamp(40px,6vw,70px)}
-.stairs{position:relative;height:clamp(340px,46vh,440px);display:flex;gap:12px;align-items:flex-end;padding-top:110px}
-.stairs .step{flex:1 1 0}
-.step{position:relative;border:0;cursor:pointer;border-radius:26px 26px 8px 8px;padding:20px 18px;text-align:left;color:var(--plum);font:inherit;transition:transform .4s cubic-bezier(.3,1.8,.5,1),box-shadow .3s;display:flex;flex-direction:column;justify-content:flex-start}
-.step:nth-of-type(1){height:46%;background:#F1CFE0}.step:nth-of-type(2){height:70%;background:#E5639A;color:#fff}.step:nth-of-type(3){height:94%;background:var(--cream)}
-.step small{font-size:14px;opacity:.8}
-.step strong{font:400 clamp(20px,1.9vw,26px)/1.1 var(--serif);margin-top:4px}
-.step:hover{transform:translateY(-6px)}
-.step[aria-pressed="true"]{box-shadow:0 0 0 3px var(--rose2),0 20px 40px rgba(0,0,0,.3)}
-.lhop{position:absolute;left:0;top:0;width:64px;height:64px;color:var(--rose2);z-index:2;pointer-events:none;filter:drop-shadow(0 8px 10px rgba(0,0,0,.35))}
-.lhop svg{width:100%;height:100%}
-.lpanel h3{font-size:clamp(36px,4.4vw,58px)}
-.lpanel h3 em{color:var(--rose2)}
-.lpanel .li{font:italic 400 22px var(--serif);opacity:.85;margin:8px 0 22px}
-.moves{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.mv{background:var(--plum2);border-radius:20px;padding:16px 18px;cursor:default;transition:transform .35s cubic-bezier(.3,1.8,.5,1),background .3s}
-.mv:hover{transform:translateY(-5px);background:#4A2240}
-.mv b{display:block;font:400 21px var(--serif);color:var(--rose2);margin-bottom:4px}
-.mv span{font-size:15px;opacity:.85}
-.levels .cta{margin-top:26px;display:flex;flex-wrap:wrap;gap:12px}
-@media(max-width:860px){.lgrid{grid-template-columns:minmax(0,1fr);gap:16px}.stairs{height:200px!important;padding-top:70px}.levels{align-items:flex-start;padding-top:76px!important}.levels .h2{font-size:28px}.levels .lead{font-size:16px;margin-top:6px}
- .lpanel h3{font-size:26px}.lpanel .li{font-size:18px;margin:4px 0 12px}.moves{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}.mv{padding:12px 14px;border-radius:16px}.mv b{font-size:18px;margin:0}.mv span{display:none}.levels .cta{margin-top:14px}.lhop{width:46px;height:46px}.step small{font-size:13px;font-weight:500;opacity:1}.step strong{display:none}}
-@media(max-width:480px){.moves{grid-template-columns:minmax(0,1fr)}.step{padding:14px 12px}.step strong{font-size:18px}}
+.lv{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(30px,5vw,80px);align-items:center}
+.levels .h2{font-size:clamp(32px,3.9vw,54px)}
+.levels .h2 em{color:var(--rose);transition:color .8s}
+.levels[data-l="1"] .h2 em,.levels[data-l="1"] .lv-body h3 em{color:#FFD3E5}
+.levels[data-l="2"] .h2 em,.levels[data-l="2"] .lv-body h3 em{color:var(--rose2)}
+.levels .lead{margin-top:10px;opacity:.85;font-size:clamp(16px,1.3vw,19px)}
+/* progress line */
+.lv-track{position:relative;margin:clamp(26px,4.5vh,46px) 0 clamp(18px,3vh,30px);padding-top:52px}
+.lv-line{position:relative;height:4px;border-radius:4px;background:currentColor;opacity:1}
+.lv-line::before{content:"";position:absolute;inset:0;border-radius:4px;background:currentColor;opacity:.18}
+.lv-line{background:none}
+.lv-fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:4px;background:var(--rose)}
+.levels[data-l="1"] .lv-fill{background:#fff}
+.lv-dots{position:absolute;left:0;right:0;top:52px;display:flex;justify-content:space-between;transform:translateY(-50%)}
+.lv-dot{position:relative;width:20px;height:20px;border-radius:50%;border:0;padding:0;cursor:pointer;color:inherit;background:currentColor;opacity:1;transition:background .4s,box-shadow .4s}
+.lv-dot::before{content:"";position:absolute;inset:0;border-radius:50%;background:inherit}
+.lv-dot{background:color-mix(in srgb,currentColor 30%,transparent)}
+.lv-dot.done{background:var(--rose)}
+.levels[data-l="1"] .lv-dot.done{background:#fff}
+.lv-dot[aria-pressed="true"]{box-shadow:0 0 0 6px color-mix(in srgb,currentColor 22%,transparent)}
+.lv-dot span{position:absolute;top:26px;left:50%;transform:translateX(-50%);white-space:nowrap;font:500 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:inherit;opacity:.6;transition:opacity .4s}
+.lv-dot[aria-pressed="true"] span{opacity:1;font-weight:700}
+.lv-dots .lv-dot:first-child span{left:0;transform:none}.lv-dots .lv-dot:last-child span{left:auto;right:0;transform:none}
+.lv-hop{position:absolute;top:0;left:0;width:44px;height:44px;color:var(--rose);pointer-events:none;filter:drop-shadow(0 6px 8px rgba(42,18,34,.25));transition:color .8s}
+.levels[data-l="1"] .lv-hop{color:#fff}.levels[data-l="2"] .lv-hop{color:var(--rose2)}
+.lv-hop svg{width:100%;height:100%}
+/* level text */
+.lv-body{margin-top:clamp(40px,6vh,60px)}
+.lv-k{font:500 13px var(--sans);letter-spacing:.14em;text-transform:uppercase;opacity:.75;margin:0}
+.lv-body h3{font-size:clamp(30px,3.4vw,46px);margin:6px 0 0}
+.lv-body h3 em{color:var(--rose);transition:color .8s}
+.lv-body .li{font:italic 400 clamp(18px,1.6vw,22px) var(--serif);opacity:.85;margin:4px 0 16px}
+.lv-moves{list-style:none;margin:0 0 22px;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.lv-moves li{padding:9px 16px;border-radius:999px;font-size:15px;background:rgba(255,255,255,.75);color:var(--plum)}
+.levels[data-l="1"] .lv-moves li{background:rgba(255,255,255,.16);color:#fff}
+.levels[data-l="2"] .lv-moves li{background:var(--plum2);color:var(--cream)}
+.levels .btn.lv-go{background:var(--rose);color:#fff}
+.levels[data-l="1"] .btn.lv-go{background:#fff;color:var(--rose)}
+/* photos */
+.lv-media{position:relative;height:min(68svh,620px);border-radius:999px 999px 40px 40px;overflow:hidden;background:var(--plum);box-shadow:0 40px 80px -40px rgba(42,18,34,.55)}
+.lv-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;clip-path:inset(100% 0 0 0);transform:scale(1.15);transition:clip-path 1s cubic-bezier(.7,0,.2,1),transform 1.6s cubic-bezier(.2,.7,.2,1)}
+.lv-media img.on{clip-path:inset(0 0 0 0);transform:scale(1);z-index:2}
+.lv-media img.was{clip-path:inset(0 0 0 0);transform:scale(1);z-index:1;transition:none}
+.lv-num{position:absolute;z-index:3;right:22px;bottom:22px;width:92px;height:92px;border-radius:50%;background:var(--cream);color:var(--rose);display:grid;place-items:center;text-align:center;font:italic 400 34px/1 var(--serif);box-shadow:0 14px 30px rgba(42,18,34,.3)}
+.lv-num small{display:block;font:500 10px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--plum);margin-top:4px;font-style:normal}
+@media(max-width:860px){
+ .levels{align-items:flex-start;padding:88px 0 20px!important}
+ .lv{grid-template-columns:minmax(0,1fr);gap:0}
+ .lv-media{order:-1;height:clamp(200px,32svh,400px);border-radius:120px 120px 28px 28px;margin-bottom:14px}
+ .lv-num{width:66px;height:66px;font-size:24px;right:14px;bottom:14px}
+ .levels .h2{font-size:26px}.levels .lead{font-size:15px;margin-top:4px}
+ .lv-track{margin:14px 0 8px;padding-top:44px}.lv-dots{top:44px}.lv-hop{width:36px;height:36px}
+ .lv-dot{width:16px;height:16px}.lv-dot span{font-size:10px;top:22px}
+ .lv-body{margin-top:40px}.lv-body h3{font-size:24px}.lv-body .li{font-size:16px;margin:2px 0 10px}
+ .lv-moves{margin-bottom:14px;gap:6px}.lv-moves li{font-size:13px;padding:7px 12px}
+ .levels .btn.lv-go{min-height:46px}
+}
+@media(max-height:700px) and (max-width:860px){.lv-media{height:24svh}.levels .lead{display:none}}
 
 /* classes */
 .classes{background:var(--plum);color:var(--cream);overflow:hidden}
@@ -867,21 +891,32 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
 
 <!-- LEVELS -->
 <section class="levels band" id="levels" data-l="0">
-  <div class="wrap">
-    <div class="top2"><div><h2 class="h2">Make your bounce <em>non-stop progress.</em></h2><p class="lead">Feel your bounce grow with each class, each experience, each beat.</p></div></div>
-    <div class="lgrid">
-      <div class="stairs" id="stairs">
-        <div class="lhop" id="lHop" aria-hidden="true"><svg><use href="#bloom"/></svg></div>
-        <button class="step" type="button" data-i="0" aria-pressed="true"><small>Beginner</small><strong>Find your bounce</strong></button>
-        <button class="step" type="button" data-i="1" aria-pressed="false"><small>Intermediate</small><strong>Build your power</strong></button>
-        <button class="step" type="button" data-i="2" aria-pressed="false"><small>Advanced</small><strong>Let it fly</strong></button>
+  <div class="wrap lv">
+    <div class="lv-txt">
+      <h2 class="h2">Make your bounce <em>non-stop progress.</em></h2>
+      <p class="lead">Feel your bounce grow with each class, each experience, each beat.</p>
+      <div class="lv-track">
+        <div class="lv-hop" id="lHop" aria-hidden="true"><svg><use href="#bloom"/></svg></div>
+        <div class="lv-line"><i class="lv-fill" id="lFill"></i></div>
+        <div class="lv-dots">
+          <button class="lv-dot" type="button" data-i="0" aria-pressed="true" aria-label="Beginner"><span>Beginner</span></button>
+          <button class="lv-dot" type="button" data-i="1" aria-pressed="false" aria-label="Intermediate"><span>Intermediate</span></button>
+          <button class="lv-dot" type="button" data-i="2" aria-pressed="false" aria-label="Advanced"><span>Advanced</span></button>
+        </div>
       </div>
-      <div class="lpanel" aria-live="polite">
+      <div class="lv-body" aria-live="polite">
+        <p class="lv-k" id="lK"></p>
         <h3 id="lT"></h3>
         <p class="li" id="lI"></p>
-        <div class="moves" id="lM"></div>
-        <div class="cta"><a class="btn rose" href="booking.html">Start your level</a></div>
+        <ul class="lv-moves" id="lM"></ul>
+        <a class="btn lv-go" href="booking.html">Start your level</a>
       </div>
+    </div>
+    <div class="lv-media" id="lMedia">
+      <img class="on" src="img/class-steps.jpg" alt="Coach leading gentle steps in rebound boots" loading="lazy">
+      <img src="img/class-highknees.jpg" alt="Women doing high knees together, laughing" loading="lazy">
+      <img src="img/group-jump.jpg" alt="Three women jumping high together in rebound boots" loading="lazy">
+      <div class="lv-num" id="lNum">01<small>Level</small></div>
     </div>
   </div>
 </section>
@@ -1209,41 +1244,37 @@ if(hasG&&!RM){
     .to({},{duration:.2});
 }
 
-/* ---------- levels: the bloom climbs the steps ---------- */
+/* ---------- levels: photo per level, the bloom bounces along a progress line ---------- */
 (function(){
   const L=[
-    {t:'Beginner. <em>Find your bounce.</em>',i:'Soft knees, steady core, gentle springs.',m:[['Soft Bounce','Small, gentle bounces. Feel the springs.'],['Bounce March','Shift from boot to boot in rhythm.'],['Heel Tap','Tap one heel forward, then switch.'],['Side Step','Step side to side with a light bounce.']]},
-    {t:'Intermediate. <em>Build your power.</em>',i:'Bigger lifts and new directions.',m:[['Knee Lift','Lift one knee, bounce on the other boot.'],['Swing Kick','Hop side to side with a straight-leg kick.'],['Scissor Step','One boot forward, one back, switch.'],['Hip Twist','Hips turn, shoulders stay forward.']]},
-    {t:'Advanced. <em>Let it fly.</em>',i:'Full energy, big music, pure power.',m:[['Star Jump','Feet out, feet in, knees soft.'],['Sprint Knees','Fast knees, arms pumping.'],['Squat to Lift','Sink low, then spring up.'],['Turn Combo','Mix your steps with quarter and half turns.']]}];
-  const steps=$$('.step'),hop=$('#lHop'),st=$('#stairs');let cur=-1,idle=null;
-  const spot=i=>{const b=steps[i],r=b.getBoundingClientRect(),s=st.getBoundingClientRect(),w=hop.offsetWidth;return{x:r.left-s.left+r.width/2-w/2,y:r.top-s.top-w}};
+    {k:'Level 01 · Beginner',t:'Find your <em>bounce.</em>',i:'Soft knees, steady core, gentle springs.',m:['Soft Bounce','Bounce March','Heel Tap','Side Step']},
+    {k:'Level 02 · Intermediate',t:'Build your <em>power.</em>',i:'Bigger lifts and new directions.',m:['Knee Lift','Swing Kick','Scissor Step','Hip Twist']},
+    {k:'Level 03 · Advanced',t:'Let it <em>fly.</em>',i:'Full energy, big music, pure power.',m:['Star Jump','Sprint Knees','Squat to Lift','Turn Combo']}];
+  const sec=$('#levels'),dots=$$('.lv-dot'),hop=$('#lHop'),fill=$('#lFill'),imgs=$$('#lMedia img'),num=$('#lNum'),line=$('.lv-line');
+  let cur=-1,idle=null,prog=0;
+  const hopX=p=>p*(line.offsetWidth)-hop.offsetWidth/2;
+  function place(p){prog=p;fill.style.width=(p*100)+'%';const x=hopX(p);if(hasG&&!RM)gsap.set(hop,{x});else hop.style.transform=`translateX(${x}px)`;dots.forEach((d,j)=>d.classList.toggle('done',p>=j/2-.001))}
+  function bob(i){idle&&idle.kill();if(!hasG||RM)return;idle=gsap.fromTo(hop,{y:0},{y:-[14,24,36][i],duration:[.5,.42,.36][i],repeat:-1,yoyo:true,ease:'power1.out'})}
   function show(i,anim){
-    const prev=cur;cur=i;const l=L[i];
-    steps.forEach((b,j)=>b.setAttribute('aria-pressed',j===i));$('#levels').dataset.l=i;
-    $('#lT').innerHTML=l.t;$('#lI').textContent=l.i;$('#lM').innerHTML=l.m.map(m=>'<div class="mv"><b>'+m[0]+'</b><span>'+m[1]+'</span></div>').join('');
-    const p=spot(i);
-    if(!hasG||RM||!anim||prev<0){hop.style.transform=`translate(${p.x}px,${p.y}px)`;if(hasG&&!RM)idleHop(i);return}
-    idle&&idle.kill();const a=spot(prev),peak=Math.min(a.y,p.y)-90;
-    gsap.timeline({onComplete:()=>idleHop(i)})
-      .set(hop,{x:a.x,y:a.y,transform:''})
-      .to(hop,{scaleY:.75,scaleX:1.2,transformOrigin:'50% 100%',duration:.1})
-      .to(hop,{scaleY:1.1,scaleX:.9,duration:.1})
-      .to(hop,{x:p.x,duration:.6,ease:'none'},'<')
-      .to(hop,{y:peak,duration:.3,ease:'power2.out'},'<')
-      .to(hop,{y:p.y,duration:.3,ease:'power2.in'})
-      .to(hop,{scaleY:.72,scaleX:1.25,duration:.08})
-      .to(hop,{scaleY:1,scaleX:1,duration:.5,ease:'elastic.out(1.2,.35)'});
-    gsap.fromTo('#lT,#lI,.mv',{y:30,opacity:0},{y:0,opacity:1,duration:.6,ease:'back.out(2.2)',stagger:.05});
+    if(i===cur)return;const prev=cur;cur=i;const l=L[i];sec.dataset.l=i;
+    dots.forEach((d,j)=>d.setAttribute('aria-pressed',j===i));
+    $('#lK').textContent=l.k;$('#lT').innerHTML=l.t;$('#lI').textContent=l.i;$('#lM').innerHTML=l.m.map(m=>'<li>'+m+'</li>').join('');
+    num.innerHTML='0'+(i+1)+'<small>Level</small>';
+    imgs.forEach((im,j)=>{im.classList.remove('was');if(j===prev)im.classList.add('was');im.classList.toggle('on',j===i)});
+    if(hasG&&!RM&&anim){gsap.fromTo('#lK,#lT,#lI,#lM li,.lv-go',{y:26,opacity:0},{y:0,opacity:1,duration:.6,ease:'back.out(2)',stagger:.04});gsap.fromTo(num,{scale:.4},{scale:1,duration:.7,ease:'elastic.out(1.2,.4)'})}
+    bob(i);
   }
-  // idle bounce height grows with the level
-  function idleHop(i){idle&&idle.kill();const p=spot(i);gsap.set(hop,{x:p.x,y:p.y});idle=gsap.to(hop,{y:p.y-[16,30,48][i],duration:[.5,.42,.36][i],repeat:-1,yoyo:true,ease:'power1.out'})}
   let LST=null;
-  steps.forEach(b=>b.addEventListener('click',()=>{const i=+b.dataset.i;const L=stepLocks.find(x=>x.st===LST);if(L)L.go(i);else show(i,true)}));
-  show(0,false);
-  addEventListener('resize',()=>{if(hasG&&!RM)idleHop(cur);else{const p=spot(cur);hop.style.transform=`translate(${p.x}px,${p.y}px)`}});
-  if(hasG&&!RM)LST=ScrollTrigger.create({trigger:'#levels',start:'top top',end:'+=200%',pin:true,scrub:true,anticipatePin:1,onEnter:()=>hold(LST,LST.start),onEnterBack:()=>hold(LST,LST.end),onUpdate:st=>{const k=st.progress<.25?0:st.progress<.75?1:2;if(k!==cur)show(k,true)},onRefresh:()=>idleHop(cur)});
-  if(LST)stepLock(LST,[0,.5,1]);
-  if(hasG){    if(!RM){gsap.set('.step',{yPercent:100,opacity:0});const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();gsap.to('.step',{yPercent:0,opacity:1,duration:1,ease:'bounce.out',stagger:.12,onComplete:()=>idleHop(cur)})}},{threshold:.3});io.observe(st);}}
+  dots.forEach(d=>d.addEventListener('click',()=>{const i=+d.dataset.i;const S=stepLocks.find(x=>x.st===LST);if(S)S.go(i);else{show(i,true);place(i/2)}}));
+  show(0,false);place(0);
+  addEventListener('resize',()=>place(prog));
+  if(hasG&&!RM){
+    LST=ScrollTrigger.create({trigger:'#levels',start:'top top',end:'+=200%',pin:true,scrub:true,anticipatePin:1,
+      onEnter:()=>hold(LST,LST.start),onEnterBack:()=>hold(LST,LST.end),
+      onUpdate:st=>{place(st.progress);const k=st.progress<.25?0:st.progress<.75?1:2;show(k,true)},
+      onRefresh:st=>place(st.progress)});
+    stepLock(LST,[0,.5,1]);
+  }
 })();
 
 /* ---------- next class countdown ---------- */
