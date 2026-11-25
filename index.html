@@ -312,12 +312,17 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 :root.hit .pulse{transform:scale(1.08)}
 
 /* intro */
-#intro{position:fixed;inset:0;z-index:100;background:var(--plum);display:grid;place-items:center;color:var(--cream);animation:introfail .01s 5s forwards}
+#intro{position:fixed;inset:0;z-index:100;background:var(--plum);display:grid;place-items:center;color:var(--cream);animation:introfail .01s 7s forwards}
 @keyframes introfail{to{opacity:0;visibility:hidden}}
 #intro .ball{margin:0 auto;width:clamp(90px,12vw,130px);aspect-ratio:1;color:var(--rose2)}
 #intro .ball svg{width:100%;height:100%}
 #intro .shadow{width:110px;height:14px;margin:6px auto 0;border-radius:50%;background:rgba(0,0,0,.35);filter:blur(4px)}
-#intro .say{display:flex;gap:.4em;justify-content:center;margin-top:34px;font:italic 400 clamp(22px,3vw,32px) var(--serif);min-height:1.3em}
+#intro>div{text-align:center;padding:0 24px}
+#intro .welcome{font:italic 400 clamp(20px,2.4vw,28px) var(--serif);opacity:.85;margin-bottom:26px}
+#intro .iwm{width:clamp(200px,26vw,320px);aspect-ratio:1388/590;margin:18px auto 0;color:var(--cream)}
+#intro .iwm svg{width:100%;height:100%}
+#intro .say{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:22px;font:italic 400 clamp(20px,2.6vw,30px)/1.3 var(--serif)}
+#intro .say span:last-child{color:var(--rose2)}
 #intro .say span{opacity:0}
 #intro .skip{position:absolute;bottom:28px;right:28px;background:none;border:0;color:rgba(251,247,244,.7);font:15px var(--sans);cursor:pointer;min-height:44px}
 
@@ -607,9 +612,11 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
 
 <div id="intro" aria-hidden="true">
   <div>
+    <div class="welcome">Welcome to</div>
     <div class="ball"><svg><use href="#bloom"/></svg></div>
     <div class="shadow"></div>
-    <div class="say"><span>Land soft.</span><span>Rise strong.</span><span><em style="color:var(--rose2)">Bloom.</em></span></div>
+    <div class="iwm"><svg><use href="#wm"/></svg></div>
+    <div class="say"><span>Where joy meets power.</span><span>Where souls go back to nature.</span></div>
   </div>
   <button class="skip" type="button">Skip intro</button>
 </div>
@@ -901,20 +908,21 @@ function introDone(){const i=$('#intro');if(!i||i.dataset.done)return;i.dataset.
   heroIn();}
 $('#intro .skip').addEventListener('click',introDone);
 if(hasG&&!RM){
-  const b=$('#intro .ball'),sh=$('#intro .shadow'),says=$$('#intro .say span');
+  const b=$('#intro .ball'),sh=$('#intro .shadow'),says=$$('#intro .say span'),wm=$('#intro .iwm'),wel=$('#intro .welcome');
+  const reveal=[wm,says[0],says[1]];
+  gsap.set(b,{y:-300});gsap.set(sh,{scaleX:.3,opacity:.2});gsap.set(reveal,{opacity:0,y:16});gsap.set(wm,{scale:.85});gsap.set(wel,{opacity:0,y:-12});
   const tl=gsap.timeline({onComplete:introDone});
-  gsap.set(b,{y:-260});gsap.set(sh,{scaleX:.3,opacity:.2});
-  [200,120,60].forEach((h,i)=>{
-    tl.to(b,{y:0,duration:i?.32:.55,ease:'power2.in'},i?'>':0)
-      .to(sh,{scaleX:1,opacity:1,duration:i?.32:.55,ease:'power2.in'},'<')
+  tl.to(wel,{opacity:1,y:0,duration:.5,ease:'power2.out'});
+  [200,130,70].forEach((h,i)=>{
+    tl.to(b,{y:0,duration:i?.34:.55,ease:'power2.in'},i?'>':'-=.1')
+      .to(sh,{scaleX:1,opacity:1,duration:i?.34:.55,ease:'power2.in'},'<')
       .to(b,{scaleY:.78,scaleX:1.15,duration:.08,transformOrigin:'50% 100%'})
-      .to(says[i],{opacity:1,y:0,duration:.4,ease:'back.out(3)'},'<')
+      .to(reveal[i],{opacity:1,y:0,scale:1,duration:.5,ease:'back.out(2.6)'},'<')
       .to(b,{scaleY:1,scaleX:1,duration:.1})
-      .to(b,{y:-h,duration:.3,ease:'power2.out'},'<')
-      .to(sh,{scaleX:.5,opacity:.4,duration:.3,ease:'power2.out'},'<');
+      .to(b,{y:-h,duration:.32,ease:'power2.out'},'<')
+      .to(sh,{scaleX:.5,opacity:.4,duration:.32,ease:'power2.out'},'<');
   });
-  tl.to(b,{y:0,duration:.25,ease:'bounce.out'}).to(sh,{scaleX:1,opacity:1,duration:.25},'<').to({},{duration:.35});
-  gsap.set(says,{y:14});
+  tl.to(b,{y:0,duration:.3,ease:'bounce.out'}).to(sh,{scaleX:1,opacity:1,duration:.3},'<').to({},{duration:.9});
 }else{introDone()}
 
 /* ---------- hero ---------- */
