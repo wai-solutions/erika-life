@@ -537,7 +537,7 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 @media(max-width:760px){.cue{display:none}.hero .bg img{object-position:28% 40%}}
 
 /* statement */
-.state{background:var(--cream)}
+.state{background:var(--cream);min-height:100vh;min-height:100svh;display:flex;align-items:center}.state>.wrap{width:100%}
 .state p{font:400 clamp(30px,4.4vw,60px)/1.18 var(--serif);margin:0;max-width:20em;text-wrap:balance}
 .state p .w{opacity:.14;transition:none}
 .state p em .w{color:var(--rose)}
@@ -815,6 +815,30 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
   </div>
 </section>
 
+<!-- MEET -->
+<section class="meet band" id="meet">
+  <div class="wrap grid">
+    <div class="mcard" id="mcard">
+      <!-- When Erika's portrait arrives: add <img src="img/erika.jpg" alt="Erika Szenes"> here and remove .inner -->
+      <div class="inner">
+        <div class="bl pulse"><svg class="bob" aria-hidden="true"><use href="#bloom"/></svg></div>
+        <div class="wmk"><svg role="img" aria-label="Erika"><use href="#wm"/></svg></div>
+        <div class="sz">Szenes</div>
+        <div class="tag">Where joy meets power.<br>Where souls go back to nature.</div>
+      </div>
+    </div>
+    <div>
+      <h2>Meet <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span>.</h2>
+      <p class="lead">From the stage to the bounce. <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span> grew up in choreography and ballet in Hungary, classical, modern and show ballet, then found her rhythm on Kangoo Jumps. She brought it all to Egypt, to share freedom, joy and power, and to watch it blossom around the world.</p>
+      <div class="facts">
+        <div class="fact"><b data-n="20">20+</b><span>Years in fitness and wellness, coaching to European standards</span></div>
+        <div class="fact"><b data-n="15">15+</b><span>Years bringing her experience from Hungary to Egypt</span></div>
+      </div>
+      <div class="cta"><a class="btn rose" href="booking.html">Bounce with <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span></a><a class="btn line" href="https://www.instagram.com/erikaszenes/">Follow her daily life</a></div>
+    </div>
+  </div>
+</section>
+
 <!-- MOODS -->
 <section class="moods" id="moods" data-m="0">
   <div class="wrap grid">
@@ -864,30 +888,6 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
     <div class="ballm" id="maniBall" aria-hidden="true"><svg><use href="#bloom"/></svg></div>
   </div>
   <p class="small"><span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span>'s three beats</p>
-</section>
-
-<!-- MEET -->
-<section class="meet band" id="meet">
-  <div class="wrap grid">
-    <div class="mcard" id="mcard">
-      <!-- When Erika's portrait arrives: add <img src="img/erika.jpg" alt="Erika Szenes"> here and remove .inner -->
-      <div class="inner">
-        <div class="bl pulse"><svg class="bob" aria-hidden="true"><use href="#bloom"/></svg></div>
-        <div class="wmk"><svg role="img" aria-label="Erika"><use href="#wm"/></svg></div>
-        <div class="sz">Szenes</div>
-        <div class="tag">Where joy meets power.<br>Where souls go back to nature.</div>
-      </div>
-    </div>
-    <div>
-      <h2>Meet <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span>.</h2>
-      <p class="lead">From the stage to the bounce. <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span> grew up in choreography and ballet in Hungary, classical, modern and show ballet, then found her rhythm on Kangoo Jumps. She brought it all to Egypt, to share freedom, joy and power, and to watch it blossom around the world.</p>
-      <div class="facts">
-        <div class="fact"><b data-n="20">20+</b><span>Years in fitness and wellness, coaching to European standards</span></div>
-        <div class="fact"><b data-n="15">15+</b><span>Years bringing her experience from Hungary to Egypt</span></div>
-      </div>
-      <div class="cta"><a class="btn rose" href="booking.html">Bounce with <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span></a><a class="btn line" href="https://www.instagram.com/erikaszenes/">Follow her daily life</a></div>
-    </div>
-  </div>
 </section>
 
 <!-- NATURE -->
@@ -1135,7 +1135,7 @@ if(hasG&&!RM){
     if(n.nodeType===3){const f=document.createDocumentFragment();n.textContent.split(/(\s+)/).forEach(t=>{if(!t)return;if(/^\s+$/.test(t))f.appendChild(document.createTextNode(t));else{const s=document.createElement('span');s.className='w';s.textContent=t;f.appendChild(s)}});n.replaceWith(f)}
     else wrapWords(n)})};
   wrapWords(p);
-  if(hasG&&!RM)gsap.to('#statement .w',{opacity:1,stagger:.08,ease:'none',scrollTrigger:{trigger:p,start:'top 80%',end:'bottom 45%',scrub:true}});
+  if(hasG&&!RM)gsap.to('#statement .w',{opacity:1,stagger:.08,ease:'none',scrollTrigger:{trigger:'#story',start:'top top',end:()=>'+='+Math.round(innerHeight*1.8),pin:true,scrub:.6,anticipatePin:1,invalidateOnRefresh:true}});
   else $$('#statement .w').forEach(w=>w.style.opacity=1);
 })();
 
@@ -1358,7 +1358,8 @@ if(hasG&&!RM){
 
 /* beat removed */
 
-addEventListener('load',()=>hasG&&ScrollTrigger.refresh());
+if(hasG&&ScrollTrigger.sort)ScrollTrigger.sort();
+addEventListener('load',()=>{if(hasG){ScrollTrigger.sort&&ScrollTrigger.sort();ScrollTrigger.refresh()}});
 }
 </script>
 </body>
