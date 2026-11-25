@@ -117,6 +117,14 @@ nav.top .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center
 .boot .pairs{display:flex;gap:5px;margin-top:12px;flex-wrap:wrap}
 .boot .pairs i{width:12px;height:12px;border-radius:50%;background:var(--rose)}
 .boot .pairs i.off{background:#E9DCE2}
+.boot .pairs i.mine{background:transparent;box-shadow:inset 0 0 0 2px var(--rose);animation:pairOut .5s cubic-bezier(.3,1.8,.5,1)}
+@keyframes pairOut{0%{transform:translateY(-10px) scale(1.4);background:var(--rose)}100%{transform:none}}
+.sizechart{margin-top:14px;border:1px solid #EADDE3;border-radius:16px;padding:4px 16px;background:#fff}
+.sizechart summary{cursor:pointer;padding:12px 0;font-weight:500;color:var(--rose-d)}
+.sizechart table{width:100%;border-collapse:collapse;font-size:.92rem;margin:4px 0 12px}
+.sizechart th,.sizechart td{text-align:left;padding:8px 6px;border-top:1px solid #F0E6EA;white-space:nowrap}
+.sizechart th{font-weight:500;color:#7a6470}
+.sizechart .scroll{overflow-x:auto}
 .boot .left{font-weight:500;color:var(--rose-d);font-size:.86rem;margin-top:8px}
 .toggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px;margin-bottom:18px;max-width:100%;background:var(--bg)}
 .toggle button{border:0;background:none;font:500 .95rem var(--bd);padding:10px 18px;border-radius:999px;cursor:pointer;color:var(--mute);transition:all .3s}
@@ -267,7 +275,17 @@ footer a:hover{color:var(--rose)}
             <select id="shoe"><option value="">EU size</option></select>
             <span id="suggest"></span>
           </div>
-          <p class="note">Limited pairs per class. Erika double-checks the fit when you arrive.</p>
+          <details class="sizechart"><summary>Boot size chart</summary>
+            <div class="scroll"><table>
+              <thead><tr><th>Boot size</th><th>EU</th><th>UK</th><th>US women</th><th>US men</th><th>Foot length</th></tr></thead>
+              <tbody>
+                <tr><td><b>S</b></td><td>36–38</td><td>3–5</td><td>5.5–7.5</td><td>4–6</td><td>22.5–24.5 cm</td></tr>
+                <tr><td><b>M</b></td><td>39–41</td><td>6–7.5</td><td>8–10</td><td>6.5–8.5</td><td>25–26.5 cm</td></tr>
+                <tr><td><b>L</b></td><td>42–44</td><td>8–9.5</td><td>10.5–12</td><td>9–10.5</td><td>27–28.5 cm</td></tr>
+              </tbody></table></div>
+            <p class="note" style="margin-top:0">Approximate sizes. Between two sizes? Pick the larger one.</p>
+          </details>
+          <p class="note">Limited pairs per class. Erika confirms your pair when she replies, and double-checks the fit when you arrive.</p>
         </div>
         <div id="ownBox" style="display:none"><p class="note" style="font-size:1rem">Great! Bring your boots and you get the own-boots price </p></div>
       </div>
@@ -425,7 +443,10 @@ function renderTimes(){
     return `<button class="opt${st.time===t.id?' sel':''}" data-time="${t.id}" ${past?'disabled':''}><b>${t.l}</b><small>${past?'Already started':t.v}</small></button>`}).join('');
 }
 function renderBoots(){
-  $('#boots').innerHTML=STOCK.map(b=>`<button class="opt boot${st.boot===b.s?' sel':''}" data-boot="${b.s}" ${b.n?'':'disabled'}><b>Size ${b.s}</b><small>${b.eu}</small><div class="pairs">${Array.from({length:Math.max(b.n,1)},(_,i)=>`<i class="${i<b.n?'':'off'}"></i>`).join('')}</div><div class="left">${b.n===1?'Only 1 pair! ':b.n?b.n+' pairs in stock':'Sold out'}</div></button>`).join('');
+  $('#boots').innerHTML=STOCK.map(b=>{const mine=st.boot===b.s,left=b.n-(mine?1:0);
+    const dots=Array.from({length:Math.max(b.n,1)},(_,i)=>`<i class="${i>=b.n?'off':(mine&&i===b.n-1?'mine':'')}"></i>`).join('');
+    const txt=mine?`Your pair · ${left?left+' left':'last pair'}`:(b.n===1?'Only 1 pair!':b.n?b.n+' pairs in stock':'Sold out');
+    return `<button class="opt boot${mine?' sel':''}" data-boot="${b.s}" ${b.n?'':'disabled'} aria-pressed="${mine}"><b>Size ${b.s}</b><small>${b.eu}</small><div class="pairs">${dots}</div><div class="left">${txt}</div></button>`}).join('');
 }
 function renderPlans(){
   $('#plans').innerHTML=PLANS.filter(p=>!p.boots||p.boots===st.bootMode).map(p=>`<button class="opt plan${st.plan===p.id?' sel':''}" data-plan="${p.id}">${p.flag?`<span class="flag">${p.flag}</span>`:''}<span class="em">${p.em}</span><b>${p.name}</b><small>${p.desc}</small><div class="amt">${p.price.toLocaleString()} <small>${p.unit}</small></div></button>`).join('');
