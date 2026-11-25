@@ -5,8 +5,8 @@
     ['index.html#meet','Meet <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span>'],
     ['index.html#spirit','Her spirit'],
     ['index.html#levels','Levels'],
-    ['index.html#nature','Back to nature'],
     ['index.html#classes','Classes'],
+    ['index.html#nature','Back to nature'],
     ['index.html#faq','Questions'],
     ['boots.html','Boots']
   ];
