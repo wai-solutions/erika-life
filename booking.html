@@ -293,11 +293,12 @@ footer a:hover{color:var(--rose)}
           </details>
           <p class="note">Limited pairs per class. Erika confirms your pair when she replies, and double-checks the fit when you arrive.</p>
         </div>
-        <div id="ownBox" style="display:none"><p class="note" style="font-size:1rem">Great! Bring your boots and you get the own-boots price </p></div>
+        <div id="ownBox" style="display:none"><p class="note" style="font-size:1rem">Great! Bring your boots and bounce with us.</p></div>
       </div>
       <div class="step locked" id="s5">
-        <div class="sh"><div class="num"><span>5</span></div><h2>Choose your plan</h2></div>
-        <div class="grid g2" id="plans"></div>
+        <div class="sh"><div class="num"><span>5</span></div><h2>Your price</h2></div>
+        <div class="grid" id="plans"></div>
+        <p class="note">A special December price for every class, for a limited time only.</p>
       </div>
       <div class="step locked" id="s6">
         <div class="sh"><div class="num"><span>6</span></div><h2>About you</h2></div>
@@ -407,12 +408,7 @@ const TIMES=[{id:'18',l:'6–7 PM',v:'Warm evening vibes'},{id:'19',l:'7–8 PM'
 const STOCK=[{s:'S',eu:'EU 36–37',min:36,max:37,n:2},{s:'M',eu:'EU 38–39',min:38,max:39,n:8},{s:'L',eu:'EU 40–42',min:40,max:42,n:1}];
 const CHART=[{s:'XS',min:33,max:35},{s:'S',min:36,max:37},{s:'M',min:38,max:39},{s:'L',min:40,max:42},{s:'XL',min:43,max:45}];
 const PLANS=[
-  {id:'trial',name:'Trial class',em:'',desc:'First class, boots included',price:500,unit:'EGP',flag:'Start here',first:true,boots:'rent'},
-  {id:'drop',name:'Drop-in',em:'',desc:'One class with Erika’s boots',price:850,unit:'EGP',boots:'rent'},
-  {id:'own',name:'Own-boots drop-in',em:'',desc:'One class, your boots',price:650,unit:'EGP',boots:'own'},
-  {id:'p4',name:'4 classes / month',em:'',desc:'Once a week, every week',price:2800,unit:'EGP / mo'},
-  {id:'p8',name:'8 classes / month',em:'',desc:'Twice a week, fast progress',price:5000,unit:'EGP / mo'},
-  {id:'f30',name:'Founding 30',em:'',desc:'8 classes / month, first 30 members',price:4400,unit:'EGP / mo',flag:'Limited'}
+  {id:'dec',name:'December special',em:'',desc:'One class, Erika’s boots or your own. December 2026 only',price:500,unit:'EGP / class',flag:'Limited time'}
 ];
 const DAYN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],DAYF=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
@@ -495,7 +491,7 @@ document.addEventListener('click',e=>{
   if(o.dataset.date){st.date=o.dataset.date;st.time=null;renderDates();renderTimes();scrollTo('#s3')}
   if(o.dataset.time){st.time=o.dataset.time;renderTimes();scrollTo('#s4')}
   if(o.dataset.boot){st.boot=o.dataset.boot;renderBoots();scrollTo('#s5')}
-  if(o.dataset.plan){st.plan=o.dataset.plan;renderPlans();scrollTo('#s6');if(st.plan==='trial')mini(o)}
+  if(o.dataset.plan){st.plan=o.dataset.plan;renderPlans();scrollTo('#s6');mini(o)}
   unlock();
 });
 $$('#bootMode button').forEach(b=>b.addEventListener('click',()=>{
