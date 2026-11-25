@@ -249,6 +249,7 @@ footer a:hover{color:var(--rose-l)}
 .f-logo{display:block;width:110px;height:113px;fill:var(--rose);margin-bottom:12px}
 .f-tag{font:400 1.05rem var(--sf);color:var(--ink);margin-bottom:10px}
 .mnav .m-logo{width:200px;height:69px;fill:#FBF7F4;margin-bottom:34px}
+.wa-hint{margin:-2px 0 4px;font-size:13px;color:var(--mute,#7a6670);text-align:center}
 </style>
 </head>
 <body>
@@ -363,7 +364,9 @@ footer a:hover{color:var(--rose-l)}
   </div>
   <pre id="mMsg"></pre>
   <div class="acts">
-    <button class="btn btn-pink" id="mIg">Copy &amp; send on Instagram</button>
+    <button class="btn btn-pink" id="mWa">Send on WhatsApp</button>
+    <p class="wa-hint">WhatsApp opens with your booking already written. Attach your screenshot and press send.</p>
+    <button class="btn btn-ghost" id="mIg">Copy &amp; send on Instagram</button>
     <a class="btn btn-ghost" id="mFb" href="https://m.me/ErikaSzenes" target="_blank" rel="noopener">Send on Facebook Messenger</a>
     <button class="btn btn-ghost" id="mCopy">Copy message</button>
   </div>
@@ -519,6 +522,9 @@ function openModal(title,text,msg,emoji,pay){
 }
 async function copy(){try{await navigator.clipboard.writeText(lastMsg);toast('Message copied');return true}catch(e){toast('Select the message and copy it');return false}}
 $('#mCopy').addEventListener('click',copy);
+const WA_NUM=(window.ERIKA_WHATSAPP||'').replace(/\D/g,'');
+function sendWa(msg){const u='https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(msg);const w=window.open(u,'_blank','noopener');if(!w)location.href=u;try{navigator.clipboard.writeText(msg)}catch(e){}}
+$('#mWa').addEventListener('click',()=>sendWa(lastMsg));
 $('#mIg').addEventListener('click',async()=>{await copy();window.open(IG,'_blank','noopener')});
 $('#mFb').addEventListener('click',()=>{copy()});
 $('#payCopy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(PAY_TO.replace(/\s/g,''));$('#payCopy').textContent='Copied'}catch(e){$('#payCopy').textContent=PAY_TO}setTimeout(()=>$('#payCopy').textContent='Copy number',1800)});
