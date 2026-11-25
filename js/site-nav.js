@@ -6,8 +6,8 @@
     ['index.html#spirit','Her spirit'],
     ['index.html#levels','Levels'],
     ['index.html#classes','Classes'],
-    ['index.html#nature','Back to nature'],
     ['index.html#faq','Questions'],
+    ['index.html#nature','Back to nature'],
     ['boots.html','Boots']
   ];
   var css=''+
