@@ -360,7 +360,7 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 @media(max-width:700px){.stem{display:none}}
 
 /* beat button */
-#beat{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);transition:transform .14s cubic-bezier(.3,1.8,.5,1),background .3s;z-index:60;display:flex;align-items:center;gap:12px;min-height:50px;padding:0 20px 0 16px;border:0;border-radius:999px;background:var(--rose);color:#fff;font:500 15px var(--sans);cursor:pointer;box-shadow:0 12px 30px rgba(204,51,112,.4)}
+#beat{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);transition:transform .14s cubic-bezier(.3,1.8,.5,1),background .3s;z-index:60;display:flex;align-items:center;gap:12px;min-height:50px;padding:0 20px 0 16px;border:0;border-radius:999px;background:var(--rose);color:#fff;font:500 15px var(--sans);cursor:pointer;box-shadow:0 0 0 2px rgba(255,255,255,.75),0 12px 30px rgba(42,18,34,.35)}
 #beat .eq{display:flex;gap:3px;align-items:flex-end;height:18px}
 #beat .eq i{width:3px;height:5px;background:#fff;border-radius:2px;transition:height .12s}
 #beat.on .eq i{animation:eq var(--beat) ease-in-out infinite alternate}
@@ -406,7 +406,9 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 .moods{position:relative;overflow:hidden;transition:background .7s,color .7s;background:#F6E6EE;color:var(--plum)}
 .moods[data-m="1"]{background:var(--rose);color:#fff}
 .moods[data-m="2"]{background:var(--plum);color:var(--cream)}
-.moods .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(40px,7vw,110px);align-items:center;min-height:100svh;padding-top:120px;padding-bottom:100px}
+.moods .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(40px,7vw,110px);align-items:center;height:100svh;min-height:600px;padding-top:96px;padding-bottom:80px}
+.moods h2{font-size:clamp(34px,4.4vw,60px)}
+.mline{min-height:0;margin-bottom:6px}
 .moods h2{font-size:clamp(38px,5.2vw,68px)}
 .moods h2 em{color:inherit}
 .chips{display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 30px}
@@ -432,7 +434,7 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 .mburst{position:absolute;left:50%;top:50%;width:0;height:0;z-index:3;pointer-events:none}
 .mburst svg{position:absolute;width:22px;height:28px;margin:-14px 0 0 -11px}
 .mprog{display:flex;gap:6px;margin-top:22px}.mprog i{height:3px;flex:1;border-radius:3px;background:currentColor;opacity:.2;overflow:hidden;position:relative}.mprog i b{position:absolute;inset:0;background:currentColor;transform-origin:left;transform:scaleX(0)}
-@media(max-width:860px){.moods .grid{grid-template-columns:minmax(0,1fr);min-height:0;padding-top:96px;padding-bottom:96px}.mpic{max-width:420px;margin:0 auto;order:-1}.mpic .stamp{left:-10px}}
+@media(max-width:860px){.moods .grid{grid-template-columns:minmax(0,1fr);gap:14px;align-content:start;padding-top:78px;padding-bottom:70px}.mpic{width:100%;aspect-ratio:auto;height:30svh;margin:0;order:-1}.mpic .card{border-radius:28px 28px 110px 28px}.mpic .stamp{left:-8px;top:-8px;width:64px}.mpic .bpm{bottom:10px;right:10px;font-size:13px}.moods h2{font-size:28px}.chips{margin:12px 0 14px;gap:8px}.chip{min-height:44px;padding:0 18px;font-size:19px}.mline{font-size:24px}.move,.mprog{display:none}.moods ul.ticks{gap:6px;margin-top:10px;font-size:15.5px}.moods .btn{margin-top:16px;min-height:46px}}
 
 /* spirit */
 .spirit{background:var(--cream);overflow:hidden}
@@ -679,12 +681,12 @@ footer .ar{font-size:15px;direction:rtl}
 </section>
 
 <!-- MANIFESTO -->
-<section class="mani" id="mani" aria-label="Manifesto: Land soft. Rise strong. Bloom.">
+<section class="mani" id="mani" aria-label="Erika's three beats: Land soft. Rise strong. Bloom.">
   <div class="stage" id="maniStage">
     <div class="words"><span class="wd">Land soft.</span><span class="wd">Rise strong.</span><span class="wd b">Bloom.</span></div>
     <div class="ballm" id="maniBall" aria-hidden="true"><svg><use href="#bloom"/></svg></div>
   </div>
-  <p class="small">The <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span> manifesto</p>
+  <p class="small"><span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span>'s three beats</p>
 </section>
 
 <!-- MEET -->
@@ -931,7 +933,7 @@ if(hasG&&!RM){
     {img:'img/group-flex.jpg',alt:'Three women flexing their arms after class',line:'Strong legs. Strong core. Strong you.',list:['Every jump builds real strength.','Go higher than you thought you could.','Finish proud, every single class.'],move:'The power jump',bpm:126,cta:'Book a powerful class'}
   ];
   M.forEach(m=>{const p=new Image();p.src=m.img});
-  let cur=-1,auto=true,tw=null;
+  let cur=-1;
   function show(i,user){
     if(i===cur)return;cur=i;const m=M[i];
     sec.dataset.m=i;chips.forEach((c,j)=>c.setAttribute('aria-pressed',j===i));
@@ -947,17 +949,18 @@ if(hasG&&!RM){
       const b=$('#mBurst');for(let k=0;k<14;k++){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox','-14 -20 28 36');s.innerHTML='<use href="#bell"/>';s.style.color=['#CC3370','#E5639A','#F1CFE0','#FBF7F4'][k%4];b.appendChild(s);
         const a=rnd(0,Math.PI*2),d=rnd(140,300);gsap.fromTo(s,{x:0,y:0,opacity:1,scale:rnd(.6,1.3)},{x:Math.cos(a)*d,y:Math.sin(a)*d,rotation:rnd(-240,240),opacity:0,duration:rnd(.9,1.5),ease:'power3.out',onComplete:()=>s.remove()})}
     }else{img.src=m.img;img.alt=m.alt}
-    if(user){auto=false;tw&&tw.kill();bars.forEach((x,j)=>x.style.transform=`scaleX(${j===i?1:0})`)}
-    else runBar();
   }
-  function runBar(){if(!auto||!hasG||RM){bars.forEach((x,j)=>x.style.transform=`scaleX(${j===cur?1:0})`);return}
-    bars.forEach((x,j)=>gsap.set(x,{scaleX:j<cur?1:0}));
-    tw=gsap.to(bars[cur],{scaleX:1,duration:60/M[cur].bpm*16,ease:'none',onComplete:()=>{if(auto&&inView)show((cur+1)%3,false)}});}
-  let inView=false;
-  if(hasG)ScrollTrigger.create({trigger:sec,start:'top 60%',end:'bottom 40%',onToggle:st=>{inView=st.isActive;if(inView&&auto&&tw&&!tw.isActive())runBar()}});
-  chips.forEach(c=>c.addEventListener('click',()=>show(+c.dataset.i,true)));
-  chips.forEach(c=>c.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const n=(+c.dataset.i+(e.key==='ArrowRight'?1:2))%3;chips[n].focus();show(n,true)}}));
-  show(0,null);runBar();
+  let ST=null;
+  const idx=p=>p<.25?0:p<.75?1:2;
+  function bars_(p){const f=[p/.25,(p-.25)/.5,(p-.75)/.25];bars.forEach((x,j)=>x.style.transform=`scaleX(${Math.max(0,Math.min(1,f[j]))})`)}
+  chips.forEach(c=>c.addEventListener('click',()=>{const i=+c.dataset.i;if(ST){const y=ST.start+(ST.end-ST.start)*[0,.5,1][i]+1;lenis?lenis.scrollTo(y,{duration:1.1}):scrollTo({top:y,behavior:'smooth'})}else show(i,true)}));
+  chips.forEach(c=>c.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const n=(+c.dataset.i+(e.key==='ArrowRight'?1:2))%3;chips[n].focus();chips[n].click()}}));
+  show(0,null);bars_(0);
+  if(hasG&&!RM){
+    ST=ScrollTrigger.create({trigger:sec,start:'top top',end:'+=200%',pin:true,scrub:true,anticipatePin:1,
+      snap:{snapTo:[0,.5,1],directional:false,duration:{min:.3,max:.7},delay:.1,ease:'power2.inOut'},
+      onUpdate:st=>{bars_(st.progress);const i=idx(st.progress);if(i!==cur)show(i,true)}});
+  }
   if(hasG&&!RM)gsap.from('.mpic',{y:120,rotation:4,opacity:0,duration:1.2,ease:'back.out(1.6)',scrollTrigger:{trigger:sec,start:'top 70%'}});
 })();
 

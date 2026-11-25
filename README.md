@@ -5,7 +5,7 @@ Live: https://wai-solutions.github.io/erika-life/
 Rebound boots fitness dancing classes in Cairo (New Cairo + Heliopolis) with Erika Szenes.
 
 ## What's inside
-- `index.html` — home page (Nov 2026 revamp): bouncing intro, mood picker, spirit, manifesto, Meet Erika, back to nature, three levels, classes, play-the-beat audio
+- `index.html` — home page (Nov 2026 revamp): bouncing intro, mood picker, spirit, three beats (Land soft. Rise strong. Bloom.), Meet Erika, back to nature, three levels, classes, play-the-beat audio
 - `booking.html` — booking page (studio, day, hour, boots size; event waitlists). Sends a prefilled message via Instagram or Messenger, no backend.
 - `js/` — GSAP 3.12.5 + ScrollTrigger and Lenis 1.1.13 (vendored, no build step)
 - `img/` — photos and logo
