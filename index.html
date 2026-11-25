@@ -1067,8 +1067,8 @@ if(hasG&&!RM){
 /* ---------- nature: photo opens to full screen, then zooms ---------- */
 if(hasG&&!RM){
   const img='#nFrame img';
-  const tl=gsap.timeline({scrollTrigger:{trigger:'#nature',start:'top top',end:'+=220%',pin:true,scrub:1}});
-  tl.fromTo('#nFrame',{clipPath:'inset(14% 32% 14% 32% round 400px 400px 40px 40px)'},{clipPath:'inset(0% 0% 0% 0% round 0px 0px 0px 0px)',duration:1,ease:'power2.inOut'},0)
+  const tl=gsap.timeline({scrollTrigger:{trigger:'#nature',start:'top top',end:'+=220%',pin:true,scrub:1,invalidateOnRefresh:true}});
+  tl.fromTo('#nFrame',{clipPath:()=>{const sx=innerWidth<700?18:36,sy=innerWidth<700?16:10;return `inset(${sy}% ${sx}% ${sy}% ${sx}% round ${Math.round(innerWidth*(100-2*sx)/200)}px)`}},{clipPath:'inset(0% 0% 0% 0% round 0px)',duration:1,ease:'power2.inOut'},0)
     .fromTo(img,{scale:1.25},{scale:1,duration:1,ease:'power2.inOut'},0)
     .fromTo('.nveil',{opacity:0},{opacity:1,duration:.6},.5)
     .from('.ncopy .k',{y:30,opacity:0,duration:.3},.9)
