@@ -416,7 +416,7 @@
    LAYOUT : full-bleed chapters, pinned scenes, one horizontal walk, a playable bounce pad */
 :root{color-scheme:light;--cream:#FBF7F4;--sand:#F4E9E1;--rose:#CC3370;--rose2:#E5639A;--lilac:#F1CFE0;--plum:#2A1222;--plum2:#3D1B31;--heath:#667452;--ink:#2A1222;--beat:.517s;--serif:"Playfair Display",Georgia,serif;--sans:"DM Sans",system-ui,sans-serif}
 *{box-sizing:border-box;min-width:0;letter-spacing:normal}
-html{scroll-padding-top:72px}
+html{scroll-padding-top:72px;overflow-x:hidden}
 html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!important}
 body{margin:0;background:var(--cream);color:var(--ink);font:17px/1.6 var(--sans);overflow-x:clip;-webkit-font-smoothing:antialiased}
 img{display:block;max-width:100%}
@@ -457,7 +457,7 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 #intro .say{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:22px;font:italic 400 clamp(20px,2.6vw,30px)/1.3 var(--serif)}
 #intro .say span:last-child{color:var(--rose2)}
 #intro .say span{opacity:0}
-#intro .skip{position:absolute;bottom:28px;right:28px;background:none;border:0;color:rgba(251,247,244,.7);font:15px var(--sans);cursor:pointer;min-height:44px}
+#intro .skip{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);background:none;border:0;color:rgba(251,247,244,.7);font:15px var(--sans);cursor:pointer;min-height:44px}
 
 /* nav */
 .top{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:22px;padding:14px max(4vw,16px);transition:background .4s,box-shadow .4s,color .4s;color:var(--cream)}
