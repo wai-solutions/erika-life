@@ -1,22 +1,23 @@
-# Erika | Bounce Fit Boots
+# Erika Life | Bounce Experiences
 
-> Rebound boots (jumping boots) fitness dancing classes in Cairo, Egypt, coached by Erika Szenes, a Hungarian international fitness coach. Tagline: "Where joy meets power."
+> Rebound boots (jumping boots) fitness classes in Cairo, Egypt, with Hungarian coach Erika Szenes. "Where joy meets power. Where souls go back to nature." From Hungary to Egypt, from Egypt to worldwide.
 
 ## Key facts
-- Brand: Erika | Bounce Fit Boots (also written Boots Bounce Fit, Bounce Fit Boots)
-- Coach: Erika Szenes, Hungarian international fitness coach and former dancer
-- Experience: 20+ years in fitness and wellness, 16+ years on rebound boots, in Cairo since 2012
+- Brand: Erika Life | Bounce Experiences (formerly Erika | Bounce Fit Boots)
+- Coach: Erika Szenes, Hungarian coach; 20+ years in fitness and wellness; background in choreography and classical, modern and show ballet; 15+ years bringing her experience from Hungary to Egypt
 - Languages: English, Hungarian, Arabic
-- What: 60-minute fitness dancing classes on rebound boots (also called jumping boots, bounce boots, bounce fit). All levels; every class starts with basic movements.
-- Music: Masry, Latin and remixes
-- Locations and times (Africa/Cairo time):
-  - New Cairo: Sunday and Tuesday, 6 PM, 7 PM and 8 PM
-  - Heliopolis: Monday and Wednesday, 6 PM, 7 PM and 8 PM
-- Boots: provided in sizes S, M and L; reserve your size when booking
+- What: 60-minute fitness dancing classes on rebound boots (jumping boots, bounce boots). All classes use basic movements.
+- Levels: Beginner "Find your bounce" (soft bounce, bounce march, heel tap, side step); Intermediate "Build your power" (knee lift, swing kick, scissor step, hip twist); Advanced "Let it fly" (star jump, sprint knees, squat to lift, turn combo)
+- Music: Latin, Masry and remixes
+- Price: December 2026 special, 500 EGP per class, limited time
+- Next class: 1 December 2026, 6 PM Cairo time; the venue is shared after booking
+- Studios and times (Africa/Cairo): New Cairo on Sunday and Tuesday; Heliopolis on Monday and Wednesday; 6–7, 7–8 and 8–9 PM
+- Boots: provided in S (EU 36–37), M (EU 38–39) and L (EU 40–42); XS and XL are not in class stock, bring your own; you can always bring your own boots
+- Booking: on the booking page, then pay with InstaPay and send the booking with the transfer screenshot to Erika, who confirms by reply
 
 ## Pages
-- [Home](https://wai-solutions.github.io/erika-life/): the Erika story ("Born from a flower. Made to bounce."), choose your feeling (free, joyful, powerful), Erika's three beats "Land soft. Rise strong. Bloom.", meet Erika, back to nature (from Hungary to Egypt to the world), three class levels (beginner, intermediate, advanced), schedule
-- [Book a class](https://wai-solutions.github.io/erika-life/booking.html): choose studio, day, hour and boots size
+- [Home](https://wai-solutions.github.io/erika-life/): welcome, choose your feeling (free, joyful, powerful), Erika's three beats "Land soft. Rise strong. Bloom.", Meet Erika, back to nature, three levels, next class countdown, FAQ
+- [Book a class](https://wai-solutions.github.io/erika-life/booking.html): studio, day, time, boots size with size chart, December price, name and WhatsApp, InstaPay payment
 
 ## Social
 - Instagram: https://www.instagram.com/erikaszenes/
@@ -24,4 +25,4 @@
 - Facebook: https://www.facebook.com/ErikaSzenes
 
 ## Arabic keywords
-كلاسات ريباوند بوتس، جامبنج بوتس، بوتس القفز، باونس فيت، رقص فتنس، التجمع الخامس، مصر الجديدة، القاهرة
+كلاسات ريباوند بوتس، جامبنج بوتس، بوتس القفز، باونس فيت، رقص فتنس، إريكا لايف، التجمع الخامس، مصر الجديدة، القاهرة
