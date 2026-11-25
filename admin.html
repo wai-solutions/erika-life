@@ -37,37 +37,45 @@ main.wrap{padding-top:26px;padding-bottom:60px}
 .login h2{font:400 30px var(--serif);margin:0 0 6px}
 .login input,.tools input{width:100%;font:16px var(--sans);min-height:48px;border-radius:14px;border:1px solid var(--line);padding:0 14px;background:#FCF9F7;margin:14px 0}
 .err{color:#B3261E;font-size:14px}
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 18px}
-.stat b{display:block;font:400 34px/1.1 var(--serif);color:var(--rose)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-bottom:22px}
+.stat{background:var(--card);padding:18px 20px}
+.stat b{display:block;font:400 32px/1.15 var(--serif);color:var(--ink)}
+.stat b.rose{color:var(--rose)}
 .stat span{font-size:14px;color:var(--mute)}
-.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
-.tabs{display:flex;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px}
-.tabs button{background:transparent;color:var(--ink);min-height:38px}
+h2.sec{font:400 22px var(--serif);margin:28px 0 12px}
+.ins{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px 20px}
+.box h3{font:500 15px var(--sans);margin:0 0 4px;color:var(--mute)}
+.box .big{font:400 24px var(--serif);margin:0 0 12px}
+.bar{display:grid;grid-template-columns:7.5em minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px;margin:7px 0}
+.bar .t{height:10px;border-radius:10px;background:#F3E8EC;overflow:hidden}.bar .t i{display:block;height:100%;border-radius:10px;background:var(--rose)}
+.bar .t i.dim{background:#E3B9CB}
+.bar b{font-weight:500;white-space:nowrap;text-align:right}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:28px 0 12px}
+.tools h2{font:400 22px var(--serif);margin:0 auto 0 0}
+.tabs{display:flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px}
+.tabs button{background:transparent;color:var(--ink);min-height:36px;padding:0 14px;font-size:14px}
 .tabs button[aria-pressed="true"]{background:var(--plum);color:#fff}
-.tools input{margin:0;flex:1 1 220px;max-width:340px;min-height:46px}
-.class{background:var(--card);border:1px solid var(--line);border-radius:24px;margin-bottom:16px;overflow:hidden}
-.ch{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line)}
-.ch h3{font:400 24px var(--serif);margin:0}
-.ch .where{color:var(--mute);font-size:15px}
-.ch .count{margin-left:auto;font-weight:500}
-.meters{display:flex;flex-wrap:wrap;gap:8px;padding:12px 20px;background:#FCF7F9;border-bottom:1px solid var(--line)}
-.m{font-size:14px;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);white-space:nowrap}
-.m.full{background:var(--rose);color:#fff;border-color:var(--rose)}
-.m i{font-style:normal;color:var(--mute)}.m.full i{color:#fff}
-.p{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto auto;gap:10px 16px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line)}
+.tools input{margin:0;width:220px;min-height:40px;font-size:15px}
+.class{background:var(--card);border:1px solid var(--line);border-radius:18px;margin-bottom:12px;overflow:hidden}
+.ch{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--line)}
+.ch h3{font:400 20px var(--serif);margin:0}
+.ch .where{color:var(--mute);font-size:14px}
+.ch .count{margin-left:auto;font-size:14px;color:var(--mute)}
+.p{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 5.5em auto;gap:8px 14px;align-items:center;padding:11px 18px;border-bottom:1px solid var(--line);font-size:15px}
 .p:last-child{border-bottom:0}
 .p .nm{font-weight:500}
 .p .sub{font-size:13px;color:var(--mute)}
-.p .notes{grid-column:1/-1;font-size:14px;background:#FCF9F7;border-radius:12px;padding:8px 12px}
-.p a.wa{color:var(--rose-d);font-weight:500;text-decoration:none;white-space:nowrap}
-.tag{display:inline-block;font-size:12px;padding:2px 9px;border-radius:999px;background:var(--blush);color:var(--rose-d);margin-left:6px;white-space:nowrap}
-.boot{font:400 20px var(--serif);white-space:nowrap}
+.p .notes{grid-column:1/-1;font-size:13px;color:var(--mute)}
+.p a.wa{color:var(--rose-d);text-decoration:none;white-space:nowrap}
+.tag{font-size:12px;color:var(--rose-d);margin-left:6px;white-space:nowrap}
+.boot{white-space:nowrap}
 .paid{background:#fff;color:var(--ink);border-color:var(--line)}
 .paid[aria-pressed="true"]{background:var(--ok);color:#fff;border-color:var(--ok)}
+.x{background:none;border:0;color:var(--mute);min-height:36px;padding:0 6px;font-size:13px;text-decoration:underline}
 .p.cancelled{opacity:.45}.p.cancelled .nm{text-decoration:line-through}
-.empty{text-align:center;color:var(--mute);padding:40px 0}
-@media(max-width:700px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.p{grid-template-columns:minmax(0,1fr) auto}.p .acts{grid-column:1/-1;display:flex;gap:8px}.ch .count{margin-left:0}}
+.empty{text-align:center;color:var(--mute);padding:30px 0}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.ins{grid-template-columns:minmax(0,1fr)}.p{grid-template-columns:minmax(0,1fr) auto}.p .acts{grid-column:1/-1;display:flex;gap:8px;align-items:center}.tools input{width:100%}.bar{grid-template-columns:6.5em minmax(0,1fr) auto}}
 </style>
 </head>
 <body>
@@ -99,15 +107,12 @@ function waLink(n){let d=String(n).replace(/\D/g,'');if(d.startsWith('01'))d='2'
 
 function sample(){
   SAMPLE=true;
-  const rows=[
-    ['A1B2C3','2026-11-26 10:12','New Cairo','2026-12-01','18','M','Nour Hassan','010 1234 5678','Yes, first time!','Coming with my sister','500','yes','booked'],
-    ['D4E5F6','2026-11-26 11:40','New Cairo','2026-12-01','18','S','Salma Adel','011 2233 4455','I’ve tried before','','500','no','booked'],
-    ['G7H8J9','2026-11-27 09:05','New Cairo','2026-12-01','18','own','Mariam Fawzy','012 9876 5432','Yes, first time!','Knee was injured last year','500','no','booked'],
-    ['K1L2M3','2026-11-27 18:22','Heliopolis','2026-12-02','19','L','Dina Samir','015 5544 3322','I’ve tried before','','500','yes','booked'],
-  ];
-  return rows.map(r=>({id:r[0],created:r[1],studio:r[2],date:r[3],time:r[4],classKey:`${r[2]}|${r[3]}|${r[4]}`,boots:r[5],name:r[6],whatsapp:r[7],first:r[8],notes:r[9],price:r[10],paid:r[11],status:r[12]}));
+  const names=['Nour Hassan','Salma Adel','Mariam Fawzy','Dina Samir','Hana Mostafa','Yasmin Ali','Farida Kamal','Laila Omar','Rana Tarek','Mai Sherif','Aya Nabil','Jana Wael','Noha Fathy','Malak Ehab'];
+  const cls=[['New Cairo','2026-12-01','18'],['New Cairo','2026-12-01','19'],['Heliopolis','2026-12-02','19'],['Heliopolis','2026-12-02','20'],['New Cairo','2026-12-06','19'],['Heliopolis','2026-12-07','18']];
+  const boots=['M','M','S','own','M','L','M','S','M','own','M','S','M','M'];
+  const hrs=['21:10','20:45','13:05','22:30','21:55','09:40','19:20','21:35','12:15','22:05','20:10','08:55','21:40','17:30'];
+  return names.map((n,k)=>{const c=cls[k%cls.length];return {id:'S'+String(100+k),created:`2026-11-${String(20+(k%6)).padStart(2,'0')} ${hrs[k]}`,studio:c[0],date:c[1],time:c[2],classKey:c.join('|'),boots:boots[k],name:n,whatsapp:'01'+String(k%3)+' '+String(1000+k*37).slice(0,4)+' '+String(5000+k*91).slice(0,4),first:k%2?'I’ve tried before':'Yes, first time!',notes:k===2?'Knee was injured last year':'',price:'500',paid:k%3?'yes':'no',status:k===9?'cancelled':'booked'}});
 }
-
 async function load(){
   if(!API){DATA=sample();render();return}
   if(!KEY){login();return}
@@ -125,50 +130,71 @@ function login(msg){
   $('#key').focus();
 }
 
+const money=n=>Math.round(n).toLocaleString('en-US')+' EGP';
+const bars=(items,fmt,dimKey)=>{const mx=Math.max(1,...items.map(x=>x.v));return items.map(x=>`<div class="bar"><span>${esc(x.l)}</span><span class="t"><i class="${x.dim?'dim':''}" style="width:${x.v/mx*100}%"></i></span><b>${esc(fmt?fmt(x.v):x.v)}</b></div>`).join('')};
+const top=items=>items.slice().sort((a,b)=>b.v-a.v)[0];
 function render(){
   $('#out').hidden=!API;
   const t=today();
-  let rows=DATA.slice();
-  const q=Q.toLowerCase();
+  const live=DATA.filter(r=>r.status!=='cancelled');
+  const price=r=>+String(r.price).replace(/[^\d.]/g,'')||0;
+  const paidRev=live.filter(r=>r.paid==='yes').reduce((a,r)=>a+price(r),0);
+  const allRev=live.reduce((a,r)=>a+price(r),0);
+  const up=live.filter(r=>r.date>=t);
+  const unpaid=live.filter(r=>r.paid!=='yes');
+  const next=up.map(r=>r.date+'|'+r.time).sort()[0];
+  // insights
+  const places=[...new Set(live.map(r=>r.studio))].map(p=>{const rs=live.filter(r=>r.studio===p);return {l:p,v:rs.reduce((a,r)=>a+price(r),0),n:rs.length}}).sort((a,b)=>b.v-a.v);
+  const sizes=['S','M','L','own'].map(z=>({l:z==='own'?'Own boots':'Size '+z,v:live.filter(r=>r.boots===z).length}));
+  const slots=Object.keys(TIMES).map(k=>({l:TIMES[k],v:live.filter(r=>r.time===k).length}));
+  const buckets=[['Morning',6,12],['Afternoon',12,17],['Evening',17,21],['Night',21,30]].map(([l,a,b])=>({l,v:live.filter(r=>{let h=+String(r.created).slice(11,13);if(h<6)h+=24;return h>=a&&h<b}).length}));
+  const hours={};live.forEach(r=>{const h=+String(r.created).slice(11,13);if(!isNaN(h))hours[h]=(hours[h]||0)+1});
+  const ph=Object.entries(hours).sort((a,b)=>b[1]-a[1])[0];
+  const hr=h=>{h=+h;const ap=h<12?'AM':'PM',x=h%12||12;return x+' '+ap};
+  const wd={};live.forEach(r=>{const d=new Date(String(r.created).slice(0,10)+'T00:00');if(!isNaN(d))wd[d.getDay()]=(wd[d.getDay()]||0)+1});
+  const pd=Object.entries(wd).sort((a,b)=>b[1]-a[1])[0];
+  const topSize=top(sizes),topSlot=top(slots);
+  // classes list
+  let rows=DATA.slice();const q=Q.toLowerCase();
   if(q)rows=rows.filter(r=>[r.name,r.whatsapp,r.studio,r.notes,r.id].join(' ').toLowerCase().includes(q));
   rows=rows.filter(r=>VIEW==='all'||(VIEW==='up'?r.date>=t:r.date<t));
-  const live=DATA.filter(r=>r.status!=='cancelled');
-  const up=live.filter(r=>r.date>=t);
-  const nextDate=up.map(r=>r.date+'|'+r.time).sort()[0];
-  const unpaid=up.filter(r=>r.paid!=='yes').length;
-  const firsts=up.filter(r=>/first/i.test(r.first)).length;
-  // group by class
-  const g={};rows.forEach(r=>{(g[r.classKey]=g[r.classKey]||{key:r.classKey,studio:r.studio,date:r.date,time:r.time,list:[]}).list.push(r)});
+  const g={};rows.forEach(r=>{(g[r.classKey]=g[r.classKey]||{studio:r.studio,date:r.date,time:r.time,list:[]}).list.push(r)});
   const groups=Object.values(g).sort((a,b)=>VIEW==='past'?(b.date+b.time).localeCompare(a.date+a.time):(a.date+a.time).localeCompare(b.date+b.time));
   $('#app').innerHTML=`
-  ${SAMPLE?`<div class="note"><b>Sample data.</b> These bookings are examples so you can see how the panel works. Connect Erika’s Google Sheet (admin-setup/SETUP.md) to see real bookings.</div>`:''}
+  ${SAMPLE?`<div class="note"><b>Sample data.</b> Example bookings so you can see how it works. Connect Erika’s Google Sheet (admin-setup/SETUP.md) to see real ones.</div>`:''}
   <div class="stats">
-    <div class="stat"><b>${up.length}</b><span>Upcoming bookings</span></div>
-    <div class="stat"><b style="font-size:24px;line-height:1.5">${nextDate?esc(nice(nextDate.split('|')[0])):'—'}</b><span>${nextDate?esc(TIMES[nextDate.split('|')[1]]||''):'Next class'}${nextDate?' · next class':''}</span></div>
-    <div class="stat"><b>${unpaid}</b><span>Waiting for payment</span></div>
-    <div class="stat"><b>${firsts}</b><span>First-time bouncers</span></div>
+    <div class="stat"><b class="rose">${money(paidRev)}</b><span>Revenue received · ${money(allRev)} booked</span></div>
+    <div class="stat"><b>${live.length}</b><span>Bookings · ${up.length} upcoming</span></div>
+    <div class="stat"><b>${unpaid.length}</b><span>Waiting for payment · ${money(unpaid.reduce((a,r)=>a+price(r),0))}</span></div>
+    <div class="stat"><b style="font-size:22px;line-height:1.45">${next?esc(nice(next.split('|')[0])):'—'}</b><span>${next?'Next class · '+esc(TIMES[next.split('|')[1]]||''):'No upcoming class'}</span></div>
   </div>
-  <div class="tools">
+  <h2 class="sec">Insights</h2>
+  <div class="ins">
+    <div class="box"><h3>Revenue by place</h3><p class="big">${places[0]?esc(places[0].l)+' leads':'No bookings yet'}</p>${bars(places,money)}</div>
+    <div class="box"><h3>When people book</h3><p class="big">${ph?`Around ${hr(ph[0])}${pd?', on '+DAYF[pd[0]]+'s':''}`:'—'}</p>${bars(buckets)}</div>
+    <div class="box"><h3>Most booked boots</h3><p class="big">${topSize&&topSize.v?esc(topSize.l):'—'}</p>${bars(sizes.map(x=>({...x,dim:x.l==='Own boots'})))}</div>
+    <div class="box"><h3>Favourite class time</h3><p class="big">${topSlot&&topSlot.v?esc(topSlot.l):'—'}</p>${bars(slots)}</div>
+  </div>
+  <div class="tools"><h2>Classes</h2>
     <div class="tabs" role="group" aria-label="Show">${[['up','Upcoming'],['past','Past'],['all','All']].map(([v,l])=>`<button type="button" data-v="${v}" aria-pressed="${VIEW===v}">${l}</button>`).join('')}</div>
-    <input id="q" type="search" placeholder="Search name, number, notes" aria-label="Search bookings" value="${esc(Q)}">
+    <input id="q" type="search" placeholder="Search" aria-label="Search bookings" value="${esc(Q)}">
   </div>
-  ${groups.length?groups.map(cls).join(''):`<p class="empty">${DATA.length?'No bookings match.':'No bookings yet. They will appear here as soon as someone books.'}</p>`}`;
+  ${groups.length?groups.map(cls).join(''):`<p class="empty">${DATA.length?'No bookings here.':'No bookings yet. They appear here as soon as someone books.'}</p>`}`;
   document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{VIEW=b.dataset.v;render()}));
   const qi=$('#q');qi.addEventListener('input',()=>{Q=qi.value;const p=qi.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(p,p)});
   document.querySelectorAll('[data-paid]').forEach(b=>b.addEventListener('click',()=>update(b.dataset.paid,{paid:b.getAttribute('aria-pressed')!=='true'})));
   document.querySelectorAll('[data-cancel]').forEach(b=>b.addEventListener('click',()=>{const r=DATA.find(x=>x.id===b.dataset.cancel);const c=r.status==='cancelled';if(!c&&!confirmInline(b))return;update(r.id,{status:c?'booked':'cancelled'})}));
 }
-function confirmInline(b){if(b.dataset.sure)return true;b.dataset.sure='1';b.textContent='Tap again to cancel';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='Cancel'}},3000);return false}
+function confirmInline(b){if(b.dataset.sure)return true;b.dataset.sure='1';b.textContent='Tap again';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='Cancel'}},3000);return false}
 function cls(c){
   const live=c.list.filter(r=>r.status!=='cancelled');
-  const meters=Object.keys(STOCK).map(s=>{const u=live.filter(r=>r.boots===s).length;return `<span class="m${u>=STOCK[s]?' full':''}">Size ${s} <b>${u}</b><i> / ${STOCK[s]}</i></span>`}).join('')+`<span class="m">Own boots <b>${live.filter(r=>r.boots==='own').length}</b></span>`;
-  return `<section class="class"><div class="ch"><h3>${esc(nice(c.date))} · ${esc(TIMES[c.time]||c.time)}</h3><span class="where">${esc(c.studio)}</span><span class="count">${live.length} booked</span></div>
-  <div class="meters">${meters}</div>
+  const boots=Object.keys(STOCK).map(s=>`${s} ${live.filter(r=>r.boots===s).length}/${STOCK[s]}`).join(' · ')+` · Own ${live.filter(r=>r.boots==='own').length}`;
+  return `<section class="class"><div class="ch"><h3>${esc(nice(c.date))} · ${esc(TIMES[c.time]||c.time)}</h3><span class="where">${esc(c.studio)}</span><span class="count">${live.length} booked · Boots ${esc(boots)}</span></div>
   ${c.list.sort((a,b)=>a.created.localeCompare(b.created)).map(r=>`<div class="p${r.status==='cancelled'?' cancelled':''}">
-    <div><div class="nm">${esc(r.name)}${/first/i.test(r.first)?'<span class="tag">First bounce</span>':''}</div><div class="sub">Ref ${esc(r.id)} · booked ${esc(r.created)}</div></div>
-    <div><a class="wa" href="${esc(waLink(r.whatsapp))}" target="_blank" rel="noopener">${esc(r.whatsapp)}</a><div class="sub">WhatsApp</div></div>
-    <div class="boot">${r.boots==='own'?'<span style="font-size:15px">Own boots</span>':'Size '+esc(r.boots)}</div>
-    <div class="acts"><button class="small paid" type="button" data-paid="${esc(r.id)}" aria-pressed="${r.paid==='yes'}">${r.paid==='yes'?'Paid':'Mark paid'}</button> <button class="small ghost" type="button" data-cancel="${esc(r.id)}">${r.status==='cancelled'?'Restore':'Cancel'}</button></div>
+    <div><span class="nm">${esc(r.name)}</span>${/first/i.test(r.first)?'<span class="tag">First bounce</span>':''}<div class="sub">Ref ${esc(r.id)}</div></div>
+    <a class="wa" href="${esc(waLink(r.whatsapp))}" target="_blank" rel="noopener">${esc(r.whatsapp)}</a>
+    <span class="boot">${r.boots==='own'?'Own boots':'Size '+esc(r.boots)}</span>
+    <div class="acts"><button class="small paid" type="button" data-paid="${esc(r.id)}" aria-pressed="${r.paid==='yes'}">${r.paid==='yes'?'Paid':'Mark paid'}</button><button class="x" type="button" data-cancel="${esc(r.id)}">${r.status==='cancelled'?'Restore':'Cancel'}</button></div>
     ${r.notes?`<div class="notes">${esc(r.notes)}</div>`:''}
   </div>`).join('')}</section>`;
 }
