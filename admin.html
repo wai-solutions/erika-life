@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Erika Life | Bookings</title>
+<link rel="icon" type="image/svg+xml" href="img/logo/ERIKA-rounded-icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+/* VOICE  : calm, clear studio desk for Erika
+   IDEA   : a class register — one card per class, the people on it, their boots
+   PICTURE: the next class leads the page with its boots meter
+   COLOUR and TYPE: cream ground, plum ink, rose accent; Playfair + DM Sans
+   LAYOUT : summary row, filters, class cards with attendee rows; phone first */
+:root{color-scheme:light;--bg:#FBF7F4;--card:#fff;--ink:#2A1222;--mute:#7A6470;--line:rgba(42,18,34,.1);--rose:#CC3370;--rose-d:#A3214F;--blush:#F8E6EE;--plum:#2A1222;--ok:#2E7D5B;--serif:"Playfair Display",Georgia,serif;--sans:"DM Sans",system-ui,sans-serif}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:0 max(4vw,16px)}
+header{background:var(--plum);color:#FBF7F4;padding:18px 0}
+header .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;color:#F48FB1;text-decoration:none}
+.brand svg{height:34px;width:34px}.brand .wm{width:82px;height:35px}
+header h1{font:400 22px var(--serif);margin:0 0 0 6px;color:#FBF7F4}
+.hbtns{margin-left:auto;display:flex;gap:8px}
+button,.btn{font:500 15px var(--sans);border-radius:999px;border:1px solid transparent;min-height:44px;padding:0 18px;cursor:pointer;background:var(--rose);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+button.ghost{background:transparent;color:inherit;border-color:currentColor}
+button.small{min-height:36px;padding:0 14px;font-size:14px}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #F48FB1;outline-offset:2px}
+main.wrap{padding-top:26px;padding-bottom:60px}
+[hidden]{display:none!important}
+.note{background:var(--blush);border-radius:18px;padding:16px 18px;margin-bottom:18px;font-size:15px}
+.note b{color:var(--rose-d)}
+.login{max-width:420px;margin:40px auto;background:var(--card);border-radius:24px;padding:28px;border:1px solid var(--line)}
+.login h2{font:400 30px var(--serif);margin:0 0 6px}
+.login input,.tools input{width:100%;font:16px var(--sans);min-height:48px;border-radius:14px;border:1px solid var(--line);padding:0 14px;background:#FCF9F7;margin:14px 0}
+.err{color:#B3261E;font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 18px}
+.stat b{display:block;font:400 34px/1.1 var(--serif);color:var(--rose)}
+.stat span{font-size:14px;color:var(--mute)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+.tabs{display:flex;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px}
+.tabs button{background:transparent;color:var(--ink);min-height:38px}
+.tabs button[aria-pressed="true"]{background:var(--plum);color:#fff}
+.tools input{margin:0;flex:1 1 220px;max-width:340px;min-height:46px}
+.class{background:var(--card);border:1px solid var(--line);border-radius:24px;margin-bottom:16px;overflow:hidden}
+.ch{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line)}
+.ch h3{font:400 24px var(--serif);margin:0}
+.ch .where{color:var(--mute);font-size:15px}
+.ch .count{margin-left:auto;font-weight:500}
+.meters{display:flex;flex-wrap:wrap;gap:8px;padding:12px 20px;background:#FCF7F9;border-bottom:1px solid var(--line)}
+.m{font-size:14px;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);white-space:nowrap}
+.m.full{background:var(--rose);color:#fff;border-color:var(--rose)}
+.m i{font-style:normal;color:var(--mute)}.m.full i{color:#fff}
+.p{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto auto;gap:10px 16px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line)}
+.p:last-child{border-bottom:0}
+.p .nm{font-weight:500}
+.p .sub{font-size:13px;color:var(--mute)}
+.p .notes{grid-column:1/-1;font-size:14px;background:#FCF9F7;border-radius:12px;padding:8px 12px}
+.p a.wa{color:var(--rose-d);font-weight:500;text-decoration:none;white-space:nowrap}
+.tag{display:inline-block;font-size:12px;padding:2px 9px;border-radius:999px;background:var(--blush);color:var(--rose-d);margin-left:6px;white-space:nowrap}
+.boot{font:400 20px var(--serif);white-space:nowrap}
+.paid{background:#fff;color:var(--ink);border-color:var(--line)}
+.paid[aria-pressed="true"]{background:var(--ok);color:#fff;border-color:var(--ok)}
+.p.cancelled{opacity:.45}.p.cancelled .nm{text-decoration:line-through}
+.empty{text-align:center;color:var(--mute);padding:40px 0}
+@media(max-width:700px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.p{grid-template-columns:minmax(0,1fr) auto}.p .acts{grid-column:1/-1;display:flex;gap:8px}.ch .count{margin-left:0}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs id="defs"></defs></svg>
+<header><div class="wrap">
+  <a class="brand" href="index.html" aria-label="Erika, website"><svg><use href="#bloom"/></svg><svg class="wm"><use href="#wm"/></svg></a>
+  <h1>Bookings</h1>
+  <div class="hbtns"><button class="ghost small" id="refresh" type="button">Refresh</button><button class="ghost small" id="csv" type="button">Download CSV</button><button class="ghost small" id="out" type="button" hidden>Sign out</button></div>
+</div></header>
+<main class="wrap" id="app"></main>
+
+<script src="js/erika-config.js"></script>
+<script>
+{
+const API=window.ERIKA_API||'';
+const $=s=>document.querySelector(s);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const TIMES={'18':'6–7 PM','19':'7–8 PM','20':'8–9 PM'};
+const DAYF=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const nice=d=>{const x=new Date(d+'T00:00');return isNaN(x)?d:`${DAYF[x.getDay()]} ${x.getDate()} ${MON[x.getMonth()]}`};
+let KEY='';try{KEY=localStorage.getItem('erika-admin-key')||''}catch(e){}
+let DATA=null,STOCK={S:2,M:8,L:1},VIEW='up',Q='',SAMPLE=false;
+
+/* logo symbols from the home page */
+fetch('index.html').then(r=>r.text()).then(t=>{const m=t.match(/<symbol id="bloom"[\s\S]*?<\/symbol>/),w=t.match(/<symbol id="wm"[\s\S]*?<\/symbol>/);$('#defs').innerHTML=(m?m[0]:'')+(w?w[0]:'')}).catch(()=>{});
+
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+function waLink(n){let d=String(n).replace(/\D/g,'');if(d.startsWith('01'))d='2'+d;return 'https://wa.me/'+d}
+
+function sample(){
+  SAMPLE=true;
+  const rows=[
+    ['A1B2C3','2026-11-26 10:12','New Cairo','2026-12-01','18','M','Nour Hassan','010 1234 5678','Yes, first time!','Coming with my sister','500','yes','booked'],
+    ['D4E5F6','2026-11-26 11:40','New Cairo','2026-12-01','18','S','Salma Adel','011 2233 4455','I’ve tried before','','500','no','booked'],
+    ['G7H8J9','2026-11-27 09:05','New Cairo','2026-12-01','18','own','Mariam Fawzy','012 9876 5432','Yes, first time!','Knee was injured last year','500','no','booked'],
+    ['K1L2M3','2026-11-27 18:22','Heliopolis','2026-12-02','19','L','Dina Samir','015 5544 3322','I’ve tried before','','500','yes','booked'],
+  ];
+  return rows.map(r=>({id:r[0],created:r[1],studio:r[2],date:r[3],time:r[4],classKey:`${r[2]}|${r[3]}|${r[4]}`,boots:r[5],name:r[6],whatsapp:r[7],first:r[8],notes:r[9],price:r[10],paid:r[11],status:r[12]}));
+}
+
+async function load(){
+  if(!API){DATA=sample();render();return}
+  if(!KEY){login();return}
+  $('#app').innerHTML='<p class="empty">Loading bookings…</p>';
+  try{const r=await fetch(API+'?key='+encodeURIComponent(KEY));const j=await r.json();
+    if(!j.ok){KEY='';try{localStorage.removeItem('erika-admin-key')}catch(e){}login('That key did not work. Try again.');return}
+    DATA=j.rows||[];if(j.stock)STOCK=j.stock;render()}
+  catch(e){$('#app').innerHTML='<p class="empty">Could not reach the bookings sheet. Check your connection and press Refresh.</p>'}
+}
+function login(msg){
+  $('#out').hidden=true;
+  $('#app').innerHTML=`<form class="login" id="lf"><h2>Welcome back</h2><p style="margin:0;color:var(--mute)">Enter Erika’s admin key to see the bookings.</p>
+  <input id="key" type="password" autocomplete="current-password" aria-label="Admin key" placeholder="Admin key" required>${msg?`<p class="err">${esc(msg)}</p>`:''}<button type="submit">Open bookings</button></form>`;
+  $('#lf').addEventListener('submit',e=>{e.preventDefault();KEY=$('#key').value.trim();try{localStorage.setItem('erika-admin-key',KEY)}catch(e){}load()});
+  $('#key').focus();
+}
+
+function render(){
+  $('#out').hidden=!API;
+  const t=today();
+  let rows=DATA.slice();
+  const q=Q.toLowerCase();
+  if(q)rows=rows.filter(r=>[r.name,r.whatsapp,r.studio,r.notes,r.id].join(' ').toLowerCase().includes(q));
+  rows=rows.filter(r=>VIEW==='all'||(VIEW==='up'?r.date>=t:r.date<t));
+  const live=DATA.filter(r=>r.status!=='cancelled');
+  const up=live.filter(r=>r.date>=t);
+  const nextDate=up.map(r=>r.date+'|'+r.time).sort()[0];
+  const unpaid=up.filter(r=>r.paid!=='yes').length;
+  const firsts=up.filter(r=>/first/i.test(r.first)).length;
+  // group by class
+  const g={};rows.forEach(r=>{(g[r.classKey]=g[r.classKey]||{key:r.classKey,studio:r.studio,date:r.date,time:r.time,list:[]}).list.push(r)});
+  const groups=Object.values(g).sort((a,b)=>VIEW==='past'?(b.date+b.time).localeCompare(a.date+a.time):(a.date+a.time).localeCompare(b.date+b.time));
+  $('#app').innerHTML=`
+  ${SAMPLE?`<div class="note"><b>Sample data.</b> These bookings are examples so you can see how the panel works. Connect Erika’s Google Sheet (admin-setup/SETUP.md) to see real bookings.</div>`:''}
+  <div class="stats">
+    <div class="stat"><b>${up.length}</b><span>Upcoming bookings</span></div>
+    <div class="stat"><b style="font-size:24px;line-height:1.5">${nextDate?esc(nice(nextDate.split('|')[0])):'—'}</b><span>${nextDate?esc(TIMES[nextDate.split('|')[1]]||''):'Next class'}${nextDate?' · next class':''}</span></div>
+    <div class="stat"><b>${unpaid}</b><span>Waiting for payment</span></div>
+    <div class="stat"><b>${firsts}</b><span>First-time bouncers</span></div>
+  </div>
+  <div class="tools">
+    <div class="tabs" role="group" aria-label="Show">${[['up','Upcoming'],['past','Past'],['all','All']].map(([v,l])=>`<button type="button" data-v="${v}" aria-pressed="${VIEW===v}">${l}</button>`).join('')}</div>
+    <input id="q" type="search" placeholder="Search name, number, notes" aria-label="Search bookings" value="${esc(Q)}">
+  </div>
+  ${groups.length?groups.map(cls).join(''):`<p class="empty">${DATA.length?'No bookings match.':'No bookings yet. They will appear here as soon as someone books.'}</p>`}`;
+  document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{VIEW=b.dataset.v;render()}));
+  const qi=$('#q');qi.addEventListener('input',()=>{Q=qi.value;const p=qi.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(p,p)});
+  document.querySelectorAll('[data-paid]').forEach(b=>b.addEventListener('click',()=>update(b.dataset.paid,{paid:b.getAttribute('aria-pressed')!=='true'})));
+  document.querySelectorAll('[data-cancel]').forEach(b=>b.addEventListener('click',()=>{const r=DATA.find(x=>x.id===b.dataset.cancel);const c=r.status==='cancelled';if(!c&&!confirmInline(b))return;update(r.id,{status:c?'booked':'cancelled'})}));
+}
+function confirmInline(b){if(b.dataset.sure)return true;b.dataset.sure='1';b.textContent='Tap again to cancel';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='Cancel'}},3000);return false}
+function cls(c){
+  const live=c.list.filter(r=>r.status!=='cancelled');
+  const meters=Object.keys(STOCK).map(s=>{const u=live.filter(r=>r.boots===s).length;return `<span class="m${u>=STOCK[s]?' full':''}">Size ${s} <b>${u}</b><i> / ${STOCK[s]}</i></span>`}).join('')+`<span class="m">Own boots <b>${live.filter(r=>r.boots==='own').length}</b></span>`;
+  return `<section class="class"><div class="ch"><h3>${esc(nice(c.date))} · ${esc(TIMES[c.time]||c.time)}</h3><span class="where">${esc(c.studio)}</span><span class="count">${live.length} booked</span></div>
+  <div class="meters">${meters}</div>
+  ${c.list.sort((a,b)=>a.created.localeCompare(b.created)).map(r=>`<div class="p${r.status==='cancelled'?' cancelled':''}">
+    <div><div class="nm">${esc(r.name)}${/first/i.test(r.first)?'<span class="tag">First bounce</span>':''}</div><div class="sub">Ref ${esc(r.id)} · booked ${esc(r.created)}</div></div>
+    <div><a class="wa" href="${esc(waLink(r.whatsapp))}" target="_blank" rel="noopener">${esc(r.whatsapp)}</a><div class="sub">WhatsApp</div></div>
+    <div class="boot">${r.boots==='own'?'<span style="font-size:15px">Own boots</span>':'Size '+esc(r.boots)}</div>
+    <div class="acts"><button class="small paid" type="button" data-paid="${esc(r.id)}" aria-pressed="${r.paid==='yes'}">${r.paid==='yes'?'Paid':'Mark paid'}</button> <button class="small ghost" type="button" data-cancel="${esc(r.id)}">${r.status==='cancelled'?'Restore':'Cancel'}</button></div>
+    ${r.notes?`<div class="notes">${esc(r.notes)}</div>`:''}
+  </div>`).join('')}</section>`;
+}
+async function update(id,patch){
+  const r=DATA.find(x=>x.id===id);if(!r)return;
+  const prev={...r};if(patch.paid!==undefined)r.paid=patch.paid?'yes':'no';if(patch.status)r.status=patch.status;render();
+  if(!API)return;
+  try{const res=await fetch(API,{method:'POST',body:JSON.stringify({action:'update',key:KEY,id,...patch})});const j=await res.json();if(!j.ok)throw 0}
+  catch(e){Object.assign(r,prev);render();alertBar('Could not save that change. Try again.')}
+}
+function alertBar(m){const n=document.createElement('div');n.className='note';n.innerHTML='<b>'+esc(m)+'</b>';$('#app').prepend(n);setTimeout(()=>n.remove(),4000)}
+$('#refresh').addEventListener('click',load);
+$('#out').addEventListener('click',()=>{KEY='';try{localStorage.removeItem('erika-admin-key')}catch(e){}DATA=null;login()});
+$('#csv').addEventListener('click',()=>{if(!DATA)return;const H=['id','created','studio','date','time','boots','name','whatsapp','first','notes','price','paid','status'];
+  const csv=[H.join(',')].concat(DATA.map(r=>H.map(h=>'"'+String(r[h]??'').replace(/"/g,'""')+'"').join(','))).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv'}));a.download='erika-bookings.csv';a.click()});
+load();
+}
+</script>
+</body>
+</html>

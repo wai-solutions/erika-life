@@ -371,6 +371,7 @@ footer a:hover{color:var(--rose-l)}
 </div></div>
 <div class="toast" id="toast"></div>
 
+<script src="js/erika-config.js"></script>
 <script>
 (()=>{const n=document.getElementById("nav");const f=()=>n.classList.toggle("solid",scrollY>innerHeight*.5);addEventListener("scroll",f,{passive:true});f()})();
 
@@ -424,8 +425,12 @@ function renderTimes(){
     const past=st.date===today&&h>=+t.id;
     return `<button class="opt${st.time===t.id?' sel':''}" data-time="${t.id}" ${past?'disabled':''}><b>${t.l}</b><small>${past?'Already started':t.v}</small></button>`}).join('');
 }
+const API=window.ERIKA_API||'';let BOOKED={};
+const classKey=()=>st.studio&&st.date&&st.time?`${STUDIOS[st.studio].name}|${st.date}|${st.time}`:'';
+const avail=b=>Math.max(0,b.n-((BOOKED[classKey()]||{})[b.s]||0));
+async function loadCounts(){if(!API)return;try{const r=await fetch(API+'?action=counts');const j=await r.json();if(j.ok){BOOKED=j.counts||{};if(j.stock)STOCK.forEach(b=>{if(j.stock[b.s]!=null)b.n=j.stock[b.s]});if(st.boot&&!avail(STOCK.find(x=>x.s===st.boot)))st.boot=null;renderBoots();unlock()}}catch(e){}}
 function renderBoots(){
-  $('#boots').innerHTML=STOCK.map(b=>{const mine=st.boot===b.s,left=b.n-(mine?1:0);
+  $('#boots').innerHTML=STOCK.map(b0=>{const b={...b0,n:avail(b0)};const mine=st.boot===b.s,left=b.n-(mine?1:0);
     const dots=Array.from({length:Math.max(b.n,1)},(_,i)=>`<i class="${i>=b.n?'off':(mine&&i===b.n-1?'mine':'')}"></i>`).join('');
     const txt=mine?`Your pair · ${left?left+' left':'last pair'}`:(b.n===1?'Only 1 pair!':b.n?b.n+' pairs in stock':'Sold out');
     return `<button class="opt boot${mine?' sel':''}" data-boot="${b.s}" ${b.n?'':'disabled'} aria-pressed="${mine}"><b>Size ${b.s}</b><small>${b.eu}</small><div class="pairs">${dots}</div><div class="left">${txt}</div></button>`}).join('');
@@ -469,8 +474,8 @@ function summary(){
 document.addEventListener('click',e=>{
   const o=e.target.closest('.opt');if(!o||o.disabled)return;
   if(o.dataset.studio){st.studio=o.dataset.studio;st.date=null;st.time=null;$$('[data-studio]').forEach(x=>x.classList.toggle('sel',x===o));renderDates();renderTimes();scrollTo('#s2')}
-  if(o.dataset.date){st.date=o.dataset.date;st.time=null;renderDates();renderTimes();scrollTo('#s3')}
-  if(o.dataset.time){st.time=o.dataset.time;renderTimes();scrollTo('#s4')}
+  if(o.dataset.date){st.date=o.dataset.date;st.time=null;renderDates();renderTimes();renderBoots();scrollTo('#s3')}
+  if(o.dataset.time){st.time=o.dataset.time;renderTimes();renderBoots();loadCounts();scrollTo('#s4')}
   if(o.dataset.boot){st.boot=o.dataset.boot;renderBoots();scrollTo('#s5')}
   if(o.dataset.plan){st.plan=o.dataset.plan;renderPlans();scrollTo('#s6');mini(o)}
   unlock();
@@ -519,9 +524,9 @@ $('#payCopy').addEventListener('click',async()=>{try{await navigator.clipboard.w
 $('#mClose').addEventListener('click',()=>$('#modal').classList.remove('on'));
 $('#modal').addEventListener('click',e=>{if(e.target.id==='modal')$('#modal').classList.remove('on')});
 
-$('#bookGo').addEventListener('click',()=>{
+$('#bookGo').addEventListener('click',async()=>{
   const s=STUDIOS[st.studio],p=PLANS.find(x=>x.id===st.plan),t=TIMES.find(x=>x.id===st.time),d=new Date(st.date+'T00:00');
-  const msg=`BOUNCE
+  let msg=`BOUNCE
 Hi Erika! I’d like to book a class:
 Studio: ${s.name}
 Day: ${nice(d)}
@@ -533,6 +538,13 @@ Name: ${$('#name').value.trim()}
 WhatsApp: ${$('#phone').value.trim()}
 ${st.first}${$('#notes').value.trim()?'\nNote: '+$('#notes').value.trim():''}
 Payment: ${p.price.toLocaleString()} EGP by InstaPay to ${PAY_TO} (screenshot attached)`;
+  let ref='';
+  if(API){const btn=$('#bookGo');btn.disabled=true;btn.textContent='Saving your spot…';
+    try{const r=await fetch(API,{method:'POST',body:JSON.stringify({studio:s.name,date:st.date,time:st.time,boots:st.bootMode==='own'?'own':st.boot,name:$('#name').value.trim(),whatsapp:$('#phone').value.trim(),first:st.first,notes:$('#notes').value.trim(),price:p.price})});const j=await r.json();
+      if(!j.ok&&j.error==='soldout'){toast('Sorry, that boot size just sold out for this class');await loadCounts();summary();return}
+      if(j.ok)ref=j.id}catch(e){}
+    summary()}
+  if(ref)msg+=`\nBooking ref: ${ref}`;
   save(`Class · ${s.name} · ${nice(d)} · ${t.l}`);
   openModal('You’re almost in!','Pay with InstaPay, then send your booking and screenshot to Erika.',msg,'',{amount:`${p.price.toLocaleString()} EGP`});
 });
@@ -574,7 +586,7 @@ function heart(s){cx.beginPath();cx.moveTo(0,s*.3);cx.bezierCurveTo(-s,-s*.5,-s*
 function loop(){cx.clearRect(0,0,innerWidth,innerHeight);parts.forEach(p=>{p.vy+=.32;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.life++;cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.c;p.h?heart(p.r*1.4):cx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);cx.restore()});parts=parts.filter(p=>p.y<innerHeight+40&&p.life<260);if(parts.length)requestAnimationFrame(loop);else cx.clearRect(0,0,innerWidth,innerHeight)}
 function mini(el){const r=el.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,40)}
 
-renderBoots();renderPlans();unlock();showMine();fromHash();
+renderBoots();renderPlans();unlock();showMine();fromHash();loadCounts();
 })();
 </script>
 </body>
