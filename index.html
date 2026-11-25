@@ -777,6 +777,7 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
     <a href="#nature" data-go>Back to nature</a>
     <a href="#levels" data-go>Levels</a>
     <a href="#classes" data-go>Classes</a>
+    <a href="#faq" data-go>Questions</a>
     <a href="boots.html">Boots</a>
     <a class="btn rose mbook" href="booking.html">Book your class</a>
     <div class="msoc"><a href="https://www.instagram.com/erikaszenes/">Instagram</a><a href="https://www.tiktok.com/@erikaszenes.bouncefit">TikTok</a><a href="https://www.facebook.com/ErikaSzenes">Facebook</a></div>
@@ -787,7 +788,7 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
 
 <div class="stem" aria-hidden="true"><i></i><b><svg><use href="#bloom"/></svg></b></div>
 <div class="cur" aria-hidden="true"></div>
-<button id="beat" type="button" aria-pressed="false"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="lbl">Play the beat</span></button>
+
 
 <main>
 <!-- HERO -->
@@ -1096,6 +1097,9 @@ if(hasG&&!RM){
   });
   tl.to(b,{y:0,duration:.3,ease:'bounce.out'}).to(sh,{scaleX:1,opacity:1,duration:.3},'<').to({},{duration:.9});
 }else{introDone()}
+if(location.hash.length>1){let t=null;try{t=document.querySelector(location.hash)}catch(e){}
+  if(t){introDone();const go=()=>{window.__nav=true;if(hasG)ScrollTrigger.refresh();const y=t.getBoundingClientRect().top+scrollY;if(lenis)lenis.scrollTo(y,{immediate:true,force:true});else scrollTo(0,y);setTimeout(()=>{window.__nav=false},700)};
+  if(document.readyState==='complete')setTimeout(go,250);else addEventListener('load',()=>setTimeout(go,250))}}
 
 /* ---------- hero ---------- */
 let heroed=false;
@@ -1352,39 +1356,7 @@ if(hasG&&!RM){
     c.classList.toggle('big',!!e.target.closest('a,button,.pad'))});
 })();
 
-/* ---------- the beat (Web Audio, starts on click) ---------- */
-Beat=(function(){
-  let BPM=116,SP=60/BPM/2;let ctx=null,master=null,on=false,next=0,step=0,timer=0,noiseBuf=null;
-  const btn=$('#beat'),lbl=$('#beat .lbl');
-  const prog=[[110,220],[87.31,174.6],[130.81,261.6],[98,196]];// A, F, C, G
-  const bells=[659.25,783.99,880,987.77,1174.66,1318.51];
-  function ensureCtx(){if(ctx)return ctx;try{ctx=new (window.AudioContext||window.webkitAudioContext)();
-    const comp=ctx.createDynamicsCompressor();master=ctx.createGain();master.gain.value=.55;master.connect(comp);comp.connect(ctx.destination);
-    noiseBuf=ctx.createBuffer(1,ctx.sampleRate*.5,ctx.sampleRate);const d=noiseBuf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;}catch(e){ctx=null}return ctx}
-  const env=(g,t,a,peak,dec)=>{g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+a);g.gain.exponentialRampToValueAtTime(0.0001,t+a+dec)};
-  function kick(t){const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(42,t+.13);env(g,t,.003,1,.32);o.connect(g).connect(master);o.start(t);o.stop(t+.4)}
-  function noise(t,type,f,peak,dec){const s=ctx.createBufferSource(),fl=ctx.createBiquadFilter(),g=ctx.createGain();s.buffer=noiseBuf;fl.type=type;fl.frequency.value=f;env(g,t,.002,peak,dec);s.connect(fl).connect(g).connect(master);s.start(t);s.stop(t+dec+.05)}
-  function tone(t,f,type,peak,dec,dest){const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.value=f;env(g,t,.005,peak,dec);o.connect(g).connect(dest||master);o.start(t);o.stop(t+dec+.1)}
-  function bass(t,f){const o=ctx.createOscillator(),fl=ctx.createBiquadFilter(),g=ctx.createGain();o.type='sawtooth';o.frequency.value=f;fl.type='lowpass';fl.frequency.value=420;env(g,t,.01,.22,.22);o.connect(fl).connect(g).connect(master);o.start(t);o.stop(t+.3)}
-  function play(s,t){const i=s%16,bar=Math.floor(s/16)%4;
-    if(i%4===0)kick(t);
-    if(i===4||i===12)noise(t,'bandpass',1600,.35,.16);
-    if(i%2===1)noise(t,'highpass',7500,.09,.045);
-    if(i%4===2)bass(t,prog[bar][0]);
-    if([0,3,6,10,13].includes(i)&&Math.random()<.8){const f=bells[(i+bar*2)%bells.length];tone(t,f,'sine',.07,1.1);tone(t,f*2.76,'sine',.012,.5)}
-    if(i===0)[1,1.25,1.5].forEach(m=>tone(t,prog[bar][1]*m,'triangle',.025,1.8));
-    if(i%4===0){const ms=Math.max(0,(t-ctx.currentTime)*1000);setTimeout(()=>{root.classList.add('hit');setTimeout(()=>root.classList.remove('hit'),120)},ms)}
-  }
-  function sched(){while(next<ctx.currentTime+.12){play(step,next);next+=SP;step++}}
-  function start(){if(!ensureCtx())return;ctx.resume();on=true;next=ctx.currentTime+.06;step=0;timer=setInterval(sched,25);btn.classList.add('on');btn.setAttribute('aria-pressed','true');lbl.textContent='Pause the beat';
-    // realign CSS bobs to the beat
-    $$('.bob').forEach(el=>{el.style.animation='none';void el.offsetWidth;el.style.animation=''})}
-  function stop(){on=false;clearInterval(timer);btn.classList.remove('on');btn.setAttribute('aria-pressed','false');lbl.textContent='Play the beat'}
-  btn.addEventListener('click',()=>on?stop():start());
-  function blip(p){if(!ctx||ctx.state!=='running')return;const t=ctx.currentTime;tone(t,523.25*(1+p),'sine',.12,.5);tone(t+.06,659.25*(1+p),'sine',.08,.6)}
-  function setBpm(b){BPM=b;SP=60/BPM/2;root.style.setProperty('--beat',(60/BPM).toFixed(3)+'s')}
-  return{ensureCtx,blip,setBpm};
-})();
+/* beat removed */
 
 addEventListener('load',()=>hasG&&ScrollTrigger.refresh());
 }
