@@ -16,8 +16,9 @@
 - Coming soon: The Bounce Run (outdoor run on rebound boots) and CheerBounce (cheer moves on rebound boots); waitlists open
 
 ## Pages
-- [Home](https://wai-solutions.github.io/erika-bounce-fit-boots/): story, class flow, schedule, community, FAQ
-- [Book a class](https://wai-solutions.github.io/erika-bounce-fit-boots/booking.html): choose studio, day, hour and boots size; join event waitlists
+- [Home](https://wai-solutions.github.io/erika-life/): story, class flow, schedule, community, FAQ
+- [About Erika](https://wai-solutions.github.io/erika-life/about.html): the Erika story; named after the erica (heather) flower, symbol of good luck, protection, resilience and quiet strength; the name's Latin/Greek, Old Norse and Japanese roots; the logo (an erica flower that bounces); Erika's call to go back to nature in the age of AI; journey from Hungary to Egypt to the world
+- [Book a class](https://wai-solutions.github.io/erika-life/booking.html): choose studio, day, hour and boots size; join event waitlists
 
 ## Social
 - Instagram: https://www.instagram.com/erikaszenes/

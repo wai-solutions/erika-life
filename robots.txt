@@ -13,4 +13,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://wai-solutions.github.io/erika-bounce-fit-boots/sitemap.xml
+Sitemap: https://wai-solutions.github.io/erika-life/sitemap.xml
