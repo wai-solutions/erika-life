@@ -689,17 +689,18 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 .levels .btn.lv-go{background:var(--rose);color:#fff}
 .levels[data-l="1"] .btn.lv-go{background:#fff;color:var(--rose)}
 /* photos */
-.lv-media{position:relative;height:min(68svh,620px);border-radius:999px 999px 40px 40px;overflow:hidden;background:var(--plum);box-shadow:0 40px 80px -40px rgba(42,18,34,.55)}
-.lv-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 22%;clip-path:inset(100% 0 0 0);transform:scale(1.15);transition:clip-path 1s cubic-bezier(.7,0,.2,1),transform 1.6s cubic-bezier(.2,.7,.2,1)}
+.lv-media{position:relative;justify-self:center;width:min(100%,390px);height:min(72svh,640px);border-radius:999px;overflow:hidden;background:var(--plum);box-shadow:0 40px 80px -40px rgba(42,18,34,.55);isolation:isolate}
+.lv-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 25%;clip-path:inset(100% 0 0 0);transform:scale(1.15);transition:clip-path 1s cubic-bezier(.7,0,.2,1),transform 1.6s cubic-bezier(.2,.7,.2,1)}
 .lv-media img.on{clip-path:inset(0 0 0 0);transform:scale(1);z-index:2}
 .lv-media img.was{clip-path:inset(0 0 0 0);transform:scale(1);z-index:1;transition:none}
-.lv-num{position:absolute;z-index:3;right:22px;bottom:22px;width:92px;height:92px;border-radius:50%;background:var(--cream);color:var(--rose);display:grid;place-items:center;text-align:center;font:italic 400 34px/1 var(--serif);box-shadow:0 14px 30px rgba(42,18,34,.3)}
+.lv-num{position:absolute;z-index:3;left:50%;bottom:26px;transform:translateX(-50%);width:84px;height:84px;border-radius:50%;background:var(--cream);color:var(--rose);display:grid;place-content:center;text-align:center;font:italic 400 30px/1 var(--serif);box-shadow:0 14px 30px rgba(42,18,34,.3)}
 .lv-num small{display:block;font:500 10px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--plum);margin-top:4px;font-style:normal}
-@media(max-width:860px){
- .levels{align-items:flex-start;padding:88px 0 20px!important}
+@media(max-width:1024px){.lv{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:34px}.lv-media{height:min(64svh,560px)}.levels .h2{font-size:clamp(28px,4vw,40px)}}
+@media(max-width:700px){
+ .levels{padding:84px 0 24px!important}
  .lv{grid-template-columns:minmax(0,1fr);gap:0}
- .lv-media{order:-1;height:clamp(200px,32svh,400px);border-radius:120px 120px 28px 28px;margin-bottom:14px}
- .lv-num{width:66px;height:66px;font-size:24px;right:14px;bottom:14px}
+ .lv-media{order:-1;width:100%;height:clamp(140px,21svh,170px);margin-bottom:16px}
+ .lv-num{width:60px;height:60px;font-size:22px;left:auto;right:16px;bottom:50%;transform:translateY(50%)}
  .levels .h2{font-size:26px}.levels .lead{font-size:15px;margin-top:4px}
  .lv-track{margin:14px 0 8px;padding-top:44px}.lv-dots{top:44px}.lv-hop{width:36px;height:36px}
  .lv-dot{width:16px;height:16px}.lv-dot span{font-size:10px;top:22px}
@@ -707,7 +708,7 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
  .lv-moves{margin-bottom:14px;gap:6px}.lv-moves li{font-size:13px;padding:7px 12px}
  .levels .btn.lv-go{min-height:46px}
 }
-@media(max-height:700px) and (max-width:860px){.lv-media{height:24svh}.levels .lead{display:none}}
+@media(max-height:700px) and (max-width:700px){.lv-media{height:130px}.levels .lead{display:none}}
 
 /* classes */
 .classes{background:var(--plum);color:var(--cream);overflow:hidden}
@@ -1231,15 +1232,13 @@ if(hasG&&!RM){
     bob(i);
   }
   let LST=null;
-  dots.forEach(d=>d.addEventListener('click',()=>{const i=+d.dataset.i;const S=stepLocks.find(x=>x.st===LST);if(S)S.go(i);else{show(i,true);place(i/2)}}));
+  dots.forEach(d=>d.addEventListener('click',()=>{const i=+d.dataset.i;if(LST){const y=LST.start+(LST.end-LST.start)*[.1,.5,.92][i];if(lenis)lenis.scrollTo(y,{duration:1.1});else scrollTo({top:y,behavior:'smooth'})}else{show(i,true);place(i/2)}}));
   show(0,false);place(0);
   addEventListener('resize',()=>place(prog));
   if(hasG&&!RM){
-    LST=ScrollTrigger.create({trigger:'#levels',start:'top top',end:'+=200%',pin:true,scrub:true,anticipatePin:1,
-      onEnter:()=>hold(LST,LST.start),onEnterBack:()=>hold(LST,LST.end),
-      onUpdate:st=>{place(st.progress);const k=st.progress<.25?0:st.progress<.75?1:2;show(k,true)},
+    LST=ScrollTrigger.create({trigger:'#levels',start:'top top',end:'+=160%',pin:true,scrub:true,anticipatePin:1,
+      onUpdate:st=>{const p=st.progress;gsap.to(fill,{width:(p*100)+'%',duration:.5,ease:'power2.out',overwrite:'auto'});gsap.to(hop,{x:hopX(p),duration:.5,ease:'power2.out',overwrite:'auto'});prog=p;dots.forEach((d,j)=>d.classList.toggle('done',p>=j/2-.001));const k=p<.3?0:p<.7?1:2;show(k,true)},
       onRefresh:st=>place(st.progress)});
-    stepLock(LST,[0,.5,1]);
   }
 })();
 
