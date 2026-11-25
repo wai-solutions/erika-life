@@ -285,10 +285,6 @@ footer a:hover{color:var(--rose-l)}
         </div>
         <div id="rentBox">
           <div class="grid g3" id="boots"></div>
-          <div class="finder">Not sure? Your shoe size:
-            <select id="shoe"><option value="">EU size</option></select>
-            <span id="suggest"></span>
-          </div>
           <details class="sizechart"><summary>Bounce boots size chart</summary>
             <div class="scroll"><table>
               <thead><tr><th>Size</th><th>EU</th><th>US women</th><th>US men</th><th>Foot length</th></tr></thead>
@@ -393,7 +389,6 @@ const st={studio:null,date:null,time:null,bootMode:'rent',boot:null,plan:null,fi
 
 /* ---- render ---- */
 $('#studios').innerHTML=Object.entries(STUDIOS).map(([k,s])=>`<button class="opt" data-studio="${k}"><span class="em">${s.em}</span><b>${s.name}</b><small>${s.label} · 6–9 PM</small></button>`).join('');
-for(let i=33;i<=45;i++)$('#shoe').insertAdjacentHTML('beforeend',`<option>${i}</option>`);
 
 function nextDates(days,count=8){
   const out=[],d=new Date();d.setHours(0,0,0,0);
@@ -479,13 +474,6 @@ $$('#bootMode button').forEach(b=>b.addEventListener('click',()=>{
   const p=PLANS.find(x=>x.id===st.plan);if(p&&p.boots&&p.boots!==st.bootMode)st.plan=null;
   renderPlans();unlock();if(st.bootMode==='own')scrollTo('#s5');
 }));
-$('#shoe').addEventListener('change',e=>{
-  const v=+e.target.value;if(!v){$('#suggest').textContent='';return}
-  const c=CHART.find(x=>v>=x.min&&v<=x.max),b=STOCK.find(x=>x.s===c.s);
-  if(!b){st.boot=null;renderBoots();unlock();$('#suggest').innerHTML=`→ your size is <b style="color:var(--pink-d)">${c.s}</b>, not in our class stock yet. Choose "I have my own" or ask Erika in your message.`;return}
-  $('#suggest').innerHTML=`→ we suggest <b style="color:var(--pink-d)">Size ${b.s}</b>`+(b.n?'':' (sold out for this class)');
-  if(b.n){st.boot=b.s;renderBoots();unlock();scrollTo('#s5')}
-});
 $$('#first .chip').forEach(c=>c.addEventListener('click',()=>{st.first=c.dataset.v;$$('#first .chip').forEach(x=>x.classList.toggle('sel',x===c));unlock()}));
 ['#name','#phone'].forEach(s=>$(s).addEventListener('input',()=>{const e=$(s+'Err');if(!e.hidden&&(s==='#name'?nameOk():phoneOk()))e.hidden=true;unlock()}));
 $('#name').addEventListener('blur',()=>{$('#nameErr').hidden=nameOk();$('#name').setAttribute('aria-invalid',!nameOk())});
