@@ -956,6 +956,31 @@ if(hasG&&!RM){
   else $$('#statement .w').forEach(w=>w.style.opacity=1);
 })();
 
+/* ---------- step lock: one scroll = one step inside pinned sections ---------- */
+const stepLocks=[];let lastInput=0;
+function stepLock(st,stops){
+  const L={st,stops,busy:false};stepLocks.push(L);
+  L.idx=()=>{const p=st.progress;let k=0,d=9;stops.forEach((s,i)=>{const x=Math.abs(s-p);if(x<d){d=x;k=i}});return k};
+  L.y=i=>st.start+(st.end-st.start)*stops[i];
+  L.go=i=>{L.busy=true;const y=L.y(i),done=()=>setTimeout(()=>{L.busy=false},280);
+    if(lenis)lenis.scrollTo(y,{duration:.95,lock:true,force:true,onComplete:done});else{scrollTo({top:y,behavior:'smooth'});setTimeout(done,900)}};
+  return L;
+}
+function hold(st,y){const L=stepLocks.find(x=>x.st===st);if(L&&!L.busy&&Date.now()-lastInput<500&&lenis){L.busy=true;lenis.scrollTo(y,{duration:.45,lock:true,force:true,onComplete:()=>setTimeout(()=>{L.busy=false},200)})}}
+function lockFor(dir){
+  for(const L of stepLocks){const st=L.st,y=scrollY;
+    if(y<st.start-2||y>st.end+2)continue;
+    const k=L.idx(),n=k+dir;
+    if(n<0||n>=L.stops.length){if(!L.busy)continue;return true}
+    if(!L.busy)L.go(n);return true}
+  return false;
+}
+addEventListener('wheel',e=>{lastInput=Date.now();if(Math.abs(e.deltaY)<2||e.ctrlKey)return;if(lockFor(Math.sign(e.deltaY))){e.preventDefault();e.stopImmediatePropagation()}},{passive:false,capture:true});
+let tY=null,tLock=null;
+addEventListener('touchstart',e=>{lastInput=Date.now();tY=e.touches[0].clientY;tLock=null},{passive:true,capture:true});
+addEventListener('touchmove',e=>{lastInput=Date.now();if(tY===null)return;const dy=tY-e.touches[0].clientY;if(tLock===null){if(Math.abs(dy)<10)return;tLock=lockFor(Math.sign(dy))}if(tLock)e.preventDefault()},{passive:false,capture:true});
+addEventListener('keydown',e=>{const k=e.key;const dir=['ArrowDown','PageDown',' '].includes(k)?1:['ArrowUp','PageUp'].includes(k)?-1:0;if(!dir||e.target.closest('input,textarea,button,a'))return;if(lockFor(dir)){e.preventDefault()}},{capture:true});
+
 /* ---------- moods ---------- */
 (function(){
   const sec=$('#moods'),chips=$$('.chip'),card=$('#mCard'),img=$('#mImg'),bars=$$('.mprog b');
@@ -985,13 +1010,14 @@ if(hasG&&!RM){
   let ST=null;
   const idx=p=>p<.25?0:p<.75?1:2;
   function bars_(p){const f=[p/.25,(p-.25)/.5,(p-.75)/.25];bars.forEach((x,j)=>x.style.transform=`scaleX(${Math.max(0,Math.min(1,f[j]))})`)}
-  chips.forEach(c=>c.addEventListener('click',()=>{const i=+c.dataset.i;if(ST){const y=ST.start+(ST.end-ST.start)*[0,.5,1][i]+1;lenis?lenis.scrollTo(y,{duration:1.1}):scrollTo({top:y,behavior:'smooth'})}else show(i,true)}));
+  chips.forEach(c=>c.addEventListener('click',()=>{const i=+c.dataset.i;const L=stepLocks.find(x=>x.st===ST);if(L)L.go(i);else show(i,true)}));
   chips.forEach(c=>c.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const n=(+c.dataset.i+(e.key==='ArrowRight'?1:2))%3;chips[n].focus();chips[n].click()}}));
   show(0,null);bars_(0);
   if(hasG&&!RM){
     ST=ScrollTrigger.create({trigger:sec,start:'top top',end:'+=200%',pin:true,scrub:true,anticipatePin:1,
-      snap:{snapTo:[0,.5,1],directional:false,duration:{min:.3,max:.7},delay:.1,ease:'power2.inOut'},
+      onEnter:()=>hold(ST,ST.start),onEnterBack:()=>hold(ST,ST.end),
       onUpdate:st=>{bars_(st.progress);const i=idx(st.progress);if(i!==cur)show(i,true)}});
+    stepLock(ST,[0,.5,1]);
   }
   if(hasG&&!RM)gsap.from('.mpic',{y:120,rotation:4,opacity:0,duration:1.2,ease:'back.out(1.6)',scrollTrigger:{trigger:sec,start:'top 70%'}});
 })();
@@ -1083,10 +1109,11 @@ if(hasG&&!RM){
   // idle bounce height grows with the level
   function idleHop(i){idle&&idle.kill();const p=spot(i);gsap.set(hop,{x:p.x,y:p.y});idle=gsap.to(hop,{y:p.y-[16,30,48][i],duration:[.5,.42,.36][i],repeat:-1,yoyo:true,ease:'power1.out'})}
   let LST=null;
-  steps.forEach(b=>b.addEventListener('click',()=>{const i=+b.dataset.i;if(LST){const y=LST.start+(LST.end-LST.start)*[0,.5,1][i]+1;lenis?lenis.scrollTo(y,{duration:1.1}):scrollTo({top:y,behavior:'smooth'})}else show(i,true)}));
+  steps.forEach(b=>b.addEventListener('click',()=>{const i=+b.dataset.i;const L=stepLocks.find(x=>x.st===LST);if(L)L.go(i);else show(i,true)}));
   show(0,false);
   addEventListener('resize',()=>{if(hasG&&!RM)idleHop(cur);else{const p=spot(cur);hop.style.transform=`translate(${p.x}px,${p.y}px)`}});
-  if(hasG&&!RM)LST=ScrollTrigger.create({trigger:'#levels',start:'top top',end:'+=200%',pin:true,scrub:true,anticipatePin:1,snap:{snapTo:[0,.5,1],directional:false,duration:{min:.3,max:.7},delay:.1,ease:'power2.inOut'},onUpdate:st=>{const k=st.progress<.25?0:st.progress<.75?1:2;if(k!==cur)show(k,true)},onRefresh:()=>idleHop(cur)});
+  if(hasG&&!RM)LST=ScrollTrigger.create({trigger:'#levels',start:'top top',end:'+=200%',pin:true,scrub:true,anticipatePin:1,onEnter:()=>hold(LST,LST.start),onEnterBack:()=>hold(LST,LST.end),onUpdate:st=>{const k=st.progress<.25?0:st.progress<.75?1:2;if(k!==cur)show(k,true)},onRefresh:()=>idleHop(cur)});
+  if(LST)stepLock(LST,[0,.5,1]);
   if(hasG){    if(!RM){gsap.set('.step',{yPercent:100,opacity:0});const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();gsap.to('.step',{yPercent:0,opacity:1,duration:1,ease:'bounce.out',stagger:.12,onComplete:()=>idleHop(cur)})}},{threshold:.3});io.observe(st);}}
 })();
 
