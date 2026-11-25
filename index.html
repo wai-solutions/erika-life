@@ -390,6 +390,7 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 .hero h1{font-size:clamp(48px,8.6vw,132px);line-height:.98;text-shadow:0 2px 30px rgba(42,18,34,.35)}
 .hero h1 .w{display:inline-block;will-change:transform}
 .hero h1 em{color:var(--rose2)}
+.hero p.hero-tag{font:italic 400 clamp(22px,2.2vw,30px)/1.3 var(--serif)}
 .hero p{font-size:clamp(18px,1.7vw,22px);margin:22px 0 30px;max-width:30em;opacity:.95}
 .hero .cta{display:flex;flex-wrap:wrap;gap:12px}
 .cue{position:absolute;right:max(5vw,18px);bottom:clamp(64px,10vh,120px);display:flex;flex-direction:column;align-items:center;gap:10px;font-size:14px;opacity:.85;text-decoration:none}
@@ -451,6 +452,7 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 .panel.word{background:var(--rose);display:grid;place-items:center;text-align:center;padding:40px}
 .panel.word::after{display:none}
 .panel.word p{font:italic 400 clamp(34px,4.4vw,58px)/1.1 var(--serif);margin:0}
+.panel.word p.sub2{font-size:clamp(20px,2vw,28px);margin-top:16px;opacity:.9}
 .panel.word svg{width:90px;height:90px;margin:0 auto 22px;color:var(--cream)}
 @media(max-width:900px){.track{flex-direction:column;width:auto}.panel{width:100%;height:min(80vh,560px)}}
 
@@ -515,9 +517,9 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 .stairs{position:relative;height:clamp(340px,46vh,440px);display:flex;gap:12px;align-items:flex-end;padding-top:110px}
 .stairs .step{flex:1 1 0}
 .step{position:relative;border:0;cursor:pointer;border-radius:26px 26px 8px 8px;padding:20px 18px;text-align:left;color:var(--plum);font:inherit;transition:transform .4s cubic-bezier(.3,1.8,.5,1),box-shadow .3s;display:flex;flex-direction:column;justify-content:flex-start}
-.step:nth-of-type(1){height:38%;background:#F1CFE0}.step:nth-of-type(2){height:64%;background:#E5639A;color:#fff}.step:nth-of-type(3){height:90%;background:var(--cream)}
+.step:nth-of-type(1){height:46%;background:#F1CFE0}.step:nth-of-type(2){height:70%;background:#E5639A;color:#fff}.step:nth-of-type(3){height:94%;background:var(--cream)}
 .step small{font-size:14px;opacity:.8}
-.step strong{font:400 clamp(22px,2.2vw,30px)/1.1 var(--serif);margin-top:4px}
+.step strong{font:400 clamp(20px,1.9vw,26px)/1.1 var(--serif);margin-top:4px}
 .step:hover{transform:translateY(-6px)}
 .step[aria-pressed="true"]{box-shadow:0 0 0 3px var(--rose2),0 20px 40px rgba(0,0,0,.3)}
 .lhop{position:absolute;left:0;top:0;width:64px;height:64px;color:var(--rose2);z-index:2;pointer-events:none;filter:drop-shadow(0 8px 10px rgba(0,0,0,.35))}
@@ -588,7 +590,6 @@ footer nav a:hover{color:var(--rose2)}
 h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
 .state .ek{color:var(--rose)}
 .btn .ek{height:1.5em;vertical-align:middle}
-footer .ar{font-size:15px;direction:rtl}
 
 @media(prefers-reduced-motion:reduce){.bob,#beat.on .eq i{animation:none}#intro{display:none}.state p .w{opacity:1}.stop,.mean{opacity:1}.mani .wd{opacity:1}}
 </style>
@@ -640,7 +641,7 @@ footer .ar{font-size:15px;direction:rtl}
   <div class="copy wrap">
     <div class="kicker"><span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span> | Bounce Fit Boots</div>
     <h1 id="heroTitle"><span class="w">Born</span> <span class="w">from</span> <span class="w">a</span> <em class="w">flower.</em><br><span class="w">Made</span> <span class="w">to</span> <span class="w">bounce.</span></h1>
-    <p>A flower, a bounce and a call back to nature. Freedom, joy and power, one beat at a time.</p>
+    <p class="hero-tag">Where joy meets power.<br>Where souls go back to nature.</p>
     <div class="cta">
       <a class="btn rose" href="booking.html">Book your class</a>
       <a class="btn ghost" href="#story" data-go>Begin the journey</a>
@@ -694,7 +695,7 @@ footer .ar{font-size:15px;direction:rtl}
       <div class="txt"><h3>Strong, always</h3><ul class="ticks"><li>Power that grows with every class.</li><li>Strength that feels like play.</li></ul></div></article>
     <article class="panel"><div class="pic"><img src="img/class-highknees.jpg" alt="Women doing high knees together, laughing" loading="lazy"></div>
       <div class="txt"><h3>Joy that spreads</h3><ul class="ticks"><li>One smile lifts the whole room.</li><li>Leave lighter than you came.</li></ul></div></article>
-    <article class="panel word"><div><svg class="bob" aria-hidden="true"><use href="#bloom"/></svg><p>Where joy<br>meets power.</p></div></article>
+    <article class="panel word"><div><svg class="bob" aria-hidden="true"><use href="#bloom"/></svg><p>Where joy meets power.</p><p class="sub2">Where souls go back to nature.</p></div></article>
   </div>
 </section>
 
@@ -716,7 +717,7 @@ footer .ar{font-size:15px;direction:rtl}
         <div class="bl pulse"><svg class="bob" aria-hidden="true"><use href="#bloom"/></svg></div>
         <div class="wmk"><svg role="img" aria-label="Erika"><use href="#wm"/></svg></div>
         <div class="sz">Szenes</div>
-        <div class="tag">Where joy meets power</div>
+        <div class="tag">Where joy meets power.<br>Where souls go back to nature.</div>
       </div>
     </div>
     <div>
@@ -826,15 +827,14 @@ footer .ar{font-size:15px;direction:rtl}
   <div class="wrap">
     <div>
       <a class="brand" href="#top" data-go aria-label="Erika, back to top"><svg aria-hidden="true"><use href="#bloom"/></svg><span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span></a>
-      <p style="margin:12px 0 0;max-width:26em"><span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span> | Bounce Fit Boots. Rebound boots classes in New Cairo and Heliopolis. Where joy meets power.</p>
+      <p style="margin:12px 0 0;max-width:30em"><span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span> | Life experience | Bouncing classes with boots. From Hungary to Egypt, from Egypt to worldwide. Where joy meets power. Where souls go back to nature.</p>
     </div>
     <nav aria-label="Footer">
       <a href="#meet" data-go>Meet <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span></a><a href="#nature" data-go>Back to nature</a><a href="#classes" data-go>Classes</a>
       <a href="booking.html">Booking</a>
     </nav>
     <div>
-      <p style="margin:0">© 2026 <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span> Szenes</p>
-      <p class="ar" style="margin:8px 0 0" lang="ar">حصص الأحذية القافزة في القاهرة الجديدة ومصر الجديدة</p>
+      <p style="margin:0">© 2026 <span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span> Life</p>
     </div>
   </div>
 </footer>
