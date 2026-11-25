@@ -257,11 +257,6 @@ footer a:hover{color:var(--rose-l)}
     <span class="eyebrow">Book your rebound boots class</span>
     <h1>Book your <em>bounce</em></h1>
     <p>Pick your studio, your hour and your boots. Erika will confirm your spot personally.</p>
-    <div class="tabs" role="tablist">
-      <button class="tab on" data-tab="class">Book a class</button>
-      <button class="tab" data-tab="run">The Bounce Run <span class="new">soon</span></button>
-      <button class="tab" data-tab="cheerbounce">CheerBounce <span class="new">soon</span></button>
-    </div>
   </div>
 </header>
 
@@ -331,54 +326,6 @@ footer a:hover{color:var(--rose-l)}
     </section>
 
     <!-- RUN -->
-    <section class="panel" id="p-run">
-      <div class="event-hero run"><img class="ebg" src="img/outdoor-run.jpg" alt="A big group bouncing outdoors on rebound boots" loading="lazy" style="object-position:50% 40%">
-        <span class="soon">Coming soon</span>
-        <h2>The Bounce Run</h2>
-        <p>Our first outdoor run on rebound boots. Music, fresh air and the whole crew. Save your place now, we’ll tell you first when we announce it.</p>
-        <div class="count-pill">Early list, first to know.</div>
-        <div class="big hdx">SOON</div>
-      </div>
-      <div class="perks"><div><span>01</span>Run to the beat</div><div><span>02</span>Bounce with the crew</div><div><span>03</span>Finish-line photos</div></div>
-      <div class="step active">
-        <div class="sh"><h2>Save my place</h2></div>
-        <div class="grid g2">
-          <label class="f">Your name<input id="rName" placeholder="e.g. Salma"></label>
-          <label class="f">WhatsApp number<input id="rPhone" type="tel" placeholder="01x xxxx xxxx"></label>
-        </div>
-        <div style="margin-top:16px"><div class="f" style="font-weight:700;margin-bottom:8px">How many runners?</div>
-          <div class="chips" data-group="rCount"><button class="chip sel" data-v="Just me">Just me</button><button class="chip" data-v="Me + 1 friend">Me + 1</button><button class="chip" data-v="A group of 3+">Group of 3+</button></div>
-        </div>
-        <div style="margin-top:16px"><div class="f" style="font-weight:700;margin-bottom:8px">Boots</div>
-          <div class="chips" data-group="rBoots"><button class="chip sel" data-v="I need boots">I need boots</button><button class="chip" data-v="I have my own boots">I have my own</button></div>
-        </div>
-        <div style="margin-top:22px"><button class="btn btn-pink" id="runGo">Notify me first</button></div>
-      </div>
-    </section>
-
-    <!-- CHEERBOUNCE -->
-    <section class="panel" id="p-cheerbounce">
-      <div class="event-hero cheer"><img class="ebg" src="img/crop-studio.jpg" alt="Pom-poms and rebound boots" loading="lazy" style="object-position:50% 25%">
-        <span class="soon">Coming soon</span>
-        <h2>CheerBounce</h2>
-        <p>Cheer moves meet rebound boots. Pom-poms, music and pure team spirit. Save your place now, we’ll tell you first when we announce it.</p>
-        <div class="count-pill">Early list, first to know.</div>
-        <div class="big hdx">SOON</div>
-      </div>
-      <div class="perks"><div><span>01</span>Cheer choreography</div><div><span>02</span>Pom-pom power</div><div><span>03</span>Team spirit</div></div>
-      <div class="step active">
-        <div class="sh"><h2>Save my place</h2></div>
-        <div class="grid g2">
-          <label class="f">Your name<input id="cName" placeholder="e.g. Mariam"></label>
-          <label class="f">WhatsApp number<input id="cPhone" type="tel" placeholder="01x xxxx xxxx"></label>
-        </div>
-        <div style="margin-top:16px"><div class="f" style="font-weight:700;margin-bottom:8px">Who is cheering?</div>
-          <div class="chips" data-group="cWho"><button class="chip sel" data-v="Me">Me</button><button class="chip" data-v="My kid(s)">My kid(s)</button><button class="chip" data-v="Me and my kid(s)">Both of us</button><button class="chip" data-v="My friends and me">My squad</button></div>
-        </div>
-        <label class="f" style="margin-top:16px">Kids’ ages, if any<input id="cAges" placeholder="Optional, e.g. 7 and 10"></label>
-        <div style="margin-top:22px"><button class="btn btn-pink" id="cheerGo">Notify me first</button></div>
-      </div>
-    </section>
   </div>
 
   <aside class="summary">
@@ -548,12 +495,12 @@ const pick=g=>{const c=document.querySelector(`[data-group="${g}"] .chip.sel`);r
 
 /* tabs + hash */
 function showTab(t){
-  if(!['class','run','cheerbounce'].includes(t))t='class';
+  t='class';
   $$('.tab').forEach(x=>x.classList.toggle('on',x.dataset.tab===t));
   $$('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+t));
   $('.layout').classList.toggle('solo',t!=='class');
 }
-$$('.tab').forEach(b=>b.addEventListener('click',()=>{showTab(b.dataset.tab);scrollBy({top:$('.layout').getBoundingClientRect().top-90,behavior:'smooth'});try{history.replaceState(null,'','#'+(b.dataset.tab==='class'?'book':b.dataset.tab))}catch(e){}}));
+[].forEach(b=>b.addEventListener('click',()=>{showTab(b.dataset.tab);scrollBy({top:$('.layout').getBoundingClientRect().top-90,behavior:'smooth'});try{history.replaceState(null,'','#'+(b.dataset.tab==='class'?'book':b.dataset.tab))}catch(e){}}));
 function fromHash(){
   const h=location.hash.slice(1);
   if(STUDIOS[h]){showTab('class');st.studio=h;$$('[data-studio]').forEach(x=>x.classList.toggle('sel',x.dataset.studio===h));renderDates();renderTimes();unlock();scrollTo('#s2')}
@@ -613,8 +560,6 @@ Please notify me once you announce it!`;
   save(isRun?'The Bounce Run · waitlist':'CheerBounce · waitlist');
   openModal('You’re on the list!','Send this to Erika so she can notify you first.',msg,isRun?'':'');
 }
-$('#runGo').addEventListener('click',()=>waitlist('run'));
-$('#cheerGo').addEventListener('click',()=>waitlist('cheer'));
 
 /* local "my requests" */
 function load(){try{return JSON.parse(localStorage.getItem('erika-requests')||'[]')}catch(e){return[]}}

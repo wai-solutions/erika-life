@@ -13,11 +13,10 @@
   - New Cairo: Sunday and Tuesday, 6 PM, 7 PM and 8 PM
   - Heliopolis: Monday and Wednesday, 6 PM, 7 PM and 8 PM
 - Boots: provided in sizes S, M and L; reserve your size when booking
-- Coming soon: The Bounce Run (outdoor run on rebound boots) and CheerBounce (cheer moves on rebound boots); waitlists open
 
 ## Pages
 - [Home](https://wai-solutions.github.io/erika-life/): the Erika story ("Born from a flower. Made to bounce."), choose your feeling (free, joyful, powerful), Erika's three beats "Land soft. Rise strong. Bloom.", meet Erika, back to nature (from Hungary to Egypt to the world), three class levels (beginner, intermediate, advanced), schedule
-- [Book a class](https://wai-solutions.github.io/erika-life/booking.html): choose studio, day, hour and boots size; join event waitlists
+- [Book a class](https://wai-solutions.github.io/erika-life/booking.html): choose studio, day, hour and boots size
 
 ## Social
 - Instagram: https://www.instagram.com/erikaszenes/
