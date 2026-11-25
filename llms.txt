@@ -13,11 +13,14 @@
 - Next class: 1 December 2026, 6 PM Cairo time; the venue is shared after booking
 - Studios and times (Africa/Cairo): New Cairo on Sunday and Tuesday; Heliopolis on Monday and Wednesday; 6–7, 7–8 and 8–9 PM
 - Boots: provided in S (EU 36–37), M (EU 38–39) and L (EU 40–42); XS and XL are not in class stock, bring your own; you can always bring your own boots
+- Own boots for sale: Basic full black 16,000 EGP; Modified coloured springs 18,000 EGP; Special coloured edition 20,000 EGP; Kids 16,000 EGP; Luxury mirrored edition 25,000 EGP. Reserve with a 50% InstaPay deposit, balance on delivery.
 - Booking: on the booking page, then pay with InstaPay and send the booking with the transfer screenshot to Erika, who confirms by reply
 
 ## Pages
 - [Home](https://wai-solutions.github.io/erika-life/): welcome, choose your feeling (free, joyful, powerful), Erika's three beats "Land soft. Rise strong. Bloom.", Meet Erika, back to nature, three levels, next class countdown, FAQ
 - [Book a class](https://wai-solutions.github.io/erika-life/booking.html): studio, day, time, boots size with size chart, December price, name and WhatsApp, InstaPay payment
+
+- [Get your own boots](https://wai-solutions.github.io/erika-life/boots.html): five editions with colours, size chart, 50% InstaPay deposit
 
 ## Social
 - Instagram: https://www.instagram.com/erikaszenes/

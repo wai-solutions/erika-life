@@ -97,7 +97,7 @@ const TIMES={'18':'6–7 PM','19':'7–8 PM','20':'8–9 PM'};
 const DAYF=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const nice=d=>{const x=new Date(d+'T00:00');return isNaN(x)?d:`${DAYF[x.getDay()]} ${x.getDate()} ${MON[x.getMonth()]}`};
 let KEY='';try{KEY=localStorage.getItem('erika-admin-key')||''}catch(e){}
-let DATA=null,STOCK={S:2,M:8,L:1},VIEW='up',Q='',SAMPLE=false;
+let DATA=null,ORDERS=[],STOCK={S:2,M:8,L:1},VIEW='up',Q='',SAMPLE=false;
 
 /* logo symbols from the home page */
 fetch('index.html').then(r=>r.text()).then(t=>{const m=t.match(/<symbol id="bloom"[\s\S]*?<\/symbol>/),w=t.match(/<symbol id="wm"[\s\S]*?<\/symbol>/);$('#defs').innerHTML=(m?m[0]:'')+(w?w[0]:'')}).catch(()=>{});
@@ -107,6 +107,10 @@ function waLink(n){let d=String(n).replace(/\D/g,'');if(d.startsWith('01'))d='2'
 
 function sample(){
   SAMPLE=true;
+  ORDERS=[
+    {id:'B1A2B',created:'2026-11-24 21:15',edition:'Luxury',colour:'Rose gold',size:'M',qty:'1',total:'25000',deposit:'12500',name:'Hana Mostafa',whatsapp:'011 1148 5364',notes:'Delivery to Sheikh Zayed',paid:'deposit',status:'ordered'},
+    {id:'B3C4D',created:'2026-11-25 10:40',edition:'Modified',colour:'Pink springs',size:'S',qty:'1',total:'18000',deposit:'9000',name:'Salma Adel',whatsapp:'011 1037 5091',notes:'',paid:'no',status:'ordered'},
+    {id:'B5E6F',created:'2026-11-25 18:05',edition:'Kids',colour:'White and pink',size:'XS',qty:'2',total:'32000',deposit:'16000',name:'Dina Samir',whatsapp:'010 1111 5273',notes:'For my twins',paid:'full',status:'ordered'}];
   const names=['Nour Hassan','Salma Adel','Mariam Fawzy','Dina Samir','Hana Mostafa','Yasmin Ali','Farida Kamal','Laila Omar','Rana Tarek','Mai Sherif','Aya Nabil','Jana Wael','Noha Fathy','Malak Ehab'];
   const cls=[['New Cairo','2026-12-01','18'],['New Cairo','2026-12-01','19'],['Heliopolis','2026-12-02','19'],['Heliopolis','2026-12-02','20'],['New Cairo','2026-12-06','19'],['Heliopolis','2026-12-07','18']];
   const boots=['M','M','S','own','M','L','M','S','M','own','M','S','M','M'];
@@ -119,7 +123,7 @@ async function load(){
   $('#app').innerHTML='<p class="empty">Loading bookings…</p>';
   try{const r=await fetch(API+'?key='+encodeURIComponent(KEY));const j=await r.json();
     if(!j.ok){KEY='';try{localStorage.removeItem('erika-admin-key')}catch(e){}login('That key did not work. Try again.');return}
-    DATA=j.rows||[];if(j.stock)STOCK=j.stock;render()}
+    DATA=j.rows||[];ORDERS=j.orders||[];if(j.stock)STOCK=j.stock;render()}
   catch(e){$('#app').innerHTML='<p class="empty">Could not reach the bookings sheet. Check your connection and press Refresh.</p>'}
 }
 function login(msg){
@@ -154,6 +158,9 @@ function render(){
   const wd={};live.forEach(r=>{const d=new Date(String(r.created).slice(0,10)+'T00:00');if(!isNaN(d))wd[d.getDay()]=(wd[d.getDay()]||0)+1});
   const pd=Object.entries(wd).sort((a,b)=>b[1]-a[1])[0];
   const topSize=top(sizes),topSlot=top(slots);
+  const liveO=ORDERS.filter(o=>o.status!=='cancelled');const num=v=>+String(v).replace(/[^\d.]/g,'')||0;
+  const bootsTot=liveO.reduce((a,o)=>a+num(o.total),0),bootsIn=liveO.reduce((a,o)=>a+(o.paid==='full'?num(o.total):o.paid==='deposit'?num(o.deposit):0),0);
+  const edBars=[...new Set(liveO.map(o=>o.edition))].map(e=>({l:e,v:liveO.filter(o=>o.edition===e).reduce((a,o)=>a+num(o.total),0)})).sort((a,b)=>b.v-a.v);
   // classes list
   let rows=DATA.slice();const q=Q.toLowerCase();
   if(q)rows=rows.filter(r=>[r.name,r.whatsapp,r.studio,r.notes,r.id].join(' ').toLowerCase().includes(q));
@@ -173,16 +180,27 @@ function render(){
     <div class="box"><h3>Revenue by place</h3><p class="big">${places[0]?esc(places[0].l)+' leads':'No bookings yet'}</p>${bars(places,money)}</div>
     <div class="box"><h3>When people book</h3><p class="big">${ph?`Around ${hr(ph[0])}${pd?', on '+DAYF[pd[0]]+'s':''}`:'—'}</p>${bars(buckets)}</div>
     <div class="box"><h3>Most booked boots</h3><p class="big">${topSize&&topSize.v?esc(topSize.l):'—'}</p>${bars(sizes.map(x=>({...x,dim:x.l==='Own boots'})))}</div>
+    <div class="box"><h3>Boots sales</h3><p class="big">${money(bootsIn)} <span style="font:400 14px var(--sans);color:var(--mute)">received of ${money(bootsTot)}</span></p>${bars(edBars,money)}</div>
     <div class="box"><h3>Favourite class time</h3><p class="big">${topSlot&&topSlot.v?esc(topSlot.l):'—'}</p>${bars(slots)}</div>
   </div>
   <div class="tools"><h2>Classes</h2>
     <div class="tabs" role="group" aria-label="Show">${[['up','Upcoming'],['past','Past'],['all','All']].map(([v,l])=>`<button type="button" data-v="${v}" aria-pressed="${VIEW===v}">${l}</button>`).join('')}</div>
     <input id="q" type="search" placeholder="Search" aria-label="Search bookings" value="${esc(Q)}">
   </div>
-  ${groups.length?groups.map(cls).join(''):`<p class="empty">${DATA.length?'No bookings here.':'No bookings yet. They appear here as soon as someone books.'}</p>`}`;
+  ${groups.length?groups.map(cls).join(''):`<p class="empty">${DATA.length?'No bookings here.':'No bookings yet. They appear here as soon as someone books.'}</p>`}
+  <div class="tools"><h2>Boot orders</h2></div>
+  ${ORDERS.length?`<section class="class">${ORDERS.slice().sort((a,b)=>b.created.localeCompare(a.created)).map(o=>`<div class="p${o.status==='cancelled'?' cancelled':''}">
+    <div><span class="nm">${esc(o.name)}</span><div class="sub">Ref ${esc(o.id)} · ${esc(o.created)}</div></div>
+    <a class="wa" href="${esc(waLink(o.whatsapp))}" target="_blank" rel="noopener">${esc(o.whatsapp)}</a>
+    <span class="boot">${esc(o.edition)} · ${esc(o.size)}${+o.qty>1?' ×'+esc(o.qty):''}</span>
+    <div class="acts"><button class="small paid" type="button" data-opaid="${esc(o.id)}" aria-pressed="${o.paid!=='no'}">${o.paid==='full'?'Paid in full':o.paid==='deposit'?'Deposit paid':'Mark deposit'}</button><button class="x" type="button" data-ocancel="${esc(o.id)}">${o.status==='cancelled'?'Restore':'Cancel'}</button></div>
+    <div class="notes">${esc(o.colour)} · ${money(num(o.total))} total, deposit ${money(num(o.deposit))}${o.notes?' · '+esc(o.notes):''}</div>
+  </div>`).join('')}</section>`:'<p class="empty">No boot orders yet.</p>'}`;
   document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{VIEW=b.dataset.v;render()}));
   const qi=$('#q');qi.addEventListener('input',()=>{Q=qi.value;const p=qi.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(p,p)});
   document.querySelectorAll('[data-paid]').forEach(b=>b.addEventListener('click',()=>update(b.dataset.paid,{paid:b.getAttribute('aria-pressed')!=='true'})));
+  document.querySelectorAll('[data-opaid]').forEach(b=>b.addEventListener('click',()=>{const o=ORDERS.find(x=>x.id===b.dataset.opaid);const nxt={no:'deposit',deposit:'full',full:'no'}[o.paid]||'deposit';updateOrder(o.id,{paid:nxt})}));
+  document.querySelectorAll('[data-ocancel]').forEach(b=>b.addEventListener('click',()=>{const o=ORDERS.find(x=>x.id===b.dataset.ocancel);const c=o.status==='cancelled';if(!c&&!confirmInline(b))return;updateOrder(o.id,{status:c?'ordered':'cancelled'})}));
   document.querySelectorAll('[data-cancel]').forEach(b=>b.addEventListener('click',()=>{const r=DATA.find(x=>x.id===b.dataset.cancel);const c=r.status==='cancelled';if(!c&&!confirmInline(b))return;update(r.id,{status:c?'booked':'cancelled'})}));
 }
 function confirmInline(b){if(b.dataset.sure)return true;b.dataset.sure='1';b.textContent='Tap again';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='Cancel'}},3000);return false}
@@ -197,6 +215,12 @@ function cls(c){
     <div class="acts"><button class="small paid" type="button" data-paid="${esc(r.id)}" aria-pressed="${r.paid==='yes'}">${r.paid==='yes'?'Paid':'Mark paid'}</button><button class="x" type="button" data-cancel="${esc(r.id)}">${r.status==='cancelled'?'Restore':'Cancel'}</button></div>
     ${r.notes?`<div class="notes">${esc(r.notes)}</div>`:''}
   </div>`).join('')}</section>`;
+}
+async function updateOrder(id,patch){
+  const o=ORDERS.find(x=>x.id===id);if(!o)return;const prev={...o};Object.assign(o,patch);render();
+  if(!API)return;
+  try{const res=await fetch(API,{method:'POST',body:JSON.stringify({action:'update',kind:'order',key:KEY,id,...patch})});const j=await res.json();if(!j.ok)throw 0}
+  catch(e){Object.assign(o,prev);render();alertBar('Could not save that change. Try again.')}
 }
 async function update(id,patch){
   const r=DATA.find(x=>x.id===id);if(!r)return;
