@@ -414,7 +414,7 @@
    PICTURE: real class photos in deep parallax, erica bells floating, a bloom that hops through every chapter
    COLOUR and TYPE: cream ground, deep plum nights, rose accent, heath green only for growing things; Playfair Display + DM Sans
    LAYOUT : full-bleed chapters, pinned scenes, one horizontal walk, a playable bounce pad */
-:root{color-scheme:light;--cream:#FBF7F4;--sand:#F4E9E1;--rose:#CC3370;--rose2:#E5639A;--lilac:#F1CFE0;--plum:#2A1222;--plum2:#3D1B31;--heath:#667452;--ink:#2A1222;--beat:.556s;--serif:"Playfair Display",Georgia,serif;--sans:"DM Sans",system-ui,sans-serif}
+:root{color-scheme:light;--cream:#FBF7F4;--sand:#F4E9E1;--rose:#CC3370;--rose2:#E5639A;--lilac:#F1CFE0;--plum:#2A1222;--plum2:#3D1B31;--heath:#667452;--ink:#2A1222;--beat:.667s;--serif:"Playfair Display",Georgia,serif;--sans:"DM Sans",system-ui,sans-serif}
 *{box-sizing:border-box;min-width:0;letter-spacing:normal}
 html{scroll-padding-top:72px}
 html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!important}
@@ -832,7 +832,7 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
     <div class="mpic">
       <div class="stamp pulse" aria-hidden="true"><svg class="bob"><use href="#bloom"/></svg></div>
       <div class="card" id="mCard"><img id="mImg" src="img/class-steps.jpg" alt=""></div>
-      <div class="bpm" id="mBpm">104 beats a minute</div>
+      <div class="bpm" id="mBpm">86 beats a minute</div>
       <div class="mburst" id="mBurst"></div>
     </div>
   </div>
@@ -1160,9 +1160,9 @@ addEventListener('keydown',e=>{const k=e.key;const dir=['ArrowDown','PageDown','
 (function(){
   const sec=$('#moods'),chips=$$('.chip'),card=$('#mCard'),img=$('#mImg'),bars=$$('.mprog b');
   const M=[
-    {img:'img/class-steps.jpg',alt:'Coach mid-step in rebound boots, hair flying',line:'Light as air. Nothing to carry.',list:['Float above the floor with every step.','Music up, worries down.','Move your way, there are no wrong moves.'],move:'The float',bpm:104,cta:'Book a free-feeling class'},
-    {img:'img/crop-studio.jpg',alt:'Smiling woman with pink pom-poms bouncing in pink boots',line:'Laugh first. Sweat later.',list:['A room full of smiles from the first song.','Dance steps anyone can follow.','Make friends between the beats.'],move:'Happy high knees',bpm:108,cta:'Book a joyful class'},
-    {img:'img/group-flex.jpg',alt:'Three women flexing their arms after class',line:'Strong legs. Strong core. Strong you.',list:['Every jump builds real strength.','Go higher than you thought you could.','Finish proud, every single class.'],move:'The power jump',bpm:112,cta:'Book a powerful class'}
+    {img:'img/class-steps.jpg',alt:'Coach mid-step in rebound boots, hair flying',line:'Light as air. Nothing to carry.',list:['Float above the floor with every step.','Music up, worries down.','Move your way, there are no wrong moves.'],move:'The float',bpm:86,cta:'Book a free-feeling class'},
+    {img:'img/crop-studio.jpg',alt:'Smiling woman with pink pom-poms bouncing in pink boots',line:'Laugh first. Sweat later.',list:['A room full of smiles from the first song.','Dance steps anyone can follow.','Make friends between the beats.'],move:'Happy high knees',bpm:90,cta:'Book a joyful class'},
+    {img:'img/group-flex.jpg',alt:'Three women flexing their arms after class',line:'Strong legs. Strong core. Strong you.',list:['Every jump builds real strength.','Go higher than you thought you could.','Finish proud, every single class.'],move:'The power jump',bpm:94,cta:'Book a powerful class'}
   ];
   M.forEach(m=>{const p=new Image();p.src=m.img});
   let cur=-1;
@@ -1307,7 +1307,7 @@ if(hasG&&!RM){
     setTimeout(tick,1000-(Date.now()%1000));
   }
   tick();
-  if(hasG&&!RM)gsap.to(bl,{y:-12,duration:.556,repeat:-1,yoyo:true,ease:'power1.out'});
+  if(hasG&&!RM)gsap.to(bl,{y:-12,duration:.667,repeat:-1,yoyo:true,ease:'power1.out'});
 })();
 
 /* ---------- FAQ: questions bounce in and open as they reach the middle ---------- */
@@ -1350,7 +1350,7 @@ if(hasG&&!RM){
 /* ---------- the beat (Web Audio, starts on click) ---------- */
 Beat=(function(){
   /* Erika euphoria: Für Elise (Beethoven, public domain) piano riff over an uplifting dance drop. Breakdown bars 1-4, drop bars 5-8 */
-  let BPM=108,SP=60/BPM/4;let ctx=null,out=null,dry=null,verb=null,pad=null,dly=null,on=false,next=0,step=0,timer=0,noiseBuf=null;
+  let BPM=90,SP=60/BPM/4;let ctx=null,out=null,dry=null,verb=null,pad=null,dly=null,on=false,next=0,step=0,timer=0,noiseBuf=null;
   const btn=$('#beat'),lbl=$('#beat .lbl');
   const N=n=>440*Math.pow(2,(n-69)/12);
   // harmony per bar: Am | E | Am | E->Am
