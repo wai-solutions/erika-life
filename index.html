@@ -504,7 +504,11 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 .ncopy .k .ek{height:1.7em;vertical-align:-.55em}
 
 /* levels */
-.levels{background:var(--plum);color:var(--cream);overflow:hidden}
+.levels{background:var(--plum);color:var(--cream);overflow:hidden;height:100svh;min-height:620px;display:flex;align-items:center;padding:84px 0 70px!important}
+.levels>.wrap{width:100%}
+.levels .h2{font-size:clamp(34px,4.4vw,60px)}
+.lgrid{margin-top:clamp(20px,4vh,50px)!important}
+.stairs{height:clamp(300px,44vh,420px)!important}
 .levels .top2{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px}
 .levels .lead{opacity:.9;margin-top:14px}
 .lgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(30px,5vw,80px);align-items:end;margin-top:clamp(40px,6vw,70px)}
@@ -527,7 +531,8 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 .mv b{display:block;font:400 21px var(--serif);color:var(--rose2);margin-bottom:4px}
 .mv span{font-size:15px;opacity:.85}
 .levels .cta{margin-top:26px;display:flex;flex-wrap:wrap;gap:12px}
-@media(max-width:860px){.lgrid{grid-template-columns:minmax(0,1fr)}.stairs{height:300px;padding-top:90px}}
+@media(max-width:860px){.lgrid{grid-template-columns:minmax(0,1fr);gap:16px}.stairs{height:200px!important;padding-top:70px}.levels{align-items:flex-start;padding-top:76px!important}.levels .h2{font-size:28px}.levels .lead{font-size:16px;margin-top:6px}
+ .lpanel h3{font-size:26px}.lpanel .li{font-size:18px;margin:4px 0 12px}.moves{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}.mv{padding:12px 14px;border-radius:16px}.mv b{font-size:18px;margin:0}.mv span{display:none}.levels .cta{margin-top:14px}.lhop{width:46px;height:46px}.step small{font-size:13px;font-weight:500;opacity:1}.step strong{display:none}}
 @media(max-width:480px){.moves{grid-template-columns:minmax(0,1fr)}.step{padding:14px 12px}.step strong{font-size:18px}}
 
 /* classes */
@@ -536,16 +541,29 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 .marq figure{margin:0;width:clamp(220px,26vw,360px);aspect-ratio:4/5;border-radius:26px;overflow:hidden;flex:none}
 .marq figure:nth-child(odd){transform:translateY(26px)}
 .marq img{width:100%;height:100%;object-fit:cover}
-.studios{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:10px}
-.studio{background:var(--plum2);border-radius:28px;padding:clamp(24px,3vw,38px)}
-.studio h3{font-size:clamp(30px,3.2vw,42px)}
-.studio .days{color:var(--rose2);font:italic 400 22px var(--serif);margin:6px 0 18px}
-.times{display:flex;flex-wrap:wrap;gap:8px}
-.times span{white-space:nowrap;padding:9px 16px;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(251,247,244,.3);font-size:15px}
 .classes .note{margin:24px 0 0;opacity:.8;font-size:16px}
 .classes .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
-@media(max-width:760px){.studios{grid-template-columns:minmax(0,1fr)}}
 
+.invite{background:var(--plum2);border-radius:34px;padding:clamp(24px,4vw,48px);position:relative;overflow:hidden}
+.invite::after{content:"";position:absolute;right:-80px;top:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(229,99,154,.35),rgba(229,99,154,0) 70%);pointer-events:none}
+.inv-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:18px 30px}
+.inv-k{margin:0 0 6px;color:var(--rose2);font-size:16px}
+.invite h3{font-size:clamp(32px,4vw,54px)}
+.invite h3 em{color:var(--rose2)}
+.inv-sub{margin:10px 0 0;opacity:.85;font-size:17px}
+.inv-date{text-align:right}.inv-date b{display:block;font:italic 400 clamp(24px,2.6vw,34px) var(--serif);color:var(--rose2);white-space:nowrap}.inv-date span{font-size:15px;opacity:.8}
+.cd{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:clamp(22px,3vw,36px)}
+.cd-u{background:rgba(251,247,244,.06);border-radius:22px;padding:16px 10px;text-align:center}
+.cd-u b{display:block;font:400 clamp(40px,6vw,80px)/1 var(--serif);font-variant-numeric:lining-nums tabular-nums}
+.cd-u span{font-size:14px;opacity:.75}
+.cd-u b.tick{animation:tick .45s cubic-bezier(.3,1.8,.5,1)}
+@keyframes tick{0%{transform:translateY(-14px) scale(1.1);color:var(--rose2)}100%{transform:none}}
+.cd-bar{position:relative;height:8px;border-radius:8px;background:rgba(251,247,244,.12);margin:34px 0 8px}
+.cd-bar i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:8px;background:linear-gradient(90deg,var(--rose),var(--rose2))}
+.cd-bloom{position:absolute;top:50%;left:0;width:40px;height:40px;margin:-36px 0 0 -20px;color:var(--rose2)}
+.cd-bloom svg{width:100%;height:100%}
+.cd-msg{margin:0;font-size:15px;opacity:.75}
+@media(max-width:600px){.inv-date{text-align:left}.cd{gap:6px}.cd-u{padding:12px 4px;border-radius:16px}.cd-u span{font-size:12px}}
 /* join */
 .join{background:var(--rose);color:#fff;text-align:center;position:relative;overflow:hidden}
 .join .big{width:clamp(110px,14vw,170px);margin:0 auto 26px;color:var(--cream)}
@@ -764,12 +782,26 @@ footer .ar{font-size:15px;direction:rtl}
     <figure><img src="img/class-hover.jpg" alt="Floating mid-bounce" loading="lazy"></figure>
   </div>
   <div class="wrap">
-    <div class="studios">
-      <div class="studio"><h3>New Cairo</h3><div class="days">Sunday and Tuesday</div><div class="times"><span>6–7 PM</span><span>7–8 PM</span><span>8–9 PM</span></div></div>
-      <div class="studio"><h3>Heliopolis</h3><div class="days">Monday and Wednesday</div><div class="times"><span>6–7 PM</span><span>7–8 PM</span><span>8–9 PM</span></div></div>
+    <div class="invite" id="invite">
+      <div class="inv-top">
+        <div>
+          <p class="inv-k">You are invited</p>
+          <h3>Guess where our next class is<em>?</em></h3>
+          <p class="inv-sub">Book your spot from now, the place is revealed when you join.</p>
+        </div>
+        <div class="inv-date"><b>1 December 2026</b><span>6 PM, Cairo time</span></div>
+      </div>
+      <div class="cd" id="cd" aria-live="off">
+        <div class="cd-u"><b id="cdD">0</b><span>days</span></div>
+        <div class="cd-u"><b id="cdH">00</b><span>hours</span></div>
+        <div class="cd-u"><b id="cdM">00</b><span>minutes</span></div>
+        <div class="cd-u"><b id="cdS">00</b><span>seconds</span></div>
+      </div>
+      <div class="cd-bar" aria-hidden="true"><i id="cdBar"></i><span class="cd-bloom" id="cdBloom"><svg><use href="#bloom"/></svg></span></div>
+      <p class="cd-msg" id="cdMsg">Until we bounce together</p>
     </div>
     <p class="note">All classes use basic movements. Come as you are, your boots will be ready for you.</p>
-    <div class="cta"><a class="btn rose" href="booking.html">Book your class</a></div>
+    <div class="cta"><a class="btn rose" href="booking.html">Book your spot</a></div>
   </div>
 </section>
 
@@ -1029,7 +1061,7 @@ if(hasG&&!RM){
     {t:'Intermediate. <em>Build your power.</em>',i:'Bigger lifts and new directions.',m:[['Knee Lift','Lift one knee, bounce on the other boot.'],['Swing Kick','Hop side to side with a straight-leg kick.'],['Scissor Step','One boot forward, one back, switch.'],['Hip Twist','Hips turn, shoulders stay forward.']]},
     {t:'Advanced. <em>Let it fly.</em>',i:'Full energy, big music, pure power.',m:[['Star Jump','Feet out, feet in, knees soft.'],['Sprint Knees','Fast knees, arms pumping.'],['Squat to Lift','Sink low, then spring up.'],['Turn Combo','Mix your steps with quarter and half turns.']]}];
   const steps=$$('.step'),hop=$('#lHop'),st=$('#stairs');let cur=-1,idle=null;
-  const spot=i=>{const b=steps[i],r=b.getBoundingClientRect(),s=st.getBoundingClientRect();return{x:r.left-s.left+r.width/2-32,y:r.top-s.top-64}};
+  const spot=i=>{const b=steps[i],r=b.getBoundingClientRect(),s=st.getBoundingClientRect(),w=hop.offsetWidth;return{x:r.left-s.left+r.width/2-w/2,y:r.top-s.top-w}};
   function show(i,anim){
     const prev=cur;cur=i;const l=L[i];
     steps.forEach((b,j)=>b.setAttribute('aria-pressed',j===i));
@@ -1050,11 +1082,30 @@ if(hasG&&!RM){
   }
   // idle bounce height grows with the level
   function idleHop(i){idle&&idle.kill();const p=spot(i);gsap.set(hop,{x:p.x,y:p.y});idle=gsap.to(hop,{y:p.y-[16,30,48][i],duration:[.5,.42,.36][i],repeat:-1,yoyo:true,ease:'power1.out'})}
-  steps.forEach(b=>b.addEventListener('click',()=>show(+b.dataset.i,true)));
+  let LST=null;
+  steps.forEach(b=>b.addEventListener('click',()=>{const i=+b.dataset.i;if(LST){const y=LST.start+(LST.end-LST.start)*[0,.5,1][i]+1;lenis?lenis.scrollTo(y,{duration:1.1}):scrollTo({top:y,behavior:'smooth'})}else show(i,true)}));
   show(0,false);
   addEventListener('resize',()=>{if(hasG&&!RM)idleHop(cur);else{const p=spot(cur);hop.style.transform=`translate(${p.x}px,${p.y}px)`}});
-  if(hasG){ScrollTrigger.create({trigger:'#levels',start:'top 60%',once:true,onEnter:()=>{if(RM)return;setTimeout(()=>cur===0&&show(1,true),900);setTimeout(()=>cur===1&&show(2,true),2300);setTimeout(()=>cur===2&&show(0,true),3700)}});
-    if(!RM){gsap.set('.step',{yPercent:100,opacity:0});const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();gsap.to('.step',{yPercent:0,opacity:1,duration:1,ease:'bounce.out',stagger:.12,onComplete:()=>idleHop(cur)})}},{threshold:.3});io.observe(st);}}
+  if(hasG&&!RM)LST=ScrollTrigger.create({trigger:'#levels',start:'top top',end:'+=200%',pin:true,scrub:true,anticipatePin:1,snap:{snapTo:[0,.5,1],directional:false,duration:{min:.3,max:.7},delay:.1,ease:'power2.inOut'},onUpdate:st=>{const k=st.progress<.25?0:st.progress<.75?1:2;if(k!==cur)show(k,true)},onRefresh:()=>idleHop(cur)});
+  if(hasG){    if(!RM){gsap.set('.step',{yPercent:100,opacity:0});const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();gsap.to('.step',{yPercent:0,opacity:1,duration:1,ease:'bounce.out',stagger:.12,onComplete:()=>idleHop(cur)})}},{threshold:.3});io.observe(st);}}
+})();
+
+/* ---------- next class countdown ---------- */
+(function(){
+  const T=Date.UTC(2026,11,1,16,0,0),S=Date.UTC(2026,10,25,0,0,0); // 1 Dec 2026, 6 PM Cairo (UTC+2)
+  const el={D:$('#cdD'),H:$('#cdH'),M:$('#cdM'),S:$('#cdS')},bar=$('#cdBar'),bl=$('#cdBloom');let last={};
+  const pad=n=>String(n).padStart(2,'0');
+  function tick(){
+    let ms=T-Date.now();
+    if(ms<=0){$('#cd').style.display='none';bar.style.width='100%';bl.style.left='100%';$('#cdMsg').textContent='This one has started. Book your spot for the next bounce.';return}
+    const v={D:Math.floor(ms/864e5),H:pad(Math.floor(ms/36e5)%24),M:pad(Math.floor(ms/6e4)%60),S:pad(Math.floor(ms/1e3)%60)};
+    for(const k in v){if(last[k]!==v[k]){el[k].textContent=v[k];if(!RM&&last[k]!==undefined){el[k].classList.remove('tick');void el[k].offsetWidth;el[k].classList.add('tick')}}}
+    last=v;
+    const p=Math.max(0,Math.min(1,(Date.now()-S)/(T-S)));bar.style.width=(p*100)+'%';bl.style.left=(p*100)+'%';
+    setTimeout(tick,1000-(Date.now()%1000));
+  }
+  tick();
+  if(hasG&&!RM)gsap.to(bl,{y:-12,duration:.517,repeat:-1,yoyo:true,ease:'power1.out'});
 })();
 
 /* ---------- classes marquee with scroll velocity ---------- */
@@ -1065,7 +1116,7 @@ if(hasG&&!RM){
   m.innerHTML+=m.innerHTML;
   const measure=()=>{half=m.scrollWidth/2};measure();addEventListener('resize',measure);
   (function loop(){const dy=scrollY-last;last=scrollY;v+=(dy*.25-v)*.08;x-=.6+Math.abs(v);if(-x>half)x+=half;m.style.transform=`translateX(${x}px)`;requestAnimationFrame(loop)})();
-  if(hasG)gsap.from('.studio',{y:60,opacity:0,duration:1,ease:'back.out(1.6)',stagger:.12,scrollTrigger:{trigger:'.studios',start:'top 85%'}});
+  if(hasG&&!RM)gsap.from('.invite',{y:80,opacity:0,duration:1.1,ease:'back.out(1.6)',scrollTrigger:{trigger:'.invite',start:'top 85%'}});
 })();
 
 /* ---------- headings bounce in ---------- */
