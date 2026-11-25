@@ -1079,10 +1079,10 @@ if(hasG&&!RM){
   tl.fromTo('#nFrame',{clipPath:()=>{const sx=innerWidth<700?18:36,sy=innerWidth<700?16:10;return `inset(${sy}% ${sx}% ${sy}% ${sx}% round ${Math.round(innerWidth*(100-2*sx)/200)}px)`}},{clipPath:'inset(0% 0% 0% 0% round 0px)',duration:1,ease:'power2.inOut'},0)
     .fromTo(img,{scale:1.25},{scale:1,duration:1,ease:'power2.inOut'},0)
     .fromTo('.nveil',{opacity:0},{opacity:1,duration:.6},.5)
-    .from('.ncopy .k',{y:30,opacity:0,duration:.3},.9)
-    .from('#nTitle .w',{y:-160,opacity:0,duration:.6,ease:'bounce.out',stagger:.15},1)
-    .from('#nWay',{y:30,opacity:0,duration:.4,ease:'back.out(2)'},1.4)
-    .from('.ncopy li',{y:40,opacity:0,duration:.4,ease:'back.out(3)',stagger:.12},1.65)
+    .fromTo('.ncopy .k',{y:30,opacity:0},{y:0,opacity:1,duration:.3},.9)
+    .fromTo('#nTitle .w',{y:-160,opacity:0},{y:0,opacity:1,duration:.6,ease:'bounce.out',stagger:.15},1)
+    .fromTo('#nWay',{y:30,opacity:0},{y:0,opacity:1,duration:.4,ease:'back.out(2)'},1.4)
+    .fromTo('.ncopy li',{y:40,opacity:0},{y:0,opacity:1,duration:.4,ease:'back.out(3)',stagger:.12},1.65)
     .to(img,{scale:1.32,duration:1.6,ease:'none'},1)
     .to({},{duration:.2});
 }
