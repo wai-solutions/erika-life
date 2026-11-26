@@ -17,10 +17,10 @@
 - Booking: on the booking page, then pay with InstaPay and send the booking with the transfer screenshot to Erika, who confirms by reply
 
 ## Pages
-- [Home](https://wai-solutions.github.io/erika-life/): welcome, choose your feeling (free, joyful, powerful), Erika's three beats "Land soft. Rise strong. Bloom.", Meet Erika, back to nature, three levels, next class countdown, FAQ
-- [Book a class](https://wai-solutions.github.io/erika-life/booking.html): studio, day, time, boots size with size chart, December price, name and WhatsApp, InstaPay payment
+- [Home](https://erikalife.com/): welcome, choose your feeling (free, joyful, powerful), Erika's three beats "Land soft. Rise strong. Bloom.", Meet Erika, back to nature, three levels, next class countdown, FAQ
+- [Book a class](https://erikalife.com/booking.html): studio, day, time, boots size with size chart, December price, name and WhatsApp, InstaPay payment
 
-- [Get your own boots](https://wai-solutions.github.io/erika-life/boots.html): five editions with colours, size chart, 50% InstaPay deposit
+- [Get your own boots](https://erikalife.com/boots.html): five editions with colours, size chart, 50% InstaPay deposit
 
 ## Social
 - Instagram: https://www.instagram.com/erikaszenes/
