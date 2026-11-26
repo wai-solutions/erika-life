@@ -1132,8 +1132,9 @@ function stepLock(st,stops){
     if(lenis)lenis.scrollTo(y,{duration:.95,lock:true,force:true,onComplete:done});else{scrollTo({top:y,behavior:'smooth'});setTimeout(done,900)}};
   return L;
 }
-function hold(st,y){if(window.__nav)return;const L=stepLocks.find(x=>x.st===st);if(L&&!L.busy&&Date.now()-lastInput<500&&lenis){L.busy=true;lenis.scrollTo(y,{duration:.45,lock:true,force:true,onComplete:()=>setTimeout(()=>{L.busy=false},200)})}}
+function hold(st,y){return;/* step lock off: free scrolling */if(window.__nav)return;const L=stepLocks.find(x=>x.st===st);if(L&&!L.busy&&Date.now()-lastInput<500&&lenis){L.busy=true;lenis.scrollTo(y,{duration:.45,lock:true,force:true,onComplete:()=>setTimeout(()=>{L.busy=false},200)})}}
 function lockFor(dir){
+  return false;/* step lock off: free scrolling */
   if(window.__nav)return false;
   for(const L of stepLocks){const st=L.st,y=scrollY;
     if(y<st.start-2||y>st.end+2)continue;
