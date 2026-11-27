@@ -6,7 +6,7 @@
   var TO='inas.bakeer@wai-s.com';
   var CC='erika.bouncefit@gmail.com';
   var ENDPOINT='https://formsubmit.co/ajax/'+TO;
-  var CATS=['Book a class','Buy boots','Partnership & collaboration','Sponsorship','Events & corporate','Other'];
+  var CATS=['Book a class','Cancel a booking','Buy boots','Partnership & collaboration','Sponsorship','Events & corporate','Other'];
 
   var css=''+
   '.ec-btn{position:fixed;right:clamp(14px,2.4vw,28px);bottom:clamp(14px,2.4vw,28px);z-index:80;width:60px;height:60px;border-radius:50%;border:0;cursor:pointer;background:var(--rose,#CC3370);color:#fff;display:grid;place-items:center;box-shadow:0 12px 30px rgba(42,18,34,.32);transition:transform .25s cubic-bezier(.3,1.6,.5,1),background .25s}'+
@@ -27,6 +27,7 @@
   '.ec-form textarea{min-height:96px;resize:vertical}'+
   '.ec-form input:focus,.ec-form select:focus,.ec-form textarea:focus{outline:none;border-color:#CC3370;box-shadow:0 0 0 3px rgba(204,51,112,.15)}'+
   '.ec-form .bad{border-color:#C0392B}'+
+  '.ec-cx{display:grid;gap:12px}.ec-cx[hidden]{display:none}.ec-pol{margin:0;font-size:13px;background:#F8E6EE;color:#7A1F45;border-radius:12px;padding:10px 12px}'+
   '.ec-err{color:#B02A37;font-size:13px;min-height:0}'+
   '.ec-send{border:0;border-radius:999px;background:#CC3370;color:#fff;font:500 16px var(--sans,"DM Sans",system-ui,sans-serif);min-height:50px;cursor:pointer;transition:background .2s}'+
   '.ec-send:hover{background:#B52A61}.ec-send[disabled]{opacity:.6;cursor:wait}'+
@@ -57,6 +58,7 @@
           '<label><span>Email <b>*</b></span><input name="email" type="email" autocomplete="email" required maxlength="120"></label>'+
           '<label><span>Phone number <i>(if you prefer WhatsApp communication)</i></span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+20 10 0000 0000" maxlength="25"></label>'+
           '<label><span>Topic <b>*</b></span><select name="category" required>'+opts+'</select></label>'+
+          '<div class="ec-cx" hidden><label><span>Class date <b>*</b></span><input name="cdate" type="date"></label><label><span>Booking reference <i>(optional)</i></span><input name="cref" maxlength="20" placeholder="e.g. 4F2A9C"></label><p class="ec-pol">Cancel at least 2 hours before your class for a full refund. Cancellations later than that are not refundable.</p></div>'+
           '<label><span>Message <b>*</b></span><textarea name="message" required maxlength="2000" placeholder="Tell us how we can help"></textarea></label>'+
           '<div class="ec-hp" aria-hidden="true"><input name="_honey" tabindex="-1" autocomplete="off"></div>'+
           '<div class="ec-err" role="alert"></div>'+
@@ -77,12 +79,15 @@
       w.classList.toggle('ec-open',open);btn.setAttribute('aria-expanded',open);btn.setAttribute('aria-label',open?'Close':'Talk to us');
       if(open)setTimeout(function(){(form.querySelector('.bad')||form.name).focus({preventScroll:true})},250);
     }
-    window.erikaChat=toggle;
+    window.erikaChat=function(open,topic){if(topic){w.classList.remove('ec-sent');form.category.value=topic;topicUI()}toggle(open)};
+    if(/^#cancel/.test(location.hash))setTimeout(function(){window.erikaChat(true,'Cancel a booking')},600);
     btn.addEventListener('click',function(){toggle()});
     document.addEventListener('keydown',function(e){if(e.key==='Escape'&&w.classList.contains('ec-open')){toggle(false);btn.focus()}});
     document.addEventListener('click',function(e){if(w.classList.contains('ec-open')&&!w.contains(e.target))toggle(false)});
     setTimeout(function(){tip.classList.add('on');setTimeout(function(){tip.classList.remove('on')},5000)},4500);
-    w.querySelector('.ec-new').addEventListener('click',function(){w.classList.remove('ec-sent');form.reset();if(pre)form.category.value=pre;form.name.focus()});
+    w.querySelector('.ec-new').addEventListener('click',function(){w.classList.remove('ec-sent');form.reset();if(pre)form.category.value=pre;topicUI();form.name.focus()});
+    var cx=w.querySelector('.ec-cx');function topicUI(){var c=form.category.value==='Cancel a booking';cx.hidden=!c;form.message.placeholder=c?'Your name on the booking and the class time':'Tell us how we can help'}
+    form.category.addEventListener('change',topicUI);
     form.addEventListener('input',function(e){e.target.classList.remove('bad');err.textContent=''});
 
     form.addEventListener('submit',function(e){
@@ -92,13 +97,14 @@
       if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v('email')))bad.push(['email','a valid email']);
       if(v('phone')&&v('phone').replace(/\D/g,'').length<8)bad.push(['phone','a valid phone number']);
       if(!v('category'))bad.push(['category','a topic']);
+      if(v('category')==='Cancel a booking'&&!v('cdate'))bad.push(['cdate','the class date']);
       if(v('message').length<3)bad.push(['message','your message']);
       f.querySelectorAll('.bad').forEach(function(x){x.classList.remove('bad')});
       if(bad.length){bad.forEach(function(b){f[b[0]].classList.add('bad')});err.textContent='Please add '+bad.map(function(b){return b[1]}).join(', ')+'.';f[bad[0][0]].focus();return}
       if(v('_honey'))return;
       send.disabled=true;send.textContent='Sending...';err.textContent='';
       var data={
-        Name:v('name'),Email:v('email'),Phone:v('phone')||'Not given',Topic:v('category'),Message:v('message'),Page:location.href,
+        Name:v('name'),Email:v('email'),Phone:v('phone')||'Not given',Topic:v('category'),Message:(v('category')==='Cancel a booking'?'Class date: '+v('cdate')+(v('cref')?' · Ref: '+v('cref'):'')+' · Requested: '+new Date().toLocaleString('en-GB',{timeZone:'Africa/Cairo'})+'\n':'')+v('message'),Page:location.href,
         _subject:'Erika Life request: '+v('category')+' from '+v('name'),
         _replyto:v('email'),_cc:CC,_template:'table',_captcha:'false'
       };
@@ -111,7 +117,7 @@
       var save=API?fetch(API,{method:'POST',body:JSON.stringify({type:'request',topic:data.Topic,name:data.Name,email:data.Email,phone:v('phone'),message:data.Message,source:data.Source,page:location.pathname})})
         .then(function(r){return r.json()}).then(function(j){if(!j.ok)throw 0;return true}):Promise.reject(0);
       Promise.allSettled([mail,save]).then(function(rs){if(rs.some(function(x){return x.status==='fulfilled'}))return true;throw 0})
-        .then(function(){w.classList.add('ec-sent');form.reset();try{window.gtag&&gtag('event','generate_lead',{topic:data.Topic})}catch(x){}})
+        .then(function(){w.classList.add('ec-sent');form.reset();topicUI();try{window.gtag&&gtag('event','generate_lead',{topic:data.Topic})}catch(x){}})
         .catch(function(){err.textContent='Sorry, your request did not go through. Please try again in a moment.'})
         .then(function(){send.disabled=false;send.textContent='Send to Erika'});
     });

@@ -74,6 +74,31 @@ h2.sec{font:400 22px var(--serif);margin:28px 0 12px}
 .paid[aria-pressed="true"]{background:var(--ok);color:#fff;border-color:var(--ok)}
 .x{background:none;border:0;color:var(--mute);min-height:36px;padding:0 6px;font-size:13px;text-decoration:underline}
 .p.cancelled{opacity:.45}.p.cancelled .nm{text-decoration:line-through}
+.cal{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:16px;align-items:start;margin-bottom:8px}
+.cbox{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 16px 12px}
+.chead{display:flex;align-items:center;gap:8px;margin-bottom:10px}.chead b{font:400 20px var(--serif);margin-right:auto}
+.chead button{min-height:34px;width:34px;padding:0;justify-content:center;font-size:20px;line-height:1;background:transparent;color:var(--ink);border:1px solid var(--line)}
+.cgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center}
+.cgrid .wd{font-size:12px;color:var(--mute);padding:4px 0}
+.cgrid .d{position:relative;aspect-ratio:1;border-radius:12px;border:1px solid transparent;background:none;color:var(--ink);font:400 14px var(--sans);min-height:0;padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:default}
+.cgrid .d.cls{background:var(--blush);cursor:pointer}.cgrid .d.cls:hover{border-color:var(--rose)}
+.cgrid .d.past{opacity:.5}.cgrid .d.today{border-color:var(--ink)}
+.cgrid .d.sel{background:var(--plum);color:#fff}
+.cgrid .d i{font-style:normal;font-size:11px;color:var(--rose-d);font-weight:500;line-height:1}.cgrid .d.sel i{color:#F48FB1}
+.clegend{font-size:12px;color:var(--mute);margin:10px 2px 0}
+.dpanel h3{font:400 22px var(--serif);margin:0 0 4px}.dpanel .sub{color:var(--mute);font-size:14px;margin:0 0 12px}
+.slot{border:1px solid var(--line);border-radius:16px;margin-bottom:10px;overflow:hidden;background:var(--card)}
+.slot .sh{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;padding:12px 16px;background:#FCF7F9;border-bottom:1px solid var(--line)}
+.slot .sh b{font-weight:500}.slot .sh span{font-size:13px;color:var(--mute)}.slot .sh .n{margin-left:auto;color:var(--rose-d);font-weight:500;font-size:14px}
+.slot .none{padding:12px 16px;color:var(--mute);font-size:14px}
+.att{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:6px 12px;align-items:center;padding:10px 16px;border-top:1px solid var(--line);font-size:14px}
+.att:first-of-type{border-top:0}.att .nm{font-weight:500}.att a{color:var(--rose-d);text-decoration:none;white-space:nowrap}
+.att.gone .nm{text-decoration:line-through;color:var(--mute)}
+.att .ask{font-size:12px;color:#fff;background:var(--rose);border-radius:999px;padding:2px 8px;margin-left:6px;white-space:nowrap}
+.rm{background:transparent;color:#B3261E;border:1px solid rgba(179,38,30,.35);min-height:34px;padding:0 12px;font-size:13px}
+.rm.undo{color:var(--ink);border-color:var(--line)}
+.rf{font-size:12px;color:var(--mute);grid-column:1/-1}
+@media(max-width:760px){.cal{grid-template-columns:minmax(0,1fr)}.att{grid-template-columns:minmax(0,1fr) auto}}
 .p.rq{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 9.5em auto}.p.rdone{opacity:.55}
 .empty{text-align:center;color:var(--mute);padding:30px 0}
 @media(max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.ins{grid-template-columns:minmax(0,1fr)}.p{grid-template-columns:minmax(0,1fr) auto}.p .acts{grid-column:1/-1;display:flex;gap:8px;align-items:center}.tools input{width:100%}.bar{grid-template-columns:6.5em minmax(0,1fr) auto}}
@@ -98,7 +123,7 @@ const TIMES={'18':'6–7 PM','19':'7–8 PM','20':'8–9 PM'};
 const DAYF=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const nice=d=>{const x=new Date(d+'T00:00');return isNaN(x)?d:`${DAYF[x.getDay()]} ${x.getDate()} ${MON[x.getMonth()]}`};
 let KEY='';try{KEY=localStorage.getItem('erika-admin-key')||''}catch(e){}
-let REQS=[],DATA=null,ORDERS=[],STOCK={S:2,M:8,L:1},VIEW='up',Q='',SAMPLE=false;
+let CAL=null,SEL=null,REQS=[],DATA=null,ORDERS=[],STOCK={S:2,M:8,L:1},VIEW='up',Q='',SAMPLE=false;
 
 /* logo symbols from the home page */
 fetch('index.html').then(r=>r.text()).then(t=>{const m=t.match(/<symbol id="bloom"[\s\S]*?<\/symbol>/),w=t.match(/<symbol id="wm"[\s\S]*?<\/symbol>/);$('#defs').innerHTML=(m?m[0]:'')+(w?w[0]:'')}).catch(()=>{});
@@ -116,7 +141,7 @@ function sample(){
   const cls=[['New Cairo','2026-12-01','18'],['New Cairo','2026-12-01','19'],['Heliopolis','2026-12-02','19'],['Heliopolis','2026-12-02','20'],['New Cairo','2026-12-06','19'],['Heliopolis','2026-12-07','18']];
   const boots=['M','M','S','own','M','L','M','S','M','own','M','S','M','M'];
   const hrs=['21:10','20:45','13:05','22:30','21:55','09:40','19:20','21:35','12:15','22:05','20:10','08:55','21:40','17:30'];
-  REQS=[{id:'R1A2B',created:'2026-11-26 21:10',topic:'Book a class',name:'Nour Hassan',email:'nour@example.com',phone:'010 1234 5678',message:'Is there a class for beginners on Sunday?',source:'instagram.com',page:'/',status:'new'},
+  REQS=[{id:'R0C1X',created:'2026-11-27 09:30',topic:'Cancel a booking',name:'Nour Hassan',email:'nour@example.com',phone:'010 1000 0000',message:'Class date: 2026-12-01. I cannot come, please cancel.',source:'Direct',page:'/',status:'new'},{id:'R1A2B',created:'2026-11-26 21:10',topic:'Book a class',name:'Nour Hassan',email:'nour@example.com',phone:'010 1234 5678',message:'Is there a class for beginners on Sunday?',source:'instagram.com',page:'/',status:'new'},
     {id:'R3C4D',created:'2026-11-26 14:02',topic:'Sponsorship',name:'Omar Fathy',email:'omar@brand.example',phone:'',message:'We would like to sponsor The Bounce Run.',source:'google.com',page:'/',status:'replied'},
     {id:'R5E6F',created:'2026-11-25 19:45',topic:'Buy boots',name:'Mai Sherif',email:'mai@example.com',phone:'011 2222 3333',message:'Do you have size M in pink?',source:'Facebook / Instagram',page:'/boots.html',status:'done'}];
   return names.map((n,k)=>{const c=cls[k%cls.length];return {id:'S'+String(100+k),created:`2026-11-${String(20+(k%6)).padStart(2,'0')} ${hrs[k]}`,studio:c[0],date:c[1],time:c[2],classKey:c.join('|'),boots:boots[k],name:n,whatsapp:'01'+String(k%3)+' '+String(1000+k*37).slice(0,4)+' '+String(5000+k*91).slice(0,4),first:k%2?'I’ve tried before':'Yes, first time!',notes:k===2?'Knee was injured last year':'',price:'500',paid:k%3?'yes':'no',status:k===9?'cancelled':'booked'}});
@@ -179,6 +204,8 @@ function render(){
     <div class="stat"><b>${unpaid.length}</b><span>Waiting for payment · ${money(unpaid.reduce((a,r)=>a+price(r),0))}</span></div>
     <div class="stat"><b style="font-size:22px;line-height:1.45">${next?esc(nice(next.split('|')[0])):'—'}</b><span>${next?'Next class · '+esc(TIMES[next.split('|')[1]]||''):'No upcoming class'}</span></div>
   </div>
+  <h2 class="sec">Class calendar</h2>
+  ${calSection()}
   <h2 class="sec">Insights</h2>
   <div class="ins">
     <div class="box"><h3>Revenue by place</h3><p class="big">${places[0]?esc(places[0].l)+' leads':'No bookings yet'}</p>${bars(places,money)}</div>
@@ -204,10 +231,49 @@ function render(){
   document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{VIEW=b.dataset.v;render()}));
   const qi=$('#q');qi.addEventListener('input',()=>{Q=qi.value;const p=qi.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(p,p)});
   document.querySelectorAll('[data-paid]').forEach(b=>b.addEventListener('click',()=>update(b.dataset.paid,{paid:b.getAttribute('aria-pressed')!=='true'})));
+  document.querySelectorAll('[data-cm]').forEach(b=>b.addEventListener('click',()=>{const m=CAL.m+(+b.dataset.cm);CAL={y:CAL.y+Math.floor(m/12),m:(m%12+12)%12};render()}));
+  document.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>{SEL=b.dataset.day;render();const dp=$('.dpanel');if(dp&&innerWidth<760)dp.scrollIntoView({behavior:'smooth',block:'start'})}));
+  document.querySelectorAll('[data-rm]').forEach(b=>b.addEventListener('click',()=>{const r=DATA.find(x=>x.id===b.dataset.rm);const c=r.status==='cancelled';if(!c&&!confirmInline(b,'Remove'))return;update(r.id,{status:c?'booked':'cancelled'})}));
   document.querySelectorAll('[data-rst]').forEach(b=>b.addEventListener('click',()=>{const q=REQS.find(x=>x.id===b.dataset.rst);const nxt={new:'replied',replied:'done',done:'new'}[q.status]||'replied';updateReq(q.id,nxt)}));
   document.querySelectorAll('[data-opaid]').forEach(b=>b.addEventListener('click',()=>{const o=ORDERS.find(x=>x.id===b.dataset.opaid);const nxt={no:'deposit',deposit:'full',full:'no'}[o.paid]||'deposit';updateOrder(o.id,{paid:nxt})}));
   document.querySelectorAll('[data-ocancel]').forEach(b=>b.addEventListener('click',()=>{const o=ORDERS.find(x=>x.id===b.dataset.ocancel);const c=o.status==='cancelled';if(!c&&!confirmInline(b))return;updateOrder(o.id,{status:c?'ordered':'cancelled'})}));
   document.querySelectorAll('[data-cancel]').forEach(b=>b.addEventListener('click',()=>{const r=DATA.find(x=>x.id===b.dataset.cancel);const c=r.status==='cancelled';if(!c&&!confirmInline(b))return;update(r.id,{status:c?'booked':'cancelled'})}));
+}
+/* class schedule, same as booking.html */
+const SCHED=[{studio:'New Cairo',days:[0,2]},{studio:'Heliopolis',days:[1,3]}],SLOTS=['18','19','20'],WDS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const isoD=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const digits=v=>String(v||'').replace(/\D/g,'').replace(/^20/,'0').slice(-10);
+function classesOn(iso){
+  const d=new Date(iso+'T00:00'),out=[];
+  SCHED.forEach(s=>{if(s.days.includes(d.getDay()))SLOTS.forEach(t=>out.push({studio:s.studio,time:t}))});
+  (DATA||[]).filter(r=>r.date===iso).forEach(r=>{if(!out.some(c=>c.studio===r.studio&&c.time===r.time))out.push({studio:r.studio,time:r.time})});
+  return out.sort((a,b)=>(a.studio+a.time).localeCompare(b.studio+b.time));
+}
+function calSection(){
+  const t=today();
+  if(!CAL){const n=new Date();CAL={y:n.getFullYear(),m:n.getMonth()}}
+  if(!SEL){const up=(DATA||[]).filter(r=>r.status!=='cancelled'&&r.date>=t).map(r=>r.date).sort()[0];SEL=up||t}
+  const first=new Date(CAL.y,CAL.m,1),days=new Date(CAL.y,CAL.m+1,0).getDate();
+  let cells=WDS.map(w=>`<span class="wd">${w}</span>`).join('')+'<span></span>'.repeat(first.getDay());
+  for(let i=1;i<=days;i++){
+    const iso=isoD(new Date(CAL.y,CAL.m,i)),cl=classesOn(iso),n=(DATA||[]).filter(r=>r.date===iso&&r.status!=='cancelled').length;
+    const c=['d',cl.length?'cls':'',iso<t?'past':'',iso===t?'today':'',iso===SEL?'sel':''].join(' ');
+    cells+=cl.length?`<button type="button" class="${c}" data-day="${iso}" aria-label="${esc(nice(iso))}, ${n} booked">${i}${n?`<i>${n}</i>`:''}</button>`:`<span class="${c}">${i}</span>`;
+  }
+  const cl=classesOn(SEL);
+  const asks=REQS.filter(q=>/cancel/i.test(q.topic)&&q.status!=='done');
+  const asked=r=>asks.some(q=>(q.phone&&digits(q.phone)===digits(r.whatsapp))||(q.name&&q.name.trim().toLowerCase()===String(r.name).trim().toLowerCase()));
+  const slot=c=>{const list=(DATA||[]).filter(r=>r.date===SEL&&r.studio===c.studio&&r.time===c.time).sort((a,b)=>a.created.localeCompare(b.created));const live=list.filter(r=>r.status!=='cancelled');
+    const boots=Object.keys(STOCK).map(s=>`${s} ${live.filter(r=>r.boots===s).length}/${STOCK[s]}`).join(' · ');
+    return `<div class="slot"><div class="sh"><b>${esc(TIMES[c.time]||c.time)}</b><span>${esc(c.studio)} · Boots ${esc(boots)}</span><span class="n">${live.length} booked</span></div>
+    ${list.length?list.map(r=>`<div class="att${r.status==='cancelled'?' gone':''}"><div><span class="nm">${esc(r.name)}</span>${r.status!=='cancelled'&&asked(r)?'<span class="ask">Asked to cancel</span>':''}<div class="sub" style="margin:0;font-size:12px">${r.boots==='own'?'Own boots':'Size '+esc(r.boots)} · Ref ${esc(r.id)}</div></div>
+      <a href="${esc(waLink(r.whatsapp))}" target="_blank" rel="noopener">${esc(r.whatsapp)}</a>
+      <button class="small paid" type="button" data-paid="${esc(r.id)}" aria-pressed="${r.paid==='yes'}">${r.paid==='yes'?'Paid':'Mark paid'}</button>
+      <button class="rm${r.status==='cancelled'?' undo':''}" type="button" data-rm="${esc(r.id)}">${r.status==='cancelled'?'Restore':'Remove'}</button>
+      ${r.status==='cancelled'&&r.paid==='yes'?'<span class="rf">Removed. Refund if they cancelled 2+ hours before the class.</span>':''}</div>`).join(''):'<p class="none">No bookings yet.</p>'}</div>`};
+  return `<div class="cal"><div class="cbox"><div class="chead"><b>${MON[CAL.m]} ${CAL.y}</b><button type="button" data-cm="-1" aria-label="Previous month">&lsaquo;</button><button type="button" data-cm="1" aria-label="Next month">&rsaquo;</button></div>
+    <div class="cgrid">${cells}</div><p class="clegend">Pink days have classes. The number shows people booked.</p></div>
+    <div class="dpanel"><h3>${esc(nice(SEL))}</h3><p class="sub">${cl.length?cl.length+' classes · '+(DATA||[]).filter(r=>r.date===SEL&&r.status!=='cancelled').length+' people booked':'No classes on this day'}</p>${cl.map(slot).join('')}</div></div>`;
 }
 function reqSection(){
   const cnt=k=>{const m={};REQS.forEach(q=>{const v=q[k]||'Direct';m[v]=(m[v]||0)+1});return Object.entries(m).map(([l,v])=>({l,v})).sort((a,b)=>b.v-a.v).slice(0,6)};
@@ -229,7 +295,7 @@ async function updateReq(id,status){
   try{const res=await fetch(API,{method:'POST',body:JSON.stringify({action:'update',kind:'request',key:KEY,id,status})});const j=await res.json();if(!j.ok)throw 0}
   catch(e){q.status=prev;render();alertBar('Could not save that change. Try again.')}
 }
-function confirmInline(b){if(b.dataset.sure)return true;b.dataset.sure='1';b.textContent='Tap again';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='Cancel'}},3000);return false}
+function confirmInline(b,lbl){if(b.dataset.sure)return true;b.dataset.sure='1';b.textContent='Tap again to confirm';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent=lbl||'Cancel'}},3000);return false}
 function cls(c){
   const live=c.list.filter(r=>r.status!=='cancelled');
   const boots=Object.keys(STOCK).map(s=>`${s} ${live.filter(r=>r.boots===s).length}/${STOCK[s]}`).join(' · ')+` · Own ${live.filter(r=>r.boots==='own').length}`;

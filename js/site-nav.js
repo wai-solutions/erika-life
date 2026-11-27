@@ -150,5 +150,5 @@
     var g=document.createElement('script');g.async=true;g.src='https://www.googletagmanager.com/gtag/js?id='+GA;document.head.appendChild(g)}
   function add(src){var s=document.createElement('script');s.src=src;s.defer=true;document.head.appendChild(s)}
   if(window.ERIKA_API===undefined)add('js/erika-config.js?v=2');
-  add('js/erika-chat.js?v=6');
+  add('js/erika-chat.js?v=7');
 })();
