@@ -19,9 +19,10 @@
   '.ec-panel{position:fixed;right:clamp(14px,2.4vw,28px);bottom:calc(clamp(14px,2.4vw,28px) + 74px);z-index:85;width:min(390px,calc(100vw - 28px));max-height:calc(100svh - 120px);overflow:auto;overscroll-behavior:contain;background:#FBF7F4;color:#2A1222;border-radius:26px;box-shadow:0 30px 70px rgba(42,18,34,.35);font:400 15px/1.5 var(--sans,"DM Sans",system-ui,sans-serif);opacity:0;visibility:hidden;transform:translateY(16px) scale(.98);transform-origin:100% 100%;transition:opacity .25s,transform .3s cubic-bezier(.2,.9,.3,1),visibility 0s .3s}'+
   '.ec-open .ec-panel{opacity:1;visibility:visible;transform:none;transition:opacity .25s,transform .3s cubic-bezier(.2,.9,.3,1)}'+
   '.ec-head{background:#2A1222;color:#FBF7F4;padding:20px 22px 18px;border-radius:26px 26px 0 0}'+
+  '.ec-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px;color:#FBF7F4}.ec-logo .bl{width:34px;height:34px;color:#E5639A}.ec-logo .wm{width:74px;height:32px;color:#FBF7F4}.ec-logo span{font:italic 400 17px var(--serif,"Playfair Display",Georgia,serif);opacity:.85;margin-left:-2px}'+
   '.ec-head h2{font:italic 400 24px/1.2 var(--serif,"Playfair Display",Georgia,serif);margin:0}.ec-head p{margin:6px 0 0;opacity:.8;font-size:14px}'+
   '.ec-form{padding:18px 22px 22px;display:grid;gap:12px}'+
-  '.ec-form label{display:grid;gap:5px;font-weight:500;font-size:14px}.ec-form label span b{color:#CC3370;font-weight:500}'+
+  '.ec-form label{display:grid;gap:5px;font-weight:500;font-size:14px}.ec-form label i{font-style:normal;font-weight:400;opacity:.65}.ec-form label span b{color:#CC3370;font-weight:500}'+
   '.ec-form input,.ec-form select,.ec-form textarea{font:inherit;color:inherit;background:#fff;border:1.5px solid #E8D9DF;border-radius:14px;padding:11px 13px;width:100%;box-sizing:border-box;min-height:46px}'+
   '.ec-form textarea{min-height:96px;resize:vertical}'+
   '.ec-form input:focus,.ec-form select:focus,.ec-form textarea:focus{outline:none;border-color:#CC3370;box-shadow:0 0 0 3px rgba(204,51,112,.15)}'+
@@ -50,11 +51,11 @@
         '<svg class="x" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>'+
       '</button>'+
       '<div class="ec-panel" id="ecPanel" role="dialog" aria-modal="false" aria-labelledby="ecTitle" data-lenis-prevent>'+
-        '<div class="ec-head"><h2 id="ecTitle">Talk to Erika Life</h2><p>Classes, boots, partnerships or sponsorship. Send us a note.</p></div>'+
+        '<div class="ec-head"><div class="ec-logo" aria-hidden="true"><svg class="bl"><use href="#bloom"/></svg><svg class="wm"><use href="#wm"/></svg><span>Life</span></div><h2 id="ecTitle">Talk to us</h2><p>Classes, boots, partnerships or sponsorship. Send us a note.</p></div>'+
         '<form class="ec-form" novalidate>'+
           '<label><span>Name <b>*</b></span><input name="name" autocomplete="name" required maxlength="80"></label>'+
           '<label><span>Email <b>*</b></span><input name="email" type="email" autocomplete="email" required maxlength="120"></label>'+
-          '<label><span>Phone number <b>*</b></span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="+20 10 0000 0000" maxlength="25"></label>'+
+          '<label><span>Phone number <i>(if you prefer WhatsApp communication)</i></span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+20 10 0000 0000" maxlength="25"></label>'+
           '<label><span>Topic <b>*</b></span><select name="category" required>'+opts+'</select></label>'+
           '<label><span>Message <b>*</b></span><textarea name="message" required maxlength="2000" placeholder="Tell us how we can help"></textarea></label>'+
           '<div class="ec-hp" aria-hidden="true"><input name="_honey" tabindex="-1" autocomplete="off"></div>'+
@@ -89,7 +90,7 @@
       var f=form,bad=[],v=function(n){return (f[n].value||'').trim()};
       if(v('name').length<2)bad.push(['name','your name']);
       if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v('email')))bad.push(['email','a valid email']);
-      if(v('phone').replace(/\D/g,'').length<8)bad.push(['phone','a valid phone number']);
+      if(v('phone')&&v('phone').replace(/\D/g,'').length<8)bad.push(['phone','a valid phone number']);
       if(!v('category'))bad.push(['category','a topic']);
       if(v('message').length<3)bad.push(['message','your message']);
       f.querySelectorAll('.bad').forEach(function(x){x.classList.remove('bad')});
@@ -97,7 +98,7 @@
       if(v('_honey'))return;
       send.disabled=true;send.textContent='Sending...';err.textContent='';
       var data={
-        Name:v('name'),Email:v('email'),Phone:v('phone'),Topic:v('category'),Message:v('message'),Page:location.href,
+        Name:v('name'),Email:v('email'),Phone:v('phone')||'Not given',Topic:v('category'),Message:v('message'),Page:location.href,
         _subject:'Erika Life request: '+v('category')+' from '+v('name'),
         _replyto:v('email'),_cc:CC,_template:'table',_captcha:'false'
       };
