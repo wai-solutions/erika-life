@@ -102,9 +102,16 @@
         _subject:'Erika Life request: '+v('category')+' from '+v('name'),
         _replyto:v('email'),_cc:CC,_template:'table',_captcha:'false'
       };
-      fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
-        .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok||String(j.success)==='false')throw new Error(j.message||'send failed');return j})})
-        .then(function(){w.classList.add('ec-sent');form.reset()})
+      var src='';try{src=sessionStorage.getItem('erikaSrc')||''}catch(x){}
+      data.Source=src||'Direct';
+      /* 1. email (FormSubmit)  2. save to Erika's Google Sheet (if connected) */
+      var mail=fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
+        .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok||String(j.success)==='false')throw new Error(j.message||'send failed');return true})});
+      var API=window.ERIKA_API||'';
+      var save=API?fetch(API,{method:'POST',body:JSON.stringify({type:'request',topic:data.Topic,name:data.Name,email:data.Email,phone:v('phone'),message:data.Message,source:data.Source,page:location.pathname})})
+        .then(function(r){return r.json()}).then(function(j){if(!j.ok)throw 0;return true}):Promise.reject(0);
+      Promise.allSettled([mail,save]).then(function(rs){if(rs.some(function(x){return x.status==='fulfilled'}))return true;throw 0})
+        .then(function(){w.classList.add('ec-sent');form.reset();try{window.gtag&&gtag('event','generate_lead',{topic:data.Topic})}catch(x){}})
         .catch(function(){err.textContent='Sorry, your request did not go through. Please try again in a moment.'})
         .then(function(){send.disabled=false;send.textContent='Send to Erika'});
     });

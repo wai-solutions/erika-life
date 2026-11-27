@@ -135,5 +135,20 @@
   }
 })();
 
-/* chat button + request form on every public page */
-(function(){if(/admin/.test(location.pathname))return;var s=document.createElement('script');s.src='js/erika-chat.js?v=5';s.defer=true;document.head.appendChild(s)})();
+/* visitor source, analytics, settings and chat on every public page */
+(function(){
+  if(/admin/.test(location.pathname))return;
+  /* where this visitor came from (kept for this visit, sent with chat requests) */
+  try{if(!sessionStorage.getItem('erikaSrc')){var q=new URLSearchParams(location.search),r=document.referrer,src='Direct';
+    if(q.get('utm_source'))src=q.get('utm_source')+(q.get('utm_medium')?' / '+q.get('utm_medium'):'')+(q.get('utm_campaign')?' / '+q.get('utm_campaign'):'');
+    else if(q.get('fbclid'))src='Facebook / Instagram';
+    else if(r&&r.indexOf(location.host)<0){try{src=new URL(r).hostname.replace(/^www\./,'')}catch(e){src=r}}
+    sessionStorage.setItem('erikaSrc',src)}}catch(e){}
+  /* Google Analytics 4 (Erika's account) */
+  var GA=window.ERIKA_GA||'G-79N4N8M1ZV';
+  if(/^G-[A-Z0-9]{6,}$/.test(GA)){window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config',GA);
+    var g=document.createElement('script');g.async=true;g.src='https://www.googletagmanager.com/gtag/js?id='+GA;document.head.appendChild(g)}
+  function add(src){var s=document.createElement('script');s.src=src;s.defer=true;document.head.appendChild(s)}
+  if(window.ERIKA_API===undefined)add('js/erika-config.js?v=2');
+  add('js/erika-chat.js?v=6');
+})();

@@ -74,6 +74,7 @@ h2.sec{font:400 22px var(--serif);margin:28px 0 12px}
 .paid[aria-pressed="true"]{background:var(--ok);color:#fff;border-color:var(--ok)}
 .x{background:none;border:0;color:var(--mute);min-height:36px;padding:0 6px;font-size:13px;text-decoration:underline}
 .p.cancelled{opacity:.45}.p.cancelled .nm{text-decoration:line-through}
+.p.rq{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 9.5em auto}.p.rdone{opacity:.55}
 .empty{text-align:center;color:var(--mute);padding:30px 0}
 @media(max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.ins{grid-template-columns:minmax(0,1fr)}.p{grid-template-columns:minmax(0,1fr) auto}.p .acts{grid-column:1/-1;display:flex;gap:8px;align-items:center}.tools input{width:100%}.bar{grid-template-columns:6.5em minmax(0,1fr) auto}}
 </style>
@@ -83,7 +84,7 @@ h2.sec{font:400 22px var(--serif);margin:28px 0 12px}
 <header><div class="wrap">
   <a class="brand" href="index.html" aria-label="Erika, website"><svg><use href="#bloom"/></svg><svg class="wm"><use href="#wm"/></svg></a>
   <h1>Bookings</h1>
-  <div class="hbtns"><button class="ghost small" id="refresh" type="button">Refresh</button><button class="ghost small" id="csv" type="button">Download CSV</button><button class="ghost small" id="out" type="button" hidden>Sign out</button></div>
+  <div class="hbtns"><a class="btn ghost small" href="https://analytics.google.com/analytics/web/?authuser=erika.bouncefit@gmail.com" target="_blank" rel="noopener">Visitors</a><button class="ghost small" id="refresh" type="button">Refresh</button><button class="ghost small" id="csv" type="button">Download CSV</button><button class="ghost small" id="out" type="button" hidden>Sign out</button></div>
 </div></header>
 <main class="wrap" id="app"></main>
 
@@ -97,7 +98,7 @@ const TIMES={'18':'6–7 PM','19':'7–8 PM','20':'8–9 PM'};
 const DAYF=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const nice=d=>{const x=new Date(d+'T00:00');return isNaN(x)?d:`${DAYF[x.getDay()]} ${x.getDate()} ${MON[x.getMonth()]}`};
 let KEY='';try{KEY=localStorage.getItem('erika-admin-key')||''}catch(e){}
-let DATA=null,ORDERS=[],STOCK={S:2,M:8,L:1},VIEW='up',Q='',SAMPLE=false;
+let REQS=[],DATA=null,ORDERS=[],STOCK={S:2,M:8,L:1},VIEW='up',Q='',SAMPLE=false;
 
 /* logo symbols from the home page */
 fetch('index.html').then(r=>r.text()).then(t=>{const m=t.match(/<symbol id="bloom"[\s\S]*?<\/symbol>/),w=t.match(/<symbol id="wm"[\s\S]*?<\/symbol>/);$('#defs').innerHTML=(m?m[0]:'')+(w?w[0]:'')}).catch(()=>{});
@@ -115,6 +116,9 @@ function sample(){
   const cls=[['New Cairo','2026-12-01','18'],['New Cairo','2026-12-01','19'],['Heliopolis','2026-12-02','19'],['Heliopolis','2026-12-02','20'],['New Cairo','2026-12-06','19'],['Heliopolis','2026-12-07','18']];
   const boots=['M','M','S','own','M','L','M','S','M','own','M','S','M','M'];
   const hrs=['21:10','20:45','13:05','22:30','21:55','09:40','19:20','21:35','12:15','22:05','20:10','08:55','21:40','17:30'];
+  REQS=[{id:'R1A2B',created:'2026-11-26 21:10',topic:'Book a class',name:'Nour Hassan',email:'nour@example.com',phone:'010 1234 5678',message:'Is there a class for beginners on Sunday?',source:'instagram.com',page:'/',status:'new'},
+    {id:'R3C4D',created:'2026-11-26 14:02',topic:'Sponsorship',name:'Omar Fathy',email:'omar@brand.example',phone:'',message:'We would like to sponsor The Bounce Run.',source:'google.com',page:'/',status:'replied'},
+    {id:'R5E6F',created:'2026-11-25 19:45',topic:'Buy boots',name:'Mai Sherif',email:'mai@example.com',phone:'011 2222 3333',message:'Do you have size M in pink?',source:'Facebook / Instagram',page:'/boots.html',status:'done'}];
   return names.map((n,k)=>{const c=cls[k%cls.length];return {id:'S'+String(100+k),created:`2026-11-${String(20+(k%6)).padStart(2,'0')} ${hrs[k]}`,studio:c[0],date:c[1],time:c[2],classKey:c.join('|'),boots:boots[k],name:n,whatsapp:'01'+String(k%3)+' '+String(1000+k*37).slice(0,4)+' '+String(5000+k*91).slice(0,4),first:k%2?'I’ve tried before':'Yes, first time!',notes:k===2?'Knee was injured last year':'',price:'500',paid:k%3?'yes':'no',status:k===9?'cancelled':'booked'}});
 }
 async function load(){
@@ -123,7 +127,7 @@ async function load(){
   $('#app').innerHTML='<p class="empty">Loading bookings…</p>';
   try{const r=await fetch(API+'?key='+encodeURIComponent(KEY));const j=await r.json();
     if(!j.ok){KEY='';try{localStorage.removeItem('erika-admin-key')}catch(e){}login('That key did not work. Try again.');return}
-    DATA=j.rows||[];ORDERS=j.orders||[];if(j.stock)STOCK=j.stock;render()}
+    DATA=j.rows||[];ORDERS=j.orders||[];REQS=j.requests||[];if(j.stock)STOCK=j.stock;render()}
   catch(e){$('#app').innerHTML='<p class="empty">Could not reach the bookings sheet. Check your connection and press Refresh.</p>'}
 }
 function login(msg){
@@ -195,13 +199,35 @@ function render(){
     <span class="boot">${esc(o.edition)} · ${esc(o.size)}${+o.qty>1?' ×'+esc(o.qty):''}</span>
     <div class="acts"><button class="small paid" type="button" data-opaid="${esc(o.id)}" aria-pressed="${o.paid!=='no'}">${o.paid==='full'?'Paid in full':o.paid==='deposit'?'Deposit paid':'Mark deposit'}</button><button class="x" type="button" data-ocancel="${esc(o.id)}">${o.status==='cancelled'?'Restore':'Cancel'}</button></div>
     <div class="notes">${esc(o.colour)} · ${money(num(o.total))} total, deposit ${money(num(o.deposit))}${o.notes?' · '+esc(o.notes):''}</div>
-  </div>`).join('')}</section>`:'<p class="empty">No boot orders yet.</p>'}`;
+  </div>`).join('')}</section>`:'<p class="empty">No boot orders yet.</p>'}
+  ${reqSection()}`;
   document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{VIEW=b.dataset.v;render()}));
   const qi=$('#q');qi.addEventListener('input',()=>{Q=qi.value;const p=qi.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(p,p)});
   document.querySelectorAll('[data-paid]').forEach(b=>b.addEventListener('click',()=>update(b.dataset.paid,{paid:b.getAttribute('aria-pressed')!=='true'})));
+  document.querySelectorAll('[data-rst]').forEach(b=>b.addEventListener('click',()=>{const q=REQS.find(x=>x.id===b.dataset.rst);const nxt={new:'replied',replied:'done',done:'new'}[q.status]||'replied';updateReq(q.id,nxt)}));
   document.querySelectorAll('[data-opaid]').forEach(b=>b.addEventListener('click',()=>{const o=ORDERS.find(x=>x.id===b.dataset.opaid);const nxt={no:'deposit',deposit:'full',full:'no'}[o.paid]||'deposit';updateOrder(o.id,{paid:nxt})}));
   document.querySelectorAll('[data-ocancel]').forEach(b=>b.addEventListener('click',()=>{const o=ORDERS.find(x=>x.id===b.dataset.ocancel);const c=o.status==='cancelled';if(!c&&!confirmInline(b))return;updateOrder(o.id,{status:c?'ordered':'cancelled'})}));
   document.querySelectorAll('[data-cancel]').forEach(b=>b.addEventListener('click',()=>{const r=DATA.find(x=>x.id===b.dataset.cancel);const c=r.status==='cancelled';if(!c&&!confirmInline(b))return;update(r.id,{status:c?'booked':'cancelled'})}));
+}
+function reqSection(){
+  const cnt=k=>{const m={};REQS.forEach(q=>{const v=q[k]||'Direct';m[v]=(m[v]||0)+1});return Object.entries(m).map(([l,v])=>({l,v})).sort((a,b)=>b.v-a.v).slice(0,6)};
+  const open=REQS.filter(q=>q.status==='new').length;
+  const st={new:'New',replied:'Replied',done:'Done'};
+  return `<div class="tools"><h2>Requests</h2><span class="tag" style="font-size:14px">${open} new</span></div>
+  ${REQS.length?`<div class="ins" style="margin-bottom:14px"><div class="box"><h3>By topic</h3>${bars(cnt('topic'))}</div><div class="box"><h3>Where they came from</h3>${bars(cnt('source'))}</div></div>
+  <section class="class">${REQS.slice().sort((a,b)=>b.created.localeCompare(a.created)).map(q=>`<div class="p rq${q.status==='done'?' rdone':''}">
+    <div><span class="nm">${esc(q.name)}</span><span class="tag">${esc(q.topic)}</span><div class="sub">${esc(q.created)} · from ${esc(q.source||'Direct')}</div></div>
+    <a class="wa" href="mailto:${esc(q.email)}?subject=${encodeURIComponent('Erika Life: '+q.topic)}">${esc(q.email)}</a>
+    ${q.phone?`<a class="wa" href="${esc(waLink(q.phone))}" target="_blank" rel="noopener">${esc(q.phone)}</a>`:'<span class="sub">No phone</span>'}
+    <div class="acts"><button class="small paid" type="button" data-rst="${esc(q.id)}" aria-pressed="${q.status!=='new'}">${st[q.status]||'New'}</button></div>
+    <div class="notes">${esc(q.message)}</div>
+  </div>`).join('')}</section>`:'<p class="empty">No requests yet. Messages from the chat button appear here.</p>'}`;
+}
+async function updateReq(id,status){
+  const q=REQS.find(x=>x.id===id);if(!q)return;const prev=q.status;q.status=status;render();
+  if(!API)return;
+  try{const res=await fetch(API,{method:'POST',body:JSON.stringify({action:'update',kind:'request',key:KEY,id,status})});const j=await res.json();if(!j.ok)throw 0}
+  catch(e){q.status=prev;render();alertBar('Could not save that change. Try again.')}
 }
 function confirmInline(b){if(b.dataset.sure)return true;b.dataset.sure='1';b.textContent='Tap again';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='Cancel'}},3000);return false}
 function cls(c){
@@ -234,7 +260,8 @@ $('#refresh').addEventListener('click',load);
 $('#out').addEventListener('click',()=>{KEY='';try{localStorage.removeItem('erika-admin-key')}catch(e){}DATA=null;login()});
 $('#csv').addEventListener('click',()=>{if(!DATA)return;const H=['id','created','studio','date','time','boots','name','whatsapp','first','notes','price','paid','status'];
   const csv=[H.join(',')].concat(DATA.map(r=>H.map(h=>'"'+String(r[h]??'').replace(/"/g,'""')+'"').join(','))).join('\n');
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv'}));a.download='erika-bookings.csv';a.click()});
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv'}));a.download='erika-bookings.csv';a.click();
+  if(REQS.length){const RH=['id','created','topic','name','email','phone','message','source','page','status'];const c2=[RH.join(',')].concat(REQS.map(r=>RH.map(h=>'"'+String(r[h]??'').replace(/"/g,'""')+'"').join(','))).join('\n');setTimeout(()=>{const b=document.createElement('a');b.href=URL.createObjectURL(new Blob(['\ufeff'+c2],{type:'text/csv'}));b.download='erika-requests.csv';b.click()},400)}});
 load();
 }
 </script>

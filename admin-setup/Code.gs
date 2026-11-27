@@ -5,12 +5,15 @@
  *
  * 1. Change ADMIN_KEY below to a private password only Erika knows.
  * 2. Keep BOOT_STOCK in line with the real pairs per class.
+ * Sheets made automatically: Bookings, Boot orders, Requests (chat form).
  */
 const ADMIN_KEY = 'CHANGE-ME-erika-private-key';
 const BOOT_STOCK = { S: 2, M: 8, L: 1 };
 const SHEET_NAME = 'Bookings';
 const ORDERS_SHEET = 'Boot orders';
 const ORDER_HEAD = ['id', 'created', 'edition', 'colour', 'size', 'qty', 'total', 'deposit', 'name', 'whatsapp', 'notes', 'paid', 'status'];
+const REQ_SHEET = 'Requests';
+const REQ_HEAD = ['id', 'created', 'topic', 'name', 'email', 'phone', 'message', 'source', 'page', 'status'];
 const HEAD = ['id', 'created', 'studio', 'date', 'time', 'classKey', 'boots', 'name', 'whatsapp', 'first', 'notes', 'price', 'paid', 'status'];
 
 function sheet_() {
@@ -30,6 +33,19 @@ function orderSheet_() {
   let sh = ss.getSheetByName(ORDERS_SHEET);
   if (!sh) { sh = ss.insertSheet(ORDERS_SHEET); sh.appendRow(ORDER_HEAD); sh.setFrozenRows(1); sh.getRange('A:M').setNumberFormat('@'); }
   return sh;
+}
+
+function reqSheet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(REQ_SHEET);
+  if (!sh) { sh = ss.insertSheet(REQ_SHEET); sh.appendRow(REQ_HEAD); sh.setFrozenRows(1); sh.getRange('A:J').setNumberFormat('@'); }
+  return sh;
+}
+
+function requests_() {
+  const vals = reqSheet_().getDataRange().getDisplayValues();
+  vals.shift();
+  return vals.map(function (r, i) { const o = { _row: i + 2 }; REQ_HEAD.forEach(function (h, k) { o[h] = r[k]; }); return o; });
 }
 
 function orders_() {
@@ -72,7 +88,7 @@ function doGet(e) {
     return json_({ ok: true, stock: BOOT_STOCK, counts: c });
   }
   if (p.key !== ADMIN_KEY) return json_({ ok: false, error: 'key' });
-  return json_({ ok: true, stock: BOOT_STOCK, rows: rows.map(function (r) { delete r._row; return r; }), orders: orders_().map(function (r) { delete r._row; return r; }) });
+  return json_({ ok: true, stock: BOOT_STOCK, rows: rows.map(function (r) { delete r._row; return r; }), orders: orders_().map(function (r) { delete r._row; return r; }), requests: requests_().map(function (r) { delete r._row; return r; }) });
 }
 
 /* Booking from the website, or admin updates (paid / cancelled) */
@@ -85,15 +101,21 @@ function doPost(e) {
     const rows = rows_();
     if (b.action === 'update') {
       if (b.key !== ADMIN_KEY) return json_({ ok: false, error: 'key' });
-      const isOrder = b.kind === 'order';
-      const list = isOrder ? orders_() : rows;
-      const head = isOrder ? ORDER_HEAD : HEAD;
-      const target = isOrder ? orderSheet_() : sh;
+      const isOrder = b.kind === 'order', isReq = b.kind === 'request';
+      const list = isReq ? requests_() : (isOrder ? orders_() : rows);
+      const head = isReq ? REQ_HEAD : (isOrder ? ORDER_HEAD : HEAD);
+      const target = isReq ? reqSheet_() : (isOrder ? orderSheet_() : sh);
       const r = list.filter(function (x) { return x.id === b.id; })[0];
       if (!r) return json_({ ok: false, error: 'notfound' });
-      if (b.paid !== undefined) target.getRange(r._row, head.indexOf('paid') + 1).setValue(b.paid === true ? 'yes' : (b.paid === false ? 'no' : clean_(b.paid, 10)));
+      if (b.paid !== undefined && head.indexOf('paid') > -1) target.getRange(r._row, head.indexOf('paid') + 1).setValue(b.paid === true ? 'yes' : (b.paid === false ? 'no' : clean_(b.paid, 10)));
       if (b.status) target.getRange(r._row, head.indexOf('status') + 1).setValue(clean_(b.status, 20));
       return json_({ ok: true });
+    }
+    if (b.type === 'request') {
+      const rid = 'R' + Utilities.getUuid().slice(0, 5).toUpperCase();
+      const at = Utilities.formatDate(new Date(), 'Africa/Cairo', 'yyyy-MM-dd HH:mm');
+      reqSheet_().appendRow([rid, at, clean_(b.topic, 40), clean_(b.name, 80), clean_(b.email, 120), clean_(b.phone, 30), clean_(b.message, 2000), clean_(b.source, 120), clean_(b.page, 200), 'new']);
+      return json_({ ok: true, id: rid });
     }
     if (b.type === 'order') {
       const oid = 'B' + Utilities.getUuid().slice(0, 5).toUpperCase();
