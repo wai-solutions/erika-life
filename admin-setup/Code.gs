@@ -12,12 +12,15 @@ const BOOT_STOCK = { S: 2, M: 8, L: 1 };
 const SHEET_NAME = 'Bookings';
 const ORDERS_SHEET = 'Boot orders';
 const ORDER_HEAD = ['id', 'created', 'edition', 'colour', 'size', 'qty', 'total', 'deposit', 'name', 'whatsapp', 'notes', 'paid', 'status'];
+/* Erika's Google Sheet "Erika Life Data" (works as a standalone or sheet-bound script) */
+const SHEET_ID = '1QnaFLnJkIqGbq2kU6MsuyCaQvB1J0ugS5IU_7VIs2eM';
+function ss_() { return SpreadsheetApp.getActiveSpreadsheet() || SpreadsheetApp.openById(SHEET_ID); }
 const REQ_SHEET = 'Requests';
 const REQ_HEAD = ['id', 'created', 'topic', 'name', 'email', 'phone', 'message', 'source', 'page', 'status'];
 const HEAD = ['id', 'created', 'studio', 'date', 'time', 'classKey', 'boots', 'name', 'whatsapp', 'first', 'notes', 'price', 'paid', 'status'];
 
 function sheet_() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = ss_();
   let sh = ss.getSheetByName(SHEET_NAME);
   if (!sh) {
     sh = ss.insertSheet(SHEET_NAME);
@@ -29,14 +32,14 @@ function sheet_() {
 }
 
 function orderSheet_() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = ss_();
   let sh = ss.getSheetByName(ORDERS_SHEET);
   if (!sh) { sh = ss.insertSheet(ORDERS_SHEET); sh.appendRow(ORDER_HEAD); sh.setFrozenRows(1); sh.getRange('A:M').setNumberFormat('@'); }
   return sh;
 }
 
 function reqSheet_() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = ss_();
   let sh = ss.getSheetByName(REQ_SHEET);
   if (!sh) { sh = ss.insertSheet(REQ_SHEET); sh.appendRow(REQ_HEAD); sh.setFrozenRows(1); sh.getRange('A:J').setNumberFormat('@'); }
   return sh;

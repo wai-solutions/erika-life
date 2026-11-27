@@ -23,7 +23,7 @@ The admin panel lives at `admin.html` on the website. It reads bookings from a G
 3. Commit. After GitHub Pages updates, bookings are saved to the sheet.
 
 ## 5. Open the admin panel
-- Go to `https://wai-solutions.github.io/erika-life/admin.html` and enter the admin key.
+- Go to `https://erikalife.com/admin.html` and enter the admin key.
 - The page is not linked from the website and is hidden from search engines. Bookmark it on Erika's phone.
 
 ## What it does
