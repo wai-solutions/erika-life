@@ -25,6 +25,9 @@ header .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .brand svg{height:34px;width:34px}.brand .wm{width:82px;height:35px}
 header h1{font:400 22px var(--serif);margin:0 0 0 6px;color:#FBF7F4}
 .hbtns{margin-left:auto;display:flex;gap:8px}
+.pages{display:flex;gap:4px;background:rgba(251,247,244,.1);border-radius:999px;padding:3px;margin-left:8px}
+.pages a{color:#FBF7F4;text-decoration:none;font:500 14px var(--sans);border-radius:999px;padding:8px 16px;min-height:36px;display:inline-flex;align-items:center}
+.pages a[aria-current="page"]{background:#FBF7F4;color:var(--plum)}
 button,.btn{font:500 15px var(--sans);border-radius:999px;border:1px solid transparent;min-height:44px;padding:0 18px;cursor:pointer;background:var(--rose);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
 button.ghost{background:transparent;color:inherit;border-color:currentColor}
 button.small{min-height:36px;padding:0 14px;font-size:14px}
@@ -103,7 +106,7 @@ h2.sec{font:400 22px var(--serif);margin:28px 0 12px}
 .empty{text-align:center;color:var(--mute);padding:30px 0}
 .stats.fin{grid-template-columns:repeat(3,minmax(0,1fr))}
 .stat b.ok{color:var(--ok)}.stat b.neg{color:#B3261E}
-.ef{display:grid;grid-template-columns:9.5em minmax(0,1fr) minmax(0,1.4fr) 7em 6em;gap:10px;align-items:end;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 18px;margin-bottom:12px}
+.ef{display:grid;grid-template-columns:9.5em minmax(0,1fr) minmax(0,1.4fr) 7em 7.5em;gap:10px;align-items:end;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 18px;margin-bottom:12px}
 .ef label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute)}
 .ef input,.ef select{font:15px var(--sans);min-height:42px;border-radius:12px;border:1px solid var(--line);padding:0 10px;background:#FCF9F7;color:var(--ink);width:100%}
 .ef .wide{grid-column:1/-2}.ef .rt[hidden]{display:none}
@@ -112,7 +115,7 @@ h2.sec{font:400 22px var(--serif);margin:28px 0 12px}
 .p.ex{grid-template-columns:6.5em minmax(0,1.4fr) minmax(0,1fr) auto}
 .amt{font-weight:500;white-space:nowrap;text-align:right}.amt small{display:block;font-weight:400;font-size:12px;color:var(--mute)}
 @media(max-width:760px){.stats.fin{grid-template-columns:minmax(0,1fr)}.ef{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.ef .wide,.ef .it{grid-column:1/-1}.p.ex{grid-template-columns:minmax(0,1fr) auto}.p.ex>.sub:first-child{grid-column:1/-1;font-size:13px!important}.ef button{grid-column:1/-1}}
-@media(max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.ins{grid-template-columns:minmax(0,1fr)}.p{grid-template-columns:minmax(0,1fr) auto}.p .acts{grid-column:1/-1;display:flex;gap:8px;align-items:center}.tools input{width:100%}.bar{grid-template-columns:6.5em minmax(0,1fr) auto}}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.ins{grid-template-columns:minmax(0,1fr)}.p{grid-template-columns:minmax(0,1fr) auto}.p .acts{grid-column:1/-1;display:flex;gap:8px;align-items:center}.tools input{width:100%}header h1{display:none}.pages{margin-left:0}.bar{grid-template-columns:6.5em minmax(0,1fr) auto}}
 </style>
 </head>
 <body>
@@ -120,6 +123,7 @@ h2.sec{font:400 22px var(--serif);margin:28px 0 12px}
 <header><div class="wrap">
   <a class="brand" href="index.html" aria-label="Erika, website"><svg><use href="#bloom"/></svg><svg class="wm"><use href="#wm"/></svg></a>
   <h1>Admin</h1>
+  <nav class="pages" aria-label="Admin pages"><a href="#bookings" data-pg="bookings">Bookings</a><a href="#finance" data-pg="finance">Finance</a></nav>
   <div class="hbtns"><a class="btn ghost small" href="https://analytics.google.com/analytics/web/?authuser=erika.bouncefit@gmail.com" target="_blank" rel="noopener">Visitors</a><button class="ghost small" id="refresh" type="button">Refresh</button><button class="ghost small" id="csv" type="button">Download CSV</button><button class="ghost small" id="out" type="button" hidden>Sign out</button></div>
 </div></header>
 <main class="wrap" id="app"></main>
@@ -191,7 +195,7 @@ function render(){
   const unpaid=live.filter(r=>r.paid!=='yes');
   const next=up.map(r=>r.date+'|'+r.time).sort()[0];
   // insights
-  const places=[...new Set(live.map(r=>r.studio))].map(p=>{const rs=live.filter(r=>r.studio===p);return {l:p,v:rs.reduce((a,r)=>a+price(r),0),n:rs.length}}).sort((a,b)=>b.v-a.v);
+  const places=[...new Set(live.map(r=>r.studio))].map(p=>({l:p,v:live.filter(r=>r.studio===p).length})).sort((a,b)=>b.v-a.v);
   const sizes=['S','M','L','own'].map(z=>({l:z==='own'?'Own boots':'Size '+z,v:live.filter(r=>r.boots===z).length}));
   const slots=Object.keys(TIMES).map(k=>({l:TIMES[k],v:live.filter(r=>r.time===k).length}));
   const buckets=[['Morning',6,12],['Afternoon',12,17],['Evening',17,21],['Night',21,30]].map(([l,a,b])=>({l,v:live.filter(r=>{let h=+String(r.created).slice(11,13);if(h<6)h+=24;return h>=a&&h<b}).length}));
@@ -204,6 +208,11 @@ function render(){
   const liveO=ORDERS.filter(o=>o.status!=='cancelled');const num=v=>+String(v).replace(/[^\d.]/g,'')||0;
   const bootsTot=liveO.reduce((a,o)=>a+num(o.total),0),bootsIn=liveO.reduce((a,o)=>a+(o.paid==='full'?num(o.total):o.paid==='deposit'?num(o.deposit):0),0);
   const edBars=[...new Set(liveO.map(o=>o.edition))].map(e=>({l:e,v:liveO.filter(o=>o.edition===e).reduce((a,o)=>a+num(o.total),0)})).sort((a,b)=>b.v-a.v);
+  syncPage();
+  if(PAGE==='finance'){
+    $('#app').innerHTML=(SAMPLE?`<div class="note"><b>Sample data.</b> Example numbers so you can see how it works.</div>`:'')+finSection(paidRev,bootsIn,allRev,bootsTot,places.length?[...new Set(live.map(r=>r.studio))].map(p=>({l:p,v:live.filter(r=>r.studio===p&&r.paid==='yes').reduce((a,r)=>a+price(r),0)})).sort((a,b)=>b.v-a.v):[],edBars,bootsTot);
+    finWire();return;
+  }
   // classes list
   let rows=DATA.slice();const q=Q.toLowerCase();
   if(q)rows=rows.filter(r=>[r.name,r.whatsapp,r.studio,r.notes,r.id].join(' ').toLowerCase().includes(q));
@@ -213,20 +222,18 @@ function render(){
   $('#app').innerHTML=`
   ${SAMPLE?`<div class="note"><b>Sample data.</b> Example bookings so you can see how it works. Connect Erika’s Google Sheet (admin-setup/SETUP.md) to see real ones.</div>`:''}
   <div class="stats">
-    <div class="stat"><b class="rose">${money(paidRev)}</b><span>Revenue received · ${money(allRev)} booked</span></div>
+    <div class="stat"><b class="rose">${live.length-unpaid.length}</b><span>Paid bookings · of ${live.length}</span></div>
     <div class="stat"><b>${live.length}</b><span>Bookings · ${up.length} upcoming</span></div>
-    <div class="stat"><b>${unpaid.length}</b><span>Waiting for payment · ${money(unpaid.reduce((a,r)=>a+price(r),0))}</span></div>
+    <div class="stat"><b>${unpaid.length}</b><span>Waiting for payment</span></div>
     <div class="stat"><b style="font-size:22px;line-height:1.45">${next?esc(nice(next.split('|')[0])):'—'}</b><span>${next?'Next class · '+esc(TIMES[next.split('|')[1]]||''):'No upcoming class'}</span></div>
   </div>
-  ${finSection(paidRev,bootsIn,allRev,bootsTot)}
   <h2 class="sec">Class calendar</h2>
   ${calSection()}
   <h2 class="sec">Insights</h2>
   <div class="ins">
-    <div class="box"><h3>Revenue by place</h3><p class="big">${places[0]?esc(places[0].l)+' leads':'No bookings yet'}</p>${bars(places,money)}</div>
+    <div class="box"><h3>Bookings by place</h3><p class="big">${places[0]?esc(places[0].l)+' leads':'No bookings yet'}</p>${bars(places)}</div>
     <div class="box"><h3>When people book</h3><p class="big">${ph?`Around ${hr(ph[0])}${pd?', on '+DAYF[pd[0]]+'s':''}`:'—'}</p>${bars(buckets)}</div>
     <div class="box"><h3>Most booked boots</h3><p class="big">${topSize&&topSize.v?esc(topSize.l):'—'}</p>${bars(sizes.map(x=>({...x,dim:x.l==='Own boots'})))}</div>
-    <div class="box"><h3>Boots sales</h3><p class="big">${money(bootsIn)} <span style="font:400 14px var(--sans);color:var(--mute)">received of ${money(bootsTot)}</span></p>${bars(edBars,money)}</div>
     <div class="box"><h3>Favourite class time</h3><p class="big">${topSlot&&topSlot.v?esc(topSlot.l):'—'}</p>${bars(slots)}</div>
   </div>
   <div class="tools"><h2>Classes</h2>
@@ -249,7 +256,6 @@ function render(){
   document.querySelectorAll('[data-cm]').forEach(b=>b.addEventListener('click',()=>{const m=CAL.m+(+b.dataset.cm);CAL={y:CAL.y+Math.floor(m/12),m:(m%12+12)%12};render()}));
   document.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>{SEL=b.dataset.day;render();const dp=$('.dpanel');if(dp&&innerWidth<760)dp.scrollIntoView({behavior:'smooth',block:'start'})}));
   document.querySelectorAll('[data-rm]').forEach(b=>b.addEventListener('click',()=>{const r=DATA.find(x=>x.id===b.dataset.rm);const c=r.status==='cancelled';if(!c&&!confirmInline(b,'Remove'))return;update(r.id,{status:c?'booked':'cancelled'})}));
-  finWire();
   document.querySelectorAll('[data-rst]').forEach(b=>b.addEventListener('click',()=>{const q=REQS.find(x=>x.id===b.dataset.rst);const nxt={new:'replied',replied:'done',done:'new'}[q.status]||'replied';updateReq(q.id,nxt)}));
   document.querySelectorAll('[data-opaid]').forEach(b=>b.addEventListener('click',()=>{const o=ORDERS.find(x=>x.id===b.dataset.opaid);const nxt={no:'deposit',deposit:'full',full:'no'}[o.paid]||'deposit';updateOrder(o.id,{paid:nxt})}));
   document.querySelectorAll('[data-ocancel]').forEach(b=>b.addEventListener('click',()=>{const o=ORDERS.find(x=>x.id===b.dataset.ocancel);const c=o.status==='cancelled';if(!c&&!confirmInline(b))return;updateOrder(o.id,{status:c?'ordered':'cancelled'})}));
@@ -291,16 +297,21 @@ function calSection(){
     <div class="cgrid">${cells}</div><p class="clegend">Pink days have classes. The number shows people booked.</p></div>
     <div class="dpanel"><h3>${esc(nice(SEL))}</h3><p class="sub">${cl.length?cl.length+' classes · '+(DATA||[]).filter(r=>r.date===SEL&&r.status!=='cancelled').length+' people booked':'No classes on this day'}</p>${cl.map(slot).join('')}</div></div>`;
 }
+let PAGE=location.hash==='#finance'?'finance':'bookings';
+function syncPage(){
+  document.querySelectorAll('[data-pg]').forEach(a=>{if(a.dataset.pg===PAGE)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+  $('#csv').hidden=PAGE==='finance';document.title='Erika Life | '+(PAGE==='finance'?'Finance':'Bookings');
+}
+addEventListener('hashchange',()=>{PAGE=location.hash==='#finance'?'finance':'bookings';if(DATA)render();else syncPage();scrollTo(0,0)});
 const CATS=['Tools & software','Website','Marketing & ads','Content & photos','Boots & equipment','Venue & studio','Transport','Printing & packaging','Fees & legal','Other'];
 const egp=e=>+String(e.egp).replace(/[^\d.]/g,'')||0;
-function finSection(classIn,bootsIn,classAll,bootsAll){
+function finSection(classIn,bootsIn,classAll,bootsAll,placeRev,edBars,bootsTot){
   const ex=EXPS.filter(e=>e.status!=='deleted');
   const spent=ex.reduce((a,e)=>a+egp(e),0),rev=classIn+bootsIn,net=rev-spent;
   const byCat=[...new Set(ex.map(e=>e.category||'Other'))].map(c=>({l:c,v:ex.filter(e=>(e.category||'Other')===c).reduce((a,e)=>a+egp(e),0)})).sort((a,b)=>b.v-a.v);
   const months={};ex.forEach(e=>{const m=String(e.date).slice(0,7);months[m]=(months[m]||0)+egp(e)});
   const mBars=Object.keys(months).sort().map(m=>({l:MON[+m.slice(5,7)-1]+' '+m.slice(0,4),v:months[m]}));
-  return `<h2 class="sec">Finance</h2>
-  <div class="stats fin">
+  return `<div class="stats fin">
     <div class="stat"><b class="rose">${money(rev)}</b><span>Revenue received · classes ${money(classIn)}, boots ${money(bootsIn)}</span></div>
     <div class="stat"><b>${money(spent)}</b><span>Expenses · ${ex.length} item${ex.length===1?'':'s'}</span></div>
     <div class="stat"><b class="${net<0?'neg':'ok'}">${net<0?'−':''}${money(Math.abs(net))}</b><span>${net<0?'Net loss so far':'Net profit so far'} · ${money(classAll+bootsAll-spent)} if all booked is paid</span></div>
@@ -308,6 +319,8 @@ function finSection(classIn,bootsIn,classAll,bootsAll){
   <div class="ins" style="margin-bottom:14px">
     <div class="box"><h3>Expenses by category</h3>${byCat.length?bars(byCat,money):'<p class="empty" style="padding:10px 0">No expenses yet.</p>'}</div>
     <div class="box"><h3>Revenue vs expenses</h3>${bars([{l:'Classes',v:classIn},{l:'Boots',v:bootsIn},{l:'Expenses',v:spent,dim:true}],money)}${mBars.length>1?'<h3 style="margin-top:14px">Expenses by month</h3>'+bars(mBars,money):''}</div>
+    <div class="box"><h3>Class revenue by place (paid)</h3><p class="big">${money(classIn)} <span style="font:400 14px var(--sans);color:var(--mute)">received of ${money(classAll)}</span></p>${placeRev.length?bars(placeRev,money):'<p class="sub">No bookings yet.</p>'}</div>
+    <div class="box"><h3>Boots sales</h3><p class="big">${money(bootsIn)} <span style="font:400 14px var(--sans);color:var(--mute)">received of ${money(bootsTot)}</span></p>${edBars.length?bars(edBars,money):'<p class="sub">No boot orders yet.</p>'}</div>
   </div>
   <div class="tools" style="margin-top:8px"><h2>Expenses</h2><button class="ghost small" id="expcsv" type="button" style="color:var(--ink)">Download expenses CSV</button></div>
   <form class="ef" id="ef">
