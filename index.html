@@ -449,7 +449,7 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 :root.hit .pulse{transform:scale(1.08)}
 
 /* intro */
-#intro{position:fixed;inset:0;z-index:100;background:var(--plum);display:grid;place-items:center;color:var(--cream);animation:introfail .01s 6.5s forwards;cursor:pointer}
+#intro{position:fixed;inset:0;z-index:100;background:var(--plum);display:grid;place-items:center;color:var(--cream);animation:introfail .01s 4s forwards;cursor:pointer}
 .no-intro #intro{display:none}
 @keyframes introfail{to{opacity:0;visibility:hidden}}
 #intro .ball{margin:0 auto;width:clamp(90px,12vw,130px);aspect-ratio:1;color:var(--rose2)}
@@ -459,11 +459,11 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 #intro .welcome{font:italic 400 clamp(20px,2.4vw,28px) var(--serif);opacity:.85;margin-bottom:26px}
 #intro .iwm{width:clamp(200px,26vw,320px);aspect-ratio:1388/590;margin:18px auto 0;color:var(--cream)}
 #intro .iwm svg{width:100%;height:100%}
-#intro .ilife{font:italic 400 clamp(20px,2.2vw,26px) var(--serif);margin-top:6px;opacity:0;animation:introtxt .7s 1.3s forwards}
+#intro .ilife{font:italic 400 clamp(20px,2.2vw,26px) var(--serif);margin-top:6px;opacity:0;animation:introtxt .5s .7s forwards}
 #intro .say{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:18px;font:italic 400 clamp(15px,1.5vw,18px)/1.4 var(--serif)}
 #intro .say span:last-child{color:var(--rose2)}#intro .say span:first-child{font-style:normal}
-#intro .say span{opacity:0;animation:introtxt .7s 2s forwards}#intro .say span+span{animation-delay:2.7s}
-#intro .welcome,#intro .iwm{animation:introtxt .7s forwards}#intro .iwm{animation-delay:.6s;opacity:0}
+#intro .say span{opacity:0;animation:introtxt .5s 1s forwards}#intro .say span+span{animation-delay:1.35s}
+#intro .welcome,#intro .iwm{animation:introtxt .5s forwards}#intro .iwm{animation-delay:.3s;opacity:0}
 @keyframes introtxt{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 #intro .skip{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);background:none;border:0;color:rgba(251,247,244,.7);font:15px var(--sans);cursor:pointer;min-height:44px}
 
@@ -1090,7 +1090,7 @@ else if(hasG&&!RM){
     .to(b,{y:0,duration:.3,ease:'bounce.out'}).to(sh,{scaleX:1,opacity:1,duration:.3},'<')
     .to(b,{y:-40,duration:.22,ease:'power2.out'}).to(sh,{scaleX:.75,opacity:.7,duration:.22},'<')
     .to(b,{y:0,duration:.28,ease:'bounce.out'}).to(sh,{scaleX:1,opacity:1,duration:.28},'<')
-    .to({},{duration:2.78});
+    .to({},{duration:.78});
 }else{setTimeout(introDone,0)}
 if(location.hash.length>1){let t=null;try{t=document.querySelector(location.hash)}catch(e){}
   if(t){introDone();const go=()=>{window.__nav=true;if(hasG)ScrollTrigger.refresh();const y=t.getBoundingClientRect().top+scrollY;if(lenis)lenis.scrollTo(y,{immediate:true,force:true});else scrollTo(0,y);setTimeout(()=>{window.__nav=false},700)};
