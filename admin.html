@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Erika Life | Bookings</title>
+<title>Erika Life | Admin</title>
 <link rel="icon" type="image/svg+xml" href="img/logo/ERIKA-rounded-icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -101,6 +101,17 @@ h2.sec{font:400 22px var(--serif);margin:28px 0 12px}
 @media(max-width:760px){.cal{grid-template-columns:minmax(0,1fr)}.att{grid-template-columns:minmax(0,1fr) auto}}
 .p.rq{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 9.5em auto}.p.rdone{opacity:.55}
 .empty{text-align:center;color:var(--mute);padding:30px 0}
+.stats.fin{grid-template-columns:repeat(3,minmax(0,1fr))}
+.stat b.ok{color:var(--ok)}.stat b.neg{color:#B3261E}
+.ef{display:grid;grid-template-columns:9.5em minmax(0,1fr) minmax(0,1.4fr) 7em 6em;gap:10px;align-items:end;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 18px;margin-bottom:12px}
+.ef label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute)}
+.ef input,.ef select{font:15px var(--sans);min-height:42px;border-radius:12px;border:1px solid var(--line);padding:0 10px;background:#FCF9F7;color:var(--ink);width:100%}
+.ef .wide{grid-column:1/-2}.ef .rt[hidden]{display:none}
+.ef button{justify-content:center;white-space:nowrap;padding:0 14px}
+.ef .wide{grid-column:1/-2}.ef:has(.rt:not([hidden])) .wide{grid-column:1/-3}
+.p.ex{grid-template-columns:6.5em minmax(0,1.4fr) minmax(0,1fr) auto}
+.amt{font-weight:500;white-space:nowrap;text-align:right}.amt small{display:block;font-weight:400;font-size:12px;color:var(--mute)}
+@media(max-width:760px){.stats.fin{grid-template-columns:minmax(0,1fr)}.ef{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.ef .wide,.ef .it{grid-column:1/-1}.p.ex{grid-template-columns:minmax(0,1fr) auto}.p.ex>.sub:first-child{grid-column:1/-1;font-size:13px!important}.ef button{grid-column:1/-1}}
 @media(max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.ins{grid-template-columns:minmax(0,1fr)}.p{grid-template-columns:minmax(0,1fr) auto}.p .acts{grid-column:1/-1;display:flex;gap:8px;align-items:center}.tools input{width:100%}.bar{grid-template-columns:6.5em minmax(0,1fr) auto}}
 </style>
 </head>
@@ -108,7 +119,7 @@ h2.sec{font:400 22px var(--serif);margin:28px 0 12px}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs id="defs"></defs></svg>
 <header><div class="wrap">
   <a class="brand" href="index.html" aria-label="Erika, website"><svg><use href="#bloom"/></svg><svg class="wm"><use href="#wm"/></svg></a>
-  <h1>Bookings</h1>
+  <h1>Admin</h1>
   <div class="hbtns"><a class="btn ghost small" href="https://analytics.google.com/analytics/web/?authuser=erika.bouncefit@gmail.com" target="_blank" rel="noopener">Visitors</a><button class="ghost small" id="refresh" type="button">Refresh</button><button class="ghost small" id="csv" type="button">Download CSV</button><button class="ghost small" id="out" type="button" hidden>Sign out</button></div>
 </div></header>
 <main class="wrap" id="app"></main>
@@ -123,7 +134,7 @@ const TIMES={'18':'6–7 PM','19':'7–8 PM','20':'8–9 PM'};
 const DAYF=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const nice=d=>{const x=new Date(d+'T00:00');return isNaN(x)?d:`${DAYF[x.getDay()]} ${x.getDate()} ${MON[x.getMonth()]}`};
 let KEY='';try{KEY=localStorage.getItem('erika-admin-key')||''}catch(e){}
-let CAL=null,SEL=null,REQS=[],DATA=null,ORDERS=[],STOCK={S:2,M:8,L:1},VIEW='up',Q='',SAMPLE=false;
+let CAL=null,SEL=null,REQS=[],DATA=null,ORDERS=[],EXPS=[],STOCK={S:2,M:8,L:1},VIEW='up',Q='',SAMPLE=false;
 
 /* logo symbols from the home page */
 fetch('index.html').then(r=>r.text()).then(t=>{const m=t.match(/<symbol id="bloom"[\s\S]*?<\/symbol>/),w=t.match(/<symbol id="wm"[\s\S]*?<\/symbol>/);$('#defs').innerHTML=(m?m[0]:'')+(w?w[0]:'')}).catch(()=>{});
@@ -141,6 +152,9 @@ function sample(){
   const cls=[['New Cairo','2026-12-01','18'],['New Cairo','2026-12-01','19'],['Heliopolis','2026-12-02','19'],['Heliopolis','2026-12-02','20'],['New Cairo','2026-12-06','19'],['Heliopolis','2026-12-07','18']];
   const boots=['M','M','S','own','M','L','M','S','M','own','M','S','M','M'];
   const hrs=['21:10','20:45','13:05','22:30','21:55','09:40','19:20','21:35','12:15','22:05','20:10','08:55','21:40','17:30'];
+  EXPS=[{id:'E0001',date:'2026-11-01',category:'Tools & software',item:'Claude Pro (Nov, incl. VAT)',amount:'22.80',currency:'USD',rate:'52',egp:'1185.60',notes:'Project + website',status:'active'},
+    {id:'E0002',date:'2026-11-14',category:'Tools & software',item:'ChatGPT Plus (Nov, incl. VAT)',amount:'22.80',currency:'USD',rate:'52',egp:'1185.60',notes:'Logo, identity, website photos',status:'active'},
+    {id:'E0003',date:'2026-11-26',category:'Website',item:'Domain erikalife.com (1 year, Squarespace)',amount:'22.00',currency:'USD',rate:'52',egp:'1144.00',notes:'Renews Nov 2027',status:'active'}];
   REQS=[{id:'R0C1X',created:'2026-11-27 09:30',topic:'Cancel a booking',name:'Nour Hassan',email:'nour@example.com',phone:'010 1000 0000',message:'Class date: 2026-12-01. I cannot come, please cancel.',source:'Direct',page:'/',status:'new'},{id:'R1A2B',created:'2026-11-26 21:10',topic:'Book a class',name:'Nour Hassan',email:'nour@example.com',phone:'010 1234 5678',message:'Is there a class for beginners on Sunday?',source:'instagram.com',page:'/',status:'new'},
     {id:'R3C4D',created:'2026-11-26 14:02',topic:'Sponsorship',name:'Omar Fathy',email:'omar@brand.example',phone:'',message:'We would like to sponsor The Bounce Run.',source:'google.com',page:'/',status:'replied'},
     {id:'R5E6F',created:'2026-11-25 19:45',topic:'Buy boots',name:'Mai Sherif',email:'mai@example.com',phone:'011 2222 3333',message:'Do you have size M in pink?',source:'Facebook / Instagram',page:'/boots.html',status:'done'}];
@@ -152,7 +166,7 @@ async function load(){
   $('#app').innerHTML='<p class="empty">Loading bookings…</p>';
   try{const r=await fetch(API+'?key='+encodeURIComponent(KEY));const j=await r.json();
     if(!j.ok){KEY='';try{localStorage.removeItem('erika-admin-key')}catch(e){}login('That key did not work. Try again.');return}
-    DATA=j.rows||[];ORDERS=j.orders||[];REQS=j.requests||[];if(j.stock)STOCK=j.stock;render()}
+    DATA=j.rows||[];ORDERS=j.orders||[];REQS=j.requests||[];EXPS=j.expenses||[];if(j.stock)STOCK=j.stock;render()}
   catch(e){$('#app').innerHTML='<p class="empty">Could not reach the bookings sheet. Check your connection and press Refresh.</p>'}
 }
 function login(msg){
@@ -204,6 +218,7 @@ function render(){
     <div class="stat"><b>${unpaid.length}</b><span>Waiting for payment · ${money(unpaid.reduce((a,r)=>a+price(r),0))}</span></div>
     <div class="stat"><b style="font-size:22px;line-height:1.45">${next?esc(nice(next.split('|')[0])):'—'}</b><span>${next?'Next class · '+esc(TIMES[next.split('|')[1]]||''):'No upcoming class'}</span></div>
   </div>
+  ${finSection(paidRev,bootsIn,allRev,bootsTot)}
   <h2 class="sec">Class calendar</h2>
   ${calSection()}
   <h2 class="sec">Insights</h2>
@@ -234,6 +249,7 @@ function render(){
   document.querySelectorAll('[data-cm]').forEach(b=>b.addEventListener('click',()=>{const m=CAL.m+(+b.dataset.cm);CAL={y:CAL.y+Math.floor(m/12),m:(m%12+12)%12};render()}));
   document.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>{SEL=b.dataset.day;render();const dp=$('.dpanel');if(dp&&innerWidth<760)dp.scrollIntoView({behavior:'smooth',block:'start'})}));
   document.querySelectorAll('[data-rm]').forEach(b=>b.addEventListener('click',()=>{const r=DATA.find(x=>x.id===b.dataset.rm);const c=r.status==='cancelled';if(!c&&!confirmInline(b,'Remove'))return;update(r.id,{status:c?'booked':'cancelled'})}));
+  finWire();
   document.querySelectorAll('[data-rst]').forEach(b=>b.addEventListener('click',()=>{const q=REQS.find(x=>x.id===b.dataset.rst);const nxt={new:'replied',replied:'done',done:'new'}[q.status]||'replied';updateReq(q.id,nxt)}));
   document.querySelectorAll('[data-opaid]').forEach(b=>b.addEventListener('click',()=>{const o=ORDERS.find(x=>x.id===b.dataset.opaid);const nxt={no:'deposit',deposit:'full',full:'no'}[o.paid]||'deposit';updateOrder(o.id,{paid:nxt})}));
   document.querySelectorAll('[data-ocancel]').forEach(b=>b.addEventListener('click',()=>{const o=ORDERS.find(x=>x.id===b.dataset.ocancel);const c=o.status==='cancelled';if(!c&&!confirmInline(b))return;updateOrder(o.id,{status:c?'ordered':'cancelled'})}));
@@ -274,6 +290,64 @@ function calSection(){
   return `<div class="cal"><div class="cbox"><div class="chead"><b>${MON[CAL.m]} ${CAL.y}</b><button type="button" data-cm="-1" aria-label="Previous month">&lsaquo;</button><button type="button" data-cm="1" aria-label="Next month">&rsaquo;</button></div>
     <div class="cgrid">${cells}</div><p class="clegend">Pink days have classes. The number shows people booked.</p></div>
     <div class="dpanel"><h3>${esc(nice(SEL))}</h3><p class="sub">${cl.length?cl.length+' classes · '+(DATA||[]).filter(r=>r.date===SEL&&r.status!=='cancelled').length+' people booked':'No classes on this day'}</p>${cl.map(slot).join('')}</div></div>`;
+}
+const CATS=['Tools & software','Website','Marketing & ads','Content & photos','Boots & equipment','Venue & studio','Transport','Printing & packaging','Fees & legal','Other'];
+const egp=e=>+String(e.egp).replace(/[^\d.]/g,'')||0;
+function finSection(classIn,bootsIn,classAll,bootsAll){
+  const ex=EXPS.filter(e=>e.status!=='deleted');
+  const spent=ex.reduce((a,e)=>a+egp(e),0),rev=classIn+bootsIn,net=rev-spent;
+  const byCat=[...new Set(ex.map(e=>e.category||'Other'))].map(c=>({l:c,v:ex.filter(e=>(e.category||'Other')===c).reduce((a,e)=>a+egp(e),0)})).sort((a,b)=>b.v-a.v);
+  const months={};ex.forEach(e=>{const m=String(e.date).slice(0,7);months[m]=(months[m]||0)+egp(e)});
+  const mBars=Object.keys(months).sort().map(m=>({l:MON[+m.slice(5,7)-1]+' '+m.slice(0,4),v:months[m]}));
+  return `<h2 class="sec">Finance</h2>
+  <div class="stats fin">
+    <div class="stat"><b class="rose">${money(rev)}</b><span>Revenue received · classes ${money(classIn)}, boots ${money(bootsIn)}</span></div>
+    <div class="stat"><b>${money(spent)}</b><span>Expenses · ${ex.length} item${ex.length===1?'':'s'}</span></div>
+    <div class="stat"><b class="${net<0?'neg':'ok'}">${net<0?'−':''}${money(Math.abs(net))}</b><span>${net<0?'Net loss so far':'Net profit so far'} · ${money(classAll+bootsAll-spent)} if all booked is paid</span></div>
+  </div>
+  <div class="ins" style="margin-bottom:14px">
+    <div class="box"><h3>Expenses by category</h3>${byCat.length?bars(byCat,money):'<p class="empty" style="padding:10px 0">No expenses yet.</p>'}</div>
+    <div class="box"><h3>Revenue vs expenses</h3>${bars([{l:'Classes',v:classIn},{l:'Boots',v:bootsIn},{l:'Expenses',v:spent,dim:true}],money)}${mBars.length>1?'<h3 style="margin-top:14px">Expenses by month</h3>'+bars(mBars,money):''}</div>
+  </div>
+  <div class="tools" style="margin-top:8px"><h2>Expenses</h2><button class="ghost small" id="expcsv" type="button" style="color:var(--ink)">Download expenses CSV</button></div>
+  <form class="ef" id="ef">
+    <label>Date<input id="ed" type="date" value="${today()}" required></label>
+    <label>Category<select id="ec">${CATS.map(c=>`<option>${esc(c)}</option>`).join('')}</select></label>
+    <label class="it">Item<input id="ei" type="text" maxlength="120" placeholder="e.g. Instagram ads, week 1" required></label>
+    <label>Amount<input id="ea" type="number" min="0" step="0.01" inputmode="decimal" required></label>
+    <label>Currency<select id="ecur"><option>EGP</option><option>USD</option></select></label>
+    <label class="wide">Notes<input id="en" type="text" maxlength="300" placeholder="Optional"></label>
+    <label class="rt" hidden>EGP per USD<input id="er" type="number" min="1" step="0.01" value="52"></label>
+    <button type="submit" id="eb">Add expense</button>
+  </form>
+  ${ex.length?`<section class="class">${ex.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))).map(e=>`<div class="p ex">
+    <span class="sub" style="font-size:14px">${esc(e.date)}</span>
+    <div><span class="nm">${esc(e.item)}</span><div class="sub">${esc(e.category)}${e.notes?' · '+esc(e.notes):''}</div></div>
+    <span class="amt">${money(egp(e))}${e.currency==='USD'?`<small>$${esc(e.amount)} × ${esc(e.rate)}</small>`:''}</span>
+    <div class="acts"><button class="x" type="button" data-edel="${esc(e.id)}">Delete</button></div>
+  </div>`).join('')}</section>`:'<p class="empty">No expenses yet. Add the first one above.</p>'}`;
+}
+function finWire(){
+  const f=$('#ef');if(!f)return;
+  const cur=$('#ecur'),rt=f.querySelector('.rt');cur.addEventListener('change',()=>{rt.hidden=cur.value!=='USD'});
+  f.addEventListener('submit',async e=>{e.preventDefault();
+    const amount=+$('#ea').value,currency=cur.value,rate=currency==='USD'?(+$('#er').value||52):1;
+    const ex={date:$('#ed').value,category:$('#ec').value,item:$('#ei').value.trim(),amount:amount.toFixed(2),currency,rate:String(rate),egp:(amount*rate).toFixed(2),notes:$('#en').value.trim(),status:'active'};
+    if(!ex.item||!amount)return;
+    const b=$('#eb');b.disabled=true;b.textContent='Saving…';
+    if(!API){ex.id='E'+Date.now().toString(36).slice(-5).toUpperCase();EXPS.push(ex);render();return}
+    try{const r=await fetch(API,{method:'POST',body:JSON.stringify({action:'addExpense',key:KEY,...ex})});const j=await r.json();if(!j.ok)throw 0;ex.id=j.id;EXPS.push(ex);render();alertBar('Expense added.')}
+    catch(err){b.disabled=false;b.textContent='Add expense';alertBar('Could not save the expense. Try again.')}
+  });
+  document.querySelectorAll('[data-edel]').forEach(b=>b.addEventListener('click',async()=>{
+    if(!confirmInline(b,'Delete'))return;const e=EXPS.find(x=>x.id===b.dataset.edel);if(!e)return;e.status='deleted';render();
+    if(!API)return;
+    try{const r=await fetch(API,{method:'POST',body:JSON.stringify({action:'update',kind:'expense',key:KEY,id:e.id,status:'deleted'})});const j=await r.json();if(!j.ok)throw 0}
+    catch(err){e.status='active';render();alertBar('Could not delete that. Try again.')}
+  }));
+  const c=$('#expcsv');if(c)c.addEventListener('click',()=>{const H=['id','date','category','item','amount','currency','rate','egp','notes'];
+    const csv=[H.join(',')].concat(EXPS.filter(e=>e.status!=='deleted').map(r=>H.map(h=>'"'+String(r[h]??'').replace(/"/g,'""')+'"').join(','))).join('\n');
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv'}));a.download='erika-expenses.csv';a.click()});
 }
 function reqSection(){
   const cnt=k=>{const m={};REQS.forEach(q=>{const v=q[k]||'Direct';m[v]=(m[v]||0)+1});return Object.entries(m).map(([l,v])=>({l,v})).sort((a,b)=>b.v-a.v).slice(0,6)};

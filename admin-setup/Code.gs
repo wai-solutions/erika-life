@@ -5,7 +5,7 @@
  *
  * 1. Change ADMIN_KEY below to a private password only Erika knows.
  * 2. Keep BOOT_STOCK in line with the real pairs per class.
- * Sheets made automatically: Bookings, Boot orders, Requests (chat form).
+ * Sheets made automatically: Bookings, Boot orders, Requests (chat form), Expenses (finance).
  */
 const ADMIN_KEY = 'CHANGE-ME-erika-private-key';
 const BOOT_STOCK = { S: 2, M: 8, L: 1 };
@@ -18,6 +18,44 @@ function ss_() { return SpreadsheetApp.getActiveSpreadsheet() || SpreadsheetApp.
 const REQ_SHEET = 'Requests';
 const REQ_HEAD = ['id', 'created', 'topic', 'name', 'email', 'phone', 'message', 'source', 'page', 'status'];
 const HEAD = ['id', 'created', 'studio', 'date', 'time', 'classKey', 'boots', 'name', 'whatsapp', 'first', 'notes', 'price', 'paid', 'status'];
+
+/* Finance: expenses (added from the admin panel). Revenue comes from paid bookings + boot payments. */
+const EXP_SHEET = 'Expenses';
+const EXP_HEAD = ['id', 'date', 'category', 'item', 'amount', 'currency', 'rate', 'egp', 'notes', 'status'];
+function expSheet_() {
+  const ss = ss_();
+  let sh = ss.getSheetByName(EXP_SHEET);
+  if (!sh) {
+    sh = ss.insertSheet(EXP_SHEET); sh.appendRow(EXP_HEAD); sh.setFrozenRows(1); sh.getRange('A:J').setNumberFormat('@');
+    [['E0001', '2026-11-01', 'Tools & software', 'Claude Pro (Nov, incl. VAT)', '22.80', 'USD', '52', '1185.60', 'Project + website. Website share ~14 of 30 days', 'active'],
+     ['E0002', '2026-11-14', 'Tools & software', 'ChatGPT Plus (Nov, incl. VAT)', '22.80', 'USD', '52', '1185.60', 'Logo, identity, website photos', 'active'],
+     ['E0003', '2026-11-26', 'Website', 'Domain erikalife.com (1 year, Squarespace)', '22.00', 'USD', '52', '1144.00', 'Renews Nov 2027', 'active']]
+      .forEach(function (r) { sh.appendRow(r); });
+  }
+  return sh;
+}
+function expenses_() {
+  const vals = expSheet_().getDataRange().getDisplayValues();
+  vals.shift();
+  return vals.map(function (r, i) { const o = { _row: i + 2 }; EXP_HEAD.forEach(function (h, k) { o[h] = r[k]; }); return o; });
+}
+function expAdd_(b) {
+  if (b.key !== ADMIN_KEY) return json_({ ok: false, error: 'key' });
+  const num = function (v) { const n = parseFloat(String(v).replace(/[^\d.]/g, '')); return isNaN(n) ? 0 : n; };
+  const amount = num(b.amount), cur = clean_(b.currency, 5) === 'USD' ? 'USD' : 'EGP';
+  const rate = cur === 'EGP' ? 1 : (num(b.rate) || 52);
+  if (!amount) return json_({ ok: false, error: 'amount' });
+  const id = 'E' + Utilities.getUuid().slice(0, 5).toUpperCase();
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(b.date) ? b.date : Utilities.formatDate(new Date(), 'Africa/Cairo', 'yyyy-MM-dd');
+  expSheet_().appendRow([id, date, clean_(b.category, 40), clean_(b.item, 120), amount.toFixed(2), cur, String(rate), (amount * rate).toFixed(2), clean_(b.notes, 300), 'active']);
+  return json_({ ok: true, id: id });
+}
+function expUpdate_(b) {
+  const r = expenses_().filter(function (x) { return x.id === b.id; })[0];
+  if (!r) return json_({ ok: false, error: 'notfound' });
+  if (b.status) expSheet_().getRange(r._row, EXP_HEAD.indexOf('status') + 1).setValue(clean_(b.status, 20));
+  return json_({ ok: true });
+}
 
 function sheet_() {
   const ss = ss_();
@@ -91,7 +129,7 @@ function doGet(e) {
     return json_({ ok: true, stock: BOOT_STOCK, counts: c });
   }
   if (p.key !== ADMIN_KEY) return json_({ ok: false, error: 'key' });
-  return json_({ ok: true, stock: BOOT_STOCK, rows: rows.map(function (r) { delete r._row; return r; }), orders: orders_().map(function (r) { delete r._row; return r; }), requests: requests_().map(function (r) { delete r._row; return r; }) });
+  return json_({ ok: true, stock: BOOT_STOCK, rows: rows.map(function (r) { delete r._row; return r; }), orders: orders_().map(function (r) { delete r._row; return r; }), requests: requests_().map(function (r) { delete r._row; return r; }), expenses: expenses_().map(function (r) { delete r._row; return r; }) });
 }
 
 /* Booking from the website, or admin updates (paid / cancelled) */
@@ -104,6 +142,7 @@ function doPost(e) {
     const rows = rows_();
     if (b.action === 'update') {
       if (b.key !== ADMIN_KEY) return json_({ ok: false, error: 'key' });
+      if (b.kind === 'expense') return expUpdate_(b);
       const isOrder = b.kind === 'order', isReq = b.kind === 'request';
       const list = isReq ? requests_() : (isOrder ? orders_() : rows);
       const head = isReq ? REQ_HEAD : (isOrder ? ORDER_HEAD : HEAD);
@@ -114,6 +153,7 @@ function doPost(e) {
       if (b.status) target.getRange(r._row, head.indexOf('status') + 1).setValue(clean_(b.status, 20));
       return json_({ ok: true });
     }
+    if (b.action === 'addExpense') return expAdd_(b);
     if (b.type === 'request') {
       const rid = 'R' + Utilities.getUuid().slice(0, 5).toUpperCase();
       const at = Utilities.formatDate(new Date(), 'Africa/Cairo', 'yyyy-MM-dd HH:mm');
