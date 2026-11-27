@@ -156,9 +156,9 @@ function sample(){
   const cls=[['New Cairo','2026-12-01','18'],['New Cairo','2026-12-01','19'],['Heliopolis','2026-12-02','19'],['Heliopolis','2026-12-02','20'],['New Cairo','2026-12-06','19'],['Heliopolis','2026-12-07','18']];
   const boots=['M','M','S','own','M','L','M','S','M','own','M','S','M','M'];
   const hrs=['21:10','20:45','13:05','22:30','21:55','09:40','19:20','21:35','12:15','22:05','20:10','08:55','21:40','17:30'];
-  EXPS=[{id:'E0001',date:'2026-11-01',category:'Tools & software',item:'Claude Pro (Nov, incl. VAT)',amount:'22.80',currency:'USD',rate:'52',egp:'1185.60',notes:'Project + website',status:'active'},
-    {id:'E0002',date:'2026-11-14',category:'Tools & software',item:'ChatGPT Plus (Nov, incl. VAT)',amount:'22.80',currency:'USD',rate:'52',egp:'1185.60',notes:'Logo, identity, website photos',status:'active'},
-    {id:'E0003',date:'2026-11-26',category:'Website',item:'Domain erikalife.com (1 year, Squarespace)',amount:'22.00',currency:'USD',rate:'52',egp:'1144.00',notes:'Renews Nov 2027',status:'active'}];
+  EXPS=[{id:'E0001',date:'2026-11-01',category:'Tools & software',item:'Claude Pro (Nov, incl. VAT)',amount:'22.80',currency:'USD',rate:'54.8',egp:'1249.44',notes:'Project + website',status:'active'},
+    {id:'E0002',date:'2026-11-14',category:'Tools & software',item:'ChatGPT Plus (Nov, incl. VAT)',amount:'22.80',currency:'USD',rate:'54.8',egp:'1249.44',notes:'Logo, identity, website photos',status:'active'},
+    {id:'E0003',date:'2026-11-26',category:'Website',item:'Domain erikalife.com (1 year, Squarespace)',amount:'22.00',currency:'USD',rate:'54.8',egp:'1205.60',notes:'Renews Nov 2027',status:'active'}];
   REQS=[{id:'R0C1X',created:'2026-11-27 09:30',topic:'Cancel a booking',name:'Nour Hassan',email:'nour@example.com',phone:'010 1000 0000',message:'Class date: 2026-12-01. I cannot come, please cancel.',source:'Direct',page:'/',status:'new'},{id:'R1A2B',created:'2026-11-26 21:10',topic:'Book a class',name:'Nour Hassan',email:'nour@example.com',phone:'010 1234 5678',message:'Is there a class for beginners on Sunday?',source:'instagram.com',page:'/',status:'new'},
     {id:'R3C4D',created:'2026-11-26 14:02',topic:'Sponsorship',name:'Omar Fathy',email:'omar@brand.example',phone:'',message:'We would like to sponsor The Bounce Run.',source:'google.com',page:'/',status:'replied'},
     {id:'R5E6F',created:'2026-11-25 19:45',topic:'Buy boots',name:'Mai Sherif',email:'mai@example.com',phone:'011 2222 3333',message:'Do you have size M in pink?',source:'Facebook / Instagram',page:'/boots.html',status:'done'}];
@@ -330,7 +330,7 @@ function finSection(classIn,bootsIn,classAll,bootsAll,placeRev,edBars,bootsTot){
     <label>Amount<input id="ea" type="number" min="0" step="0.01" inputmode="decimal" required></label>
     <label>Currency<select id="ecur"><option>EGP</option><option>USD</option></select></label>
     <label class="wide">Notes<input id="en" type="text" maxlength="300" placeholder="Optional"></label>
-    <label class="rt" hidden>EGP per USD<input id="er" type="number" min="1" step="0.01" value="52"></label>
+    <label class="rt" hidden>EGP per USD<input id="er" type="number" min="1" step="0.01" value="54.8"></label>
     <button type="submit" id="eb">Add expense</button>
   </form>
   ${ex.length?`<section class="class">${ex.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))).map(e=>`<div class="p ex">
@@ -344,7 +344,7 @@ function finWire(){
   const f=$('#ef');if(!f)return;
   const cur=$('#ecur'),rt=f.querySelector('.rt');cur.addEventListener('change',()=>{rt.hidden=cur.value!=='USD'});
   f.addEventListener('submit',async e=>{e.preventDefault();
-    const amount=+$('#ea').value,currency=cur.value,rate=currency==='USD'?(+$('#er').value||52):1;
+    const amount=+$('#ea').value,currency=cur.value,rate=currency==='USD'?(+$('#er').value||54.8):1;
     const ex={date:$('#ed').value,category:$('#ec').value,item:$('#ei').value.trim(),amount:amount.toFixed(2),currency,rate:String(rate),egp:(amount*rate).toFixed(2),notes:$('#en').value.trim(),status:'active'};
     if(!ex.item||!amount)return;
     const b=$('#eb');b.disabled=true;b.textContent='Saving…';
