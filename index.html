@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>try{if(localStorage.getItem("erikaIntro")||location.hash.length>1)document.documentElement.classList.add("no-intro")}catch(e){}</script>
+<link rel="preload" as="image" href="img/group-jump.jpg" fetchpriority="high">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Erika Life | Bounce Experiences — Where joy meets power</title>
 <meta name="description" content="Erika Life | Bounce Experiences: rebound boots (jumping boots) classes in Cairo with Hungarian coach Erika Szenes. Where joy meets power. Where souls go back to nature. December 2026: 500 EGP per class.">
@@ -407,7 +409,9 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet"></noscript>
 <style>
 /* VOICE  : warm, joyful, luxurious; short lines, Jester joy meets Hero power
    IDEA   : a flower that bounces; the whole site moves on one 116 bpm beat
@@ -445,7 +449,8 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 :root.hit .pulse{transform:scale(1.08)}
 
 /* intro */
-#intro{position:fixed;inset:0;z-index:100;background:var(--plum);display:grid;place-items:center;color:var(--cream);animation:introfail .01s 7s forwards}
+#intro{position:fixed;inset:0;z-index:100;background:var(--plum);display:grid;place-items:center;color:var(--cream);animation:introfail .01s 3.2s forwards;cursor:pointer}
+.no-intro #intro{display:none}
 @keyframes introfail{to{opacity:0;visibility:hidden}}
 #intro .ball{margin:0 auto;width:clamp(90px,12vw,130px);aspect-ratio:1;color:var(--rose2)}
 #intro .ball svg{width:100%;height:100%}
@@ -456,7 +461,9 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 #intro .iwm svg{width:100%;height:100%}
 #intro .say{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:22px;font:italic 400 clamp(20px,2.6vw,30px)/1.3 var(--serif)}
 #intro .say span:last-child{color:var(--rose2)}#intro .say span:first-child{font-style:normal}
-#intro .say span{opacity:0}
+#intro .say span{opacity:0;animation:introtxt .5s .5s forwards}#intro .say span+span{animation-delay:.75s}
+#intro .welcome,#intro .iwm{animation:introtxt .45s forwards}#intro .iwm{animation-delay:.25s;opacity:0}
+@keyframes introtxt{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 #intro .skip{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);background:none;border:0;color:rgba(251,247,244,.7);font:15px var(--sans);cursor:pointer;min-height:44px}
 
 /* nav */
@@ -812,7 +819,7 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
 <main>
 <!-- HERO -->
 <section class="hero" id="top">
-  <div class="bg"><img src="img/group-jump.jpg" alt="Three women laughing mid-air in rebound boots during an Erika class"></div>
+  <div class="bg"><img src="img/group-jump.jpg" fetchpriority="high" decoding="async" alt="Three women laughing mid-air in rebound boots during an Erika class"></div>
   <div class="veil"></div>
   <div class="petals" id="heroPetals"></div>
   <div class="copy wrap">
@@ -1059,27 +1066,23 @@ function petals(box,n,colors){
 const hp=petals($('#heroPetals'),22,['#F1CFE0','#E5639A','#FBF7F4','#CC3370']);
 
 /* ---------- intro ---------- */
-function introDone(){const i=$('#intro');if(!i||i.dataset.done)return;i.dataset.done=1;
-  if(hasG&&!RM)gsap.to(i,{yPercent:-100,duration:.9,ease:'power4.inOut',onComplete:()=>i.remove()});else i.remove();
-  heroIn();}
-$('#intro .skip').addEventListener('click',introDone);
-if(hasG&&!RM){
-  const b=$('#intro .ball'),sh=$('#intro .shadow'),says=$$('#intro .say span'),wm=$('#intro .iwm'),wel=$('#intro .welcome');
-  const reveal=[wm,says[0],says[1]];
-  gsap.set(b,{y:-300});gsap.set(sh,{scaleX:.3,opacity:.2});gsap.set(reveal,{opacity:0,y:16});gsap.set(wm,{scale:.85});gsap.set(wel,{opacity:0,y:-12});
+function introDone(){const i=$('#intro');heroIn();if(!i||i.dataset.done)return;i.dataset.done=1;
+  try{localStorage.setItem('erikaIntro','1')}catch(e){}
+  if(i.offsetParent===null&&getComputedStyle(i).display==='none'){i.remove();return}
+  if(hasG&&!RM)gsap.to(i,{yPercent:-100,duration:.55,ease:'power3.inOut',onComplete:()=>i.remove()});else i.remove();}
+if($('#intro')){$('#intro').addEventListener('click',introDone);addEventListener('keydown',introDone,{once:true});}
+if(document.documentElement.classList.contains('no-intro')||!$('#intro')){setTimeout(introDone,0)}
+else if(hasG&&!RM){
+  const b=$('#intro .ball'),sh=$('#intro .shadow');
+  gsap.set(b,{y:-220});gsap.set(sh,{scaleX:.3,opacity:.2});
   const tl=gsap.timeline({onComplete:introDone});
-  tl.to(wel,{opacity:1,y:0,duration:.5,ease:'power2.out'});
-  [200,130,70].forEach((h,i)=>{
-    tl.to(b,{y:0,duration:i?.34:.55,ease:'power2.in'},i?'>':'-=.1')
-      .to(sh,{scaleX:1,opacity:1,duration:i?.34:.55,ease:'power2.in'},'<')
-      .to(b,{scaleY:.78,scaleX:1.15,duration:.08,transformOrigin:'50% 100%'})
-      .to(reveal[i],{opacity:1,y:0,scale:1,duration:.5,ease:'back.out(2.6)'},'<')
-      .to(b,{scaleY:1,scaleX:1,duration:.1})
-      .to(b,{y:-h,duration:.32,ease:'power2.out'},'<')
-      .to(sh,{scaleX:.5,opacity:.4,duration:.32,ease:'power2.out'},'<');
-  });
-  tl.to(b,{y:0,duration:.3,ease:'bounce.out'}).to(sh,{scaleX:1,opacity:1,duration:.3},'<').to({},{duration:.9});
-}else{introDone()}
+  tl.to(b,{y:0,duration:.45,ease:'power2.in'}).to(sh,{scaleX:1,opacity:1,duration:.45,ease:'power2.in'},'<')
+    .to(b,{scaleY:.8,scaleX:1.12,duration:.07,transformOrigin:'50% 100%'})
+    .to(b,{scaleY:1,scaleX:1,duration:.1})
+    .to(b,{y:-70,duration:.25,ease:'power2.out'},'<').to(sh,{scaleX:.6,opacity:.5,duration:.25},'<')
+    .to(b,{y:0,duration:.3,ease:'bounce.out'}).to(sh,{scaleX:1,opacity:1,duration:.3},'<')
+    .to({},{duration:.35});
+}else{setTimeout(introDone,0)}
 if(location.hash.length>1){let t=null;try{t=document.querySelector(location.hash)}catch(e){}
   if(t){introDone();const go=()=>{window.__nav=true;if(hasG)ScrollTrigger.refresh();const y=t.getBoundingClientRect().top+scrollY;if(lenis)lenis.scrollTo(y,{immediate:true,force:true});else scrollTo(0,y);setTimeout(()=>{window.__nav=false},700)};
   if(document.readyState==='complete')setTimeout(go,250);else addEventListener('load',()=>setTimeout(go,250))}}
@@ -1088,11 +1091,11 @@ if(location.hash.length>1){let t=null;try{t=document.querySelector(location.hash
 let heroed=false;
 function heroIn(){
   if(heroed)return;heroed=true;
-  if(!hasG||RM)return;
-  gsap.from('#heroTitle .w',{y:-140,opacity:0,duration:1.1,ease:'bounce.out',stagger:.09});
-  gsap.from('.hero p,.hero .cta,.hero .kicker',{y:30,opacity:0,duration:.9,ease:'power3.out',stagger:.1,delay:.6});
-  gsap.from('.hero .bg img',{scale:1.18,duration:2.4,ease:'power3.out'});
-  hp.forEach(p=>gsap.from(p.el,{y:-innerHeight,opacity:0,duration:rnd(1.2,2.2),ease:'bounce.out',delay:rnd(0,.8)}));
+  if(!hasG||RM||performance.now()>3000&&!document.documentElement.classList.contains('no-intro'))return;
+  gsap.from('#heroTitle .w',{y:-90,opacity:0,duration:.75,ease:'bounce.out',stagger:.045});
+  gsap.from('.hero p,.hero .cta,.hero .kicker',{y:24,opacity:0,duration:.6,ease:'power3.out',stagger:.07,delay:.3});
+  gsap.from('.hero .bg img',{scale:1.12,duration:1.6,ease:'power3.out'});
+  hp.forEach(p=>gsap.from(p.el,{y:-innerHeight,opacity:0,duration:rnd(.9,1.5),ease:'bounce.out',delay:rnd(0,.4)}));
 }
 if(hasG&&!RM){
   gsap.to('.hero .bg',{yPercent:18,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
