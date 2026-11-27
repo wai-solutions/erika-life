@@ -134,3 +134,6 @@
     }).catch(function(){});
   }
 })();
+
+/* chat button + request form on every public page */
+(function(){if(/admin/.test(location.pathname))return;var s=document.createElement('script');s.src='js/erika-chat.js?v=1';s.defer=true;document.head.appendChild(s)})();
