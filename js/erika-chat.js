@@ -60,7 +60,7 @@
           '<label><span>Message <b>*</b></span><textarea name="message" required maxlength="2000" placeholder="Tell us how we can help"></textarea></label>'+
           '<div class="ec-hp" aria-hidden="true"><input name="_honey" tabindex="-1" autocomplete="off"></div>'+
           '<div class="ec-err" role="alert"></div>'+
-          '<button class="ec-send" type="submit">Send</button>'+
+          '<button class="ec-send" type="submit">Send to Erika</button>'+
         '</form>'+
         '<div class="ec-done" aria-live="polite">'+
           '<div class="ok"><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
@@ -106,7 +106,7 @@
         .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok||String(j.success)==='false')throw new Error(j.message||'send failed');return j})})
         .then(function(){w.classList.add('ec-sent');form.reset()})
         .catch(function(){err.textContent='Sorry, your request did not go through. Please try again in a moment.'})
-        .then(function(){send.disabled=false;send.textContent='Send'});
+        .then(function(){send.disabled=false;send.textContent='Send to Erika'});
     });
   }
   if(document.body)build();else document.addEventListener('DOMContentLoaded',build);
