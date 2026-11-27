@@ -14,7 +14,7 @@
   var cur=function(f){return f===file?' aria-current="page"':''};
 
   var css=''+
-  '.sn{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:12px;padding:12px max(4vw,16px);background:rgba(251,247,244,.92);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 1px 0 rgba(42,18,34,.08);color:#2A1222;font-family:"DM Sans",system-ui,sans-serif;transition:background .4s,color .4s,box-shadow .4s}'+
+  '.sn{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:12px;padding:12px max(4vw,16px);background:rgba(251,247,244,.97);box-shadow:0 1px 0 rgba(42,18,34,.08);color:#2A1222;font-family:"DM Sans",system-ui,sans-serif;transition:background .4s,color .4s,box-shadow .4s}'+
   '.sn a{color:inherit;text-decoration:none}'+
   '.sn .ek,.sf .ek,.snm .ek{display:inline-block;aspect-ratio:1388/590;vertical-align:middle}.sn .ek svg,.sf .ek svg,.snm .ek svg{width:100%;height:100%;display:block}'+
   '.sn-brand{display:flex;align-items:center;gap:8px;flex:none;margin-right:auto}'+

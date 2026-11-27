@@ -469,7 +469,7 @@ ul.ticks li::before{content:"";flex:none;width:9px;height:9px;border-radius:50% 
 
 /* nav */
 .top{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:22px;padding:14px max(4vw,16px);transition:background .4s,box-shadow .4s,color .4s;color:var(--cream)}
-.top.solid{background:rgba(251,247,244,.86);backdrop-filter:blur(14px);color:var(--plum);box-shadow:0 1px 0 rgba(42,18,34,.08)}
+.top.solid{background:rgba(251,247,244,.97);color:var(--plum);box-shadow:0 1px 0 rgba(42,18,34,.08)}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:italic 500 24px var(--serif)}
 .brand>svg{width:50px;height:50px;color:var(--rose2);margin-right:2px}
 @media(max-width:600px){.brand>svg{width:42px;height:42px}}
@@ -787,6 +787,8 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
 .state .ek{color:var(--rose)}
 .btn .ek{height:1.5em;vertical-align:middle}
 
+[data-off] .bob,[data-off] .eq i,[data-off] .pulse{animation-play-state:paused!important}
+@media(max-width:760px){.btn.ghost,.mpic .bpm,.ncopy li{backdrop-filter:none}.btn.ghost{background:rgba(251,247,244,.2)}.mpic .bpm{background:rgba(42,18,34,.85)}.ncopy li{background:rgba(42,18,34,.35)}}
 @media(prefers-reduced-motion:reduce){.bob,#beat.on .eq i{animation:none}#intro{display:none}.state p .w{opacity:1}.stop,.mean{opacity:1}.mani .wd{opacity:1}}
 </style>
 </head>
@@ -812,7 +814,7 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
   <button class="skip" type="button">Skip intro</button>
 </div>
 
-<div data-site-nav></div><script src="js/site-nav.js?v=6"></script>
+<div data-site-nav></div><script src="js/site-nav.js?v=7"></script>
 
 <div class="stem" aria-hidden="true"><i></i><b><svg><use href="#bloom"/></svg></b></div>
 <div class="cur" aria-hidden="true"></div>
@@ -1026,12 +1028,14 @@ const rnd=(a,b)=>a+Math.random()*(b-a);
 const NS='http://www.w3.org/2000/svg';
 const hasG=typeof gsap!=='undefined';
 let Beat=null;
-if(hasG)gsap.registerPlugin(ScrollTrigger);
+if(hasG){gsap.registerPlugin(ScrollTrigger);ScrollTrigger.config({ignoreMobileResize:true,limitCallbacks:true});}
+/* run fn(true/false) as el enters/leaves the screen */
+const onView=(el,fn,m='200px')=>{if(!el)return;if(!('IntersectionObserver' in window)){fn(true);return}new IntersectionObserver(es=>es.forEach(e=>fn(e.isIntersecting)),{rootMargin:m}).observe(el)};
 
 /* ---------- smooth scroll ---------- */
 let lenis=null;
 if(hasG&&!RM&&typeof Lenis!=='undefined'){
-  try{lenis=new Lenis({lerp:.085,wheelMultiplier:1});lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);}catch(e){lenis=null}
+  try{lenis=new Lenis({lerp:.14,wheelMultiplier:1.1});lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);}catch(e){lenis=null}
 }
 document.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(!a)return;
   const id=a.getAttribute('href');const t=document.querySelector(id);if(!t)return;e.preventDefault();
@@ -1065,8 +1069,9 @@ function petals(box,n,colors){
   }
   return out;
 }
-const hp=petals($('#heroPetals'),22,['#F1CFE0','#E5639A','#FBF7F4','#CC3370']);
+const hp=petals($('#heroPetals'),matchMedia('(max-width:760px)').matches?12:18,['#F1CFE0','#E5639A','#FBF7F4','#CC3370']);
 
+document.querySelectorAll('main>section,main>div').forEach(sx=>onView(sx,v=>v?sx.removeAttribute('data-off'):sx.setAttribute('data-off',''),'100px'));
 /* ---------- intro ---------- */
 function introDone(){const i=$('#intro');heroIn();if(!i||i.dataset.done)return;i.dataset.done=1;
   try{localStorage.setItem('erikaIntro','1')}catch(e){}
@@ -1104,8 +1109,9 @@ if(hasG&&!RM){
   gsap.to('.hero .copy',{y:-120,opacity:0,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom 20%',scrub:true}});
   hp.forEach(p=>{
     gsap.to(p.el,{y:-p.d*420,rotation:p.r*2,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
-    gsap.to(p.el,{x:`+=${rnd(-14,14)}`,duration:rnd(2.4,4),repeat:-1,yoyo:true,ease:'sine.inOut'});
+    p.sw=gsap.to(p.el,{x:`+=${rnd(-14,14)}`,duration:rnd(2.4,4),repeat:-1,yoyo:true,ease:'sine.inOut'});
   });
+  onView($('.hero'),v=>hp.forEach(p=>p.sw&&(v?p.sw.resume():p.sw.pause())),'0px');
   gsap.fromTo('#jLogo',{yPercent:-12,rotation:-8,scale:.9},{yPercent:12,rotation:8,scale:1.05,ease:'none',scrollTrigger:{trigger:'.join',start:'top bottom',end:'bottom top',scrub:true}});
   // mouse depth on hero
   const hero=$('.hero');
@@ -1225,7 +1231,8 @@ if(hasG&&!RM){
   let cur=-1,idle=null,prog=0;
   const hopX=p=>p*(line.offsetWidth)-hop.offsetWidth/2;
   function place(p){prog=p;fill.style.width=(p*100)+'%';const x=hopX(p);if(hasG&&!RM)gsap.set(hop,{x});else hop.style.transform=`translateX(${x}px)`;dots.forEach((d,j)=>d.classList.toggle('done',p>=j/2-.001))}
-  function bob(i){idle&&idle.kill();if(!hasG||RM)return;idle=gsap.fromTo(hop,{y:0},{y:-[14,24,36][i],duration:[.5,.42,.36][i],repeat:-1,yoyo:true,ease:'power1.out'})}
+  function bob(i){idle&&idle.kill();if(!hasG||RM)return;idle=gsap.fromTo(hop,{y:0},{y:-[14,24,36][i],duration:[.5,.42,.36][i],repeat:-1,yoyo:true,ease:'power1.out'});if(!sec.__vis)idle.pause()}
+  onView(sec,v=>{sec.__vis=v;idle&&(v?idle.resume():idle.pause())});
   function show(i,anim){
     if(i===cur)return;const prev=cur;cur=i;const l=L[i];sec.dataset.l=i;
     dots.forEach((d,j)=>d.setAttribute('aria-pressed',j===i));
@@ -1261,7 +1268,7 @@ if(hasG&&!RM){
     setTimeout(tick,1000-(Date.now()%1000));
   }
   tick();
-  if(hasG&&!RM)gsap.to(bl,{y:-12,duration:.517,repeat:-1,yoyo:true,ease:'power1.out'});
+  if(hasG&&!RM){const bt=gsap.to(bl,{y:-12,duration:.517,repeat:-1,yoyo:true,ease:'power1.out'});onView(bl,v=>v?bt.resume():bt.pause())}
 })();
 
 /* ---------- FAQ: questions reveal while scrolling, answers open on tap ---------- */
@@ -1282,7 +1289,9 @@ if(hasG&&!RM){
   // duplicate for loop
   m.innerHTML+=m.innerHTML;
   const measure=()=>{half=m.scrollWidth/2};measure();addEventListener('resize',measure);
-  (function loop(){const dy=scrollY-last;last=scrollY;v+=(dy*.25-v)*.08;x-=.6+Math.abs(v);if(-x>half)x+=half;m.style.transform=`translateX(${x}px)`;requestAnimationFrame(loop)})();
+  let on=false,raf=0;
+  function loop(){const dy=scrollY-last;last=scrollY;v+=(dy*.25-v)*.08;x-=.6+Math.abs(v);if(-x>half)x+=half;m.style.transform=`translate3d(${x}px,0,0)`;raf=on?requestAnimationFrame(loop):0}
+  onView(m,vis=>{on=vis;if(vis&&!raf){last=scrollY;raf=requestAnimationFrame(loop)}});
   if(hasG&&!RM)gsap.from('.invite',{y:80,opacity:0,duration:1.1,ease:'back.out(1.6)',scrollTrigger:{trigger:'.invite',start:'top 85%'}});
 })();
 
@@ -1297,7 +1306,7 @@ if(hasG&&!RM){
   if(matchMedia('(pointer:coarse)').matches)return;
   const c=$('.cur');let shown=false;
   addEventListener('pointermove',e=>{if(!shown){c.style.opacity=1;shown=true}
-    if(hasG)gsap.to(c,{x:e.clientX,y:e.clientY,duration:.35,ease:'power3.out',overwrite:'auto'});else c.style.transform=`translate(${e.clientX}px,${e.clientY}px)`;
+    if(hasG){c.__qx=c.__qx||gsap.quickTo(c,'x',{duration:.35,ease:'power3.out'});c.__qy=c.__qy||gsap.quickTo(c,'y',{duration:.35,ease:'power3.out'});c.__qx(e.clientX);c.__qy(e.clientY)}else c.style.transform=`translate(${e.clientX}px,${e.clientY}px)`;
     c.classList.toggle('big',!!e.target.closest('a,button,.pad'))});
 })();
 
