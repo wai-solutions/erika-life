@@ -414,7 +414,7 @@ s.was{color:var(--mute);font-size:.7em;margin-right:6px;text-decoration-thicknes
 </div></div>
 <div class="toast" id="toast"></div>
 
-<script src="js/erika-config.js?v=5"></script>
+<script src="js/erika-config.js?v=6"></script>
 <script src="js/erika-calendar.js?v=1"></script>
 <script>
 (()=>{
@@ -511,7 +511,7 @@ function openModal(msg){
   lastMsg=msg;$('#mMsg').textContent=msg;
   $('#modal').classList.add('on');burst(innerWidth/2,innerHeight/3,140);
 }
-function sendWa(num,msg){const u='https://wa.me/'+num+'?text='+encodeURIComponent(msg);const w=window.open(u,'_blank','noopener');if(!w)location.href=u;try{navigator.clipboard.writeText(msg)}catch(e){}}
+function sendWa(num,msg){const u='https://api.whatsapp.com/send?phone='+num+'&text='+encodeURIComponent(msg);const w=window.open(u,'_blank','noopener');if(!w)location.href=u;try{navigator.clipboard.writeText(msg)}catch(e){}}
 $('#mWa').addEventListener('click',()=>sendWa(PAY_WA,lastMsg));
 $('#askSpot').addEventListener('click',()=>sendWa(WA_NUM,`Hi Erika Life! The ${EV.place} bounce experience on ${EV.dayLabel} is complete. Can you tell me if a spot opens up, or when your next bounce experience is?`));
 $('#mClose').addEventListener('click',()=>$('#modal').classList.remove('on'));

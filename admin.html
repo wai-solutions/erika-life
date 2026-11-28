@@ -129,7 +129,7 @@ h2.sec{font:400 22px var(--serif);margin:28px 0 12px}
 </div></header>
 <main class="wrap" id="app"></main>
 
-<script src="js/erika-config.js?v=5"></script>
+<script src="js/erika-config.js?v=6"></script>
 <script>
 {
 const API=window.ERIKA_API||'';
@@ -431,7 +431,7 @@ _Land soft. Rise strong. Bloom._`;
 }
 async function confirmBooking(id){
   const r=DATA.find(x=>x.id===id);if(!r)return;
-  const u=waLink(r.whatsapp)+'?text='+encodeURIComponent(confirmMsg(r));
+  const u='https://api.whatsapp.com/send?phone='+waLink(r.whatsapp).split('/').pop()+'&text='+encodeURIComponent(confirmMsg(r));
   const w=window.open(u,'_blank','noopener');if(!w)alertBar('Allow pop-ups to open WhatsApp.');
   const prev={...r};r.paid='yes';r.status='confirmed';render();
   if(!API)return;

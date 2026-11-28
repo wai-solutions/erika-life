@@ -206,7 +206,7 @@ footer .ek{height:1.7em;vertical-align:-.55em;color:#FBF7F4}
 
 <div data-site-footer></div>
 
-<script src="js/erika-config.js?v=5"></script>
+<script src="js/erika-config.js?v=6"></script>
 <script src="js/erika-calendar.js?v=1"></script>
 <script>
 {
@@ -280,7 +280,7 @@ WhatsApp: ${$('#phone').value.trim()}${$('#notes').value.trim()?'\nNote: '+$('#n
 });
 $('#mCopyNum').addEventListener('click',()=>copyText(PAY.replace(/\s/g,''),'Number copied'));
 const WA_NUM=(window.ERIKA_WHATSAPP||'').replace(/\D/g,'');
-function sendWa(msg){const u='https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(msg);const w=window.open(u,'_blank','noopener');if(!w)location.href=u;try{navigator.clipboard.writeText(msg)}catch(e){}}
+function sendWa(msg){const u='https://api.whatsapp.com/send?phone='+WA_NUM+'&text='+encodeURIComponent(msg);const w=window.open(u,'_blank','noopener');if(!w)location.href=u;try{navigator.clipboard.writeText(msg)}catch(e){}}
 $('#mWa').addEventListener('click',()=>sendWa(lastMsg));
 $('#mClose').addEventListener('click',()=>$('#modal').classList.remove('on'));
 $('#modal').addEventListener('click',e=>{if(e.target.id==='modal')$('#modal').classList.remove('on')});

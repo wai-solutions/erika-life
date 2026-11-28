@@ -934,7 +934,7 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
 
 <div data-site-footer></div>
 
-<script src="js/erika-config.js?v=5"></script>
+<script src="js/erika-config.js?v=6"></script>
 <script src="js/erika-calendar.js?v=1"></script>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -1208,7 +1208,7 @@ if(hasG&&!RM){
   fetch(API+'?action=counts').then(r=>r.json()).then(j=>{if(!j.ok)return;const st=j.stock||{S:2,M:8,L:1},c=(j.counts||{})[EV.key]||{};
     const left=Object.keys(st).reduce((a,k)=>a+Math.max(0,st[k]-(c[k]||0)),0);
     $('#invLeft').textContent=left?(left+' left.'):'';
-    if(!left){$('#invLeft').textContent='Bounce experience completed, all spots reserved.';const b=$('#invBook');b.textContent='Ask about a spot';b.href='https://wa.me/'+WA+'?text='+encodeURIComponent('Hi Erika Life! The '+EV.place+' bounce experience is complete. Can you tell me if a spot opens up, or when your next bounce experience is?');b.target='_blank';b.rel='noopener'}
+    if(!left){$('#invLeft').textContent='Bounce experience completed, all spots reserved.';const b=$('#invBook');b.textContent='Ask about a spot';b.href='https://api.whatsapp.com/send?phone='+WA+'&text='+encodeURIComponent('Hi Erika Life! The '+EV.place+' bounce experience is complete. Can you tell me if a spot opens up, or when your next bounce experience is?');b.target='_blank';b.rel='noopener'}
   }).catch(()=>{});
 })();
 

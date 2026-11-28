@@ -17,7 +17,7 @@ window.ERIKA_COMMUNITY = '';
 /* Message people send when they ask to join (used while ERIKA_COMMUNITY is empty) */
 window.ERIKA_COMMUNITY_MSG = 'Hi Erika \u{1F338} Please add me to your community. I want to follow your next bounce experience classes. \u2728';
 window.erikaCommunityLink = function () {
-  return window.ERIKA_COMMUNITY || ('https://wa.me/' + String(window.ERIKA_WHATSAPP || '').replace(/\D/g, '') + '?text=' + encodeURIComponent(window.ERIKA_COMMUNITY_MSG));
+  return window.ERIKA_COMMUNITY || ('https://api.whatsapp.com/send?phone=' + String(window.ERIKA_WHATSAPP || '').replace(/\D/g, '') + '&text=' + encodeURIComponent(window.ERIKA_COMMUNITY_MSG));
 };
 
 /* ---------- Bounce experiences (one-day classes) ----------
