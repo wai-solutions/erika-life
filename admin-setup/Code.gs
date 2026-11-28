@@ -190,7 +190,7 @@ function doPost(e) {
 }
 
 /* ---------- Payment confirmed: mark paid + send the designed confirmation email ---------- */
-const MAP_LINK = 'https://maps.app.goo.gl/rBn8nqgbo6acWSmJ9';
+const MAP_LINK = 'https://maps.app.goo.gl/WR7QdTBFvLuyEJ1t6';
 let MAP_ = MAP_LINK, MEMBERS_ = false;
 function confirm_(b, rows, sh) {
   if (b.key !== ADMIN_KEY) return json_({ ok: false, error: 'key' });

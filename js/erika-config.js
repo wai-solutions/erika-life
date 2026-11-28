@@ -22,12 +22,13 @@ window.erikaCommunityLink = function () {
 
 /* ---------- Bounce experiences (one-day classes) ----------
    Add one line per experience. It appears in the calendar, the news bar and the booking page.
-   id: short unique name, never change it after people book.  time: start hour, 24h ("19" = 7 PM).
+   id: short unique name, never change it after people book.
+   place: name shown on the site. studio (optional): name saved with bookings, keep it fixed once people book.  time: start hour, 24h ("19" = 7 PM).
    audience: who can join (leave '' if open to everyone). membersOnly: true adds a membership number field (off for now).
    Spots = boots pairs per size (BOOT_STOCK in admin-setup/Code.gs: S 2, M 8, L 1 = 11). */
 window.ERIKA_EVENTS = [
-  { id: 'hsc-2026-12-01', place: 'Heliopolis Sporting Club', area: 'Heliopolis, Cairo', date: '2026-12-01', time: '19', minutes: 60,
-    audience: 'Heliopolis Club members only', membersOnly: false, map: 'https://maps.app.goo.gl/rBn8nqgbo6acWSmJ9', price: 500, was: 850 }
+  { id: 'hsc-2026-12-01', place: 'Heliopolis Sporting Club, Heliopolis branch', studio: 'Heliopolis Sporting Club', area: 'Heliopolis, Cairo', date: '2026-12-01', time: '19', minutes: 60,
+    audience: 'Heliopolis Club members only', membersOnly: false, map: 'https://maps.app.goo.gl/WR7QdTBFvLuyEJ1t6', price: 500, was: 850 }
 ];
 window.ERIKA_OFFER = 'December 2026 special, limited time';
 
@@ -37,8 +38,8 @@ window.ERIKA_OFFER = 'December 2026 special, limited time';
   var MONF = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   window.ERIKA_EVENTS.forEach(function (e) {
     var p = e.date.split('-').map(Number), h = parseInt(e.time, 10), d = new Date(p[0], p[1] - 1, p[2]);
-    e.studio = e.place;
-    e.key = e.place + '|' + e.date + '|' + e.time;
+    e.studio = e.studio || e.place; /* name saved with bookings: never change after people book */
+    e.key = e.studio + '|' + e.date + '|' + e.time;
     e.startUTC = Date.UTC(p[0], p[1] - 1, p[2], h - 2, 0, 0); /* Cairo, UTC+2 */
     e.endUTC = e.startUTC + (e.minutes || 60) * 60000;
     e.dayLabel = DAYF[d.getDay()] + ' ' + p[2] + ' ' + MONF[p[1] - 1] + ' ' + p[0];

@@ -411,7 +411,7 @@ function confirmMsg(r){
 You are in, ${r.name}!
 Your payment is received and your spot in our bounce experience is confirmed.
 
-*Place:* ${r.studio}
+*Place:* ${EV.place||r.studio}
 *Day:* ${nice(r.date)}
 *Time:* ${(TIMES[r.time]||r.time)} (60 minutes)
 *Boots:* Size ${r.boots}
