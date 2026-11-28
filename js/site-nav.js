@@ -134,11 +134,15 @@
       bar.classList.add('run');
     }else if(one.scrollWidth>room)bar.classList.add('wrap');
   }
+  /* the bar's space is reserved right away, before the page's scroll animations measure the page */
+  function makeBar(){var b=document.querySelector('.snb');if(b)return b;b=document.createElement('a');b.className='snb';b.href='booking.html';
+    (document.body||document.documentElement).prepend(b);document.documentElement.style.setProperty('--snb','38px');if(document.body)document.body.style.paddingTop='38px';return b}
+  if(slot!==null&&document.body)makeBar();
   function renderBar(){
     if(!document.querySelector('.sn'))return;
     var E=(window.ERIKA_EVENTS||[]).filter(function(e){return e.endUTC>Date.now()}),e=E[0];
     var bar=document.querySelector('.snb');
-    if(!bar){bar=document.createElement('a');bar.className='snb';document.body.prepend(bar);document.documentElement.style.setProperty('--snb','38px');document.body.style.paddingTop='38px'}
+    if(!bar)bar=makeBar();
     var t=function(x){return String(x).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})};
     var sep=' <span class="sep">·</span> ',txt;
     if(e){
@@ -155,7 +159,7 @@
   }
   window.erikaNewsBar=renderBar;
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',renderBar);else setTimeout(renderBar,0);
-  addEventListener('load',renderBar);
+  addEventListener('load',function(){renderBar();if(window.ScrollTrigger)ScrollTrigger.refresh()});
   var rz;addEventListener('resize',function(){clearTimeout(rz);rz=setTimeout(function(){var b=document.querySelector('.snb');if(b)fitBar(b)},200)});
 
   /* join community: any link with data-community, plus the footer and menu buttons */
