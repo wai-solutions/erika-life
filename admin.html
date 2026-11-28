@@ -75,6 +75,7 @@ h2.sec{font:400 22px var(--serif);margin:28px 0 12px}
 .boot{white-space:nowrap}
 .paid{background:#fff;color:var(--ink);border-color:var(--line)}
 .paid[aria-pressed="true"]{background:var(--ok);color:#fff;border-color:var(--ok)}
+.conf{background:var(--rose);color:#fff;border-color:var(--rose);white-space:nowrap}.conf[aria-pressed="true"]{background:#fff;color:var(--rose-d);border-color:var(--rose)}
 .x{background:none;border:0;color:var(--mute);min-height:36px;padding:0 6px;font-size:13px;text-decoration:underline}
 .p.cancelled{opacity:.45}.p.cancelled .nm{text-decoration:line-through}
 .cal{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:16px;align-items:start;margin-bottom:8px}
@@ -94,7 +95,7 @@ h2.sec{font:400 22px var(--serif);margin:28px 0 12px}
 .slot .sh{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;padding:12px 16px;background:#FCF7F9;border-bottom:1px solid var(--line)}
 .slot .sh b{font-weight:500}.slot .sh span{font-size:13px;color:var(--mute)}.slot .sh .n{margin-left:auto;color:var(--rose-d);font-weight:500;font-size:14px}
 .slot .none{padding:12px 16px;color:var(--mute);font-size:14px}
-.att{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:6px 12px;align-items:center;padding:10px 16px;border-top:1px solid var(--line);font-size:14px}
+.att{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto auto;gap:6px 12px;align-items:center;padding:10px 16px;border-top:1px solid var(--line);font-size:14px}
 .att:first-of-type{border-top:0}.att .nm{font-weight:500}.att a{color:var(--rose-d);text-decoration:none;white-space:nowrap}
 .att.gone .nm{text-decoration:line-through;color:var(--mute)}
 .att .ask{font-size:12px;color:#fff;background:var(--rose);border-radius:999px;padding:2px 8px;margin-left:6px;white-space:nowrap}
@@ -128,7 +129,7 @@ h2.sec{font:400 22px var(--serif);margin:28px 0 12px}
 </div></header>
 <main class="wrap" id="app"></main>
 
-<script src="js/erika-config.js?v=2"></script>
+<script src="js/erika-config.js?v=3"></script>
 <script>
 {
 const API=window.ERIKA_API||'';
@@ -138,7 +139,7 @@ const TIMES={'18':'6–7 PM','19':'7–8 PM','20':'8–9 PM'};
 const DAYF=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const nice=d=>{const x=new Date(d+'T00:00');return isNaN(x)?d:`${DAYF[x.getDay()]} ${x.getDate()} ${MON[x.getMonth()]}`};
 let KEY='';try{KEY=localStorage.getItem('erika-admin-key')||''}catch(e){}
-let CAL=null,SEL=null,REQS=[],DATA=null,ORDERS=[],EXPS=[],STOCK={S:2,M:8,L:1},VIEW='up',Q='',SAMPLE=false;
+let API_V=1,CAL=null,SEL=null,REQS=[],DATA=null,ORDERS=[],EXPS=[],STOCK={S:2,M:8,L:1},VIEW='up',Q='',SAMPLE=false;
 
 /* logo symbols from the home page */
 fetch('index.html').then(r=>r.text()).then(t=>{const m=t.match(/<symbol id="bloom"[\s\S]*?<\/symbol>/),w=t.match(/<symbol id="wm"[\s\S]*?<\/symbol>/);$('#defs').innerHTML=(m?m[0]:'')+(w?w[0]:'')}).catch(()=>{});
@@ -170,7 +171,7 @@ async function load(){
   $('#app').innerHTML='<p class="empty">Loading bookings…</p>';
   try{const r=await fetch(API+'?key='+encodeURIComponent(KEY));const j=await r.json();
     if(!j.ok){KEY='';try{localStorage.removeItem('erika-admin-key')}catch(e){}login('That key did not work. Try again.');return}
-    DATA=j.rows||[];ORDERS=j.orders||[];REQS=j.requests||[];EXPS=j.expenses||[];if(j.stock)STOCK=j.stock;render()}
+    DATA=j.rows||[];ORDERS=j.orders||[];REQS=j.requests||[];EXPS=j.expenses||[];if(j.stock)STOCK=j.stock;API_V=+j.v||1;render()}
   catch(e){$('#app').innerHTML='<p class="empty">Could not reach the bookings sheet. Check your connection and press Refresh.</p>'}
 }
 function login(msg){
@@ -253,6 +254,7 @@ function render(){
   document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{VIEW=b.dataset.v;render()}));
   const qi=$('#q');qi.addEventListener('input',()=>{Q=qi.value;const p=qi.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(p,p)});
   document.querySelectorAll('[data-paid]').forEach(b=>b.addEventListener('click',()=>update(b.dataset.paid,{paid:b.getAttribute('aria-pressed')!=='true'})));
+  document.querySelectorAll('[data-confirm]').forEach(b=>b.addEventListener('click',()=>confirmBooking(b.dataset.confirm)));
   document.querySelectorAll('[data-cm]').forEach(b=>b.addEventListener('click',()=>{const m=CAL.m+(+b.dataset.cm);CAL={y:CAL.y+Math.floor(m/12),m:(m%12+12)%12};render()}));
   document.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>{SEL=b.dataset.day;render();const dp=$('.dpanel');if(dp&&innerWidth<760)dp.scrollIntoView({behavior:'smooth',block:'start'})}));
   document.querySelectorAll('[data-rm]').forEach(b=>b.addEventListener('click',()=>{const r=DATA.find(x=>x.id===b.dataset.rm);const c=r.status==='cancelled';if(!c&&!confirmInline(b,'Remove'))return;update(r.id,{status:c?'booked':'cancelled'})}));
@@ -262,12 +264,14 @@ function render(){
   document.querySelectorAll('[data-cancel]').forEach(b=>b.addEventListener('click',()=>{const r=DATA.find(x=>x.id===b.dataset.cancel);const c=r.status==='cancelled';if(!c&&!confirmInline(b))return;update(r.id,{status:c?'booked':'cancelled'})}));
 }
 /* class schedule, same as booking.html */
-const SCHED=[{studio:'New Cairo',days:[0,2]},{studio:'Heliopolis',days:[1,3]}],SLOTS=['18','19','20'],WDS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+/* no regular studios for now: one-day events from js/erika-config.js */
+const SCHED=[],SLOTS=['18','19','20'],EVENTS=window.ERIKA_EVENT?[window.ERIKA_EVENT]:[],WDS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const isoD=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const digits=v=>String(v||'').replace(/\D/g,'').replace(/^20/,'0').slice(-10);
 function classesOn(iso){
   const d=new Date(iso+'T00:00'),out=[];
   SCHED.forEach(s=>{if(s.days.includes(d.getDay()))SLOTS.forEach(t=>out.push({studio:s.studio,time:t}))});
+  EVENTS.forEach(e=>{if(e.date===iso&&!out.some(c=>c.studio===e.studio&&c.time===e.time))out.push({studio:e.studio,time:e.time})});
   (DATA||[]).filter(r=>r.date===iso).forEach(r=>{if(!out.some(c=>c.studio===r.studio&&c.time===r.time))out.push({studio:r.studio,time:r.time})});
   return out.sort((a,b)=>(a.studio+a.time).localeCompare(b.studio+b.time));
 }
@@ -288,9 +292,10 @@ function calSection(){
   const slot=c=>{const list=(DATA||[]).filter(r=>r.date===SEL&&r.studio===c.studio&&r.time===c.time).sort((a,b)=>a.created.localeCompare(b.created));const live=list.filter(r=>r.status!=='cancelled');
     const boots=Object.keys(STOCK).map(s=>`${s} ${live.filter(r=>r.boots===s).length}/${STOCK[s]}`).join(' · ');
     return `<div class="slot"><div class="sh"><b>${esc(TIMES[c.time]||c.time)}</b><span>${esc(c.studio)} · Boots ${esc(boots)}</span><span class="n">${live.length} booked</span></div>
-    ${list.length?list.map(r=>`<div class="att${r.status==='cancelled'?' gone':''}"><div><span class="nm">${esc(r.name)}</span>${r.status!=='cancelled'&&asked(r)?'<span class="ask">Asked to cancel</span>':''}<div class="sub" style="margin:0;font-size:12px">${r.boots==='own'?'Own boots':'Size '+esc(r.boots)} · Ref ${esc(r.id)}</div></div>
+    ${list.length?list.map(r=>`<div class="att${r.status==='cancelled'?' gone':''}"><div><span class="nm">${esc(r.name)}</span>${r.status!=='cancelled'&&asked(r)?'<span class="ask">Asked to cancel</span>':''}<div class="sub" style="margin:0;font-size:12px">${r.boots==='own'?'Own boots':'Size '+esc(r.boots)} · Ref ${esc(r.id)}${emailOf(r)?' · '+esc(emailOf(r)):''}${memberOf(r)?' · Member '+esc(memberOf(r)):''}</div></div>
       <a href="${esc(waLink(r.whatsapp))}" target="_blank" rel="noopener">${esc(r.whatsapp)}</a>
       <button class="small paid" type="button" data-paid="${esc(r.id)}" aria-pressed="${r.paid==='yes'}">${r.paid==='yes'?'Paid':'Mark paid'}</button>
+      ${r.status==='cancelled'?'':confirmBtn(r)}
       <button class="rm${r.status==='cancelled'?' undo':''}" type="button" data-rm="${esc(r.id)}">${r.status==='cancelled'?'Restore':'Remove'}</button>
       ${r.status==='cancelled'&&r.paid==='yes'?'<span class="rf">Removed. Refund if they cancelled 2+ hours before the class.</span>':''}</div>`).join(''):'<p class="none">No bookings yet.</p>'}</div>`};
   return `<div class="cal"><div class="cbox"><div class="chead"><b>${MON[CAL.m]} ${CAL.y}</b><button type="button" data-cm="-1" aria-label="Previous month">&lsaquo;</button><button type="button" data-cm="1" aria-label="Next month">&rsaquo;</button></div>
@@ -391,9 +396,55 @@ function cls(c){
     <div><span class="nm">${esc(r.name)}</span>${/first/i.test(r.first)?'<span class="tag">First bounce</span>':''}<div class="sub">Ref ${esc(r.id)}</div></div>
     <a class="wa" href="${esc(waLink(r.whatsapp))}" target="_blank" rel="noopener">${esc(r.whatsapp)}</a>
     <span class="boot">${r.boots==='own'?'Own boots':'Size '+esc(r.boots)}</span>
-    <div class="acts"><button class="small paid" type="button" data-paid="${esc(r.id)}" aria-pressed="${r.paid==='yes'}">${r.paid==='yes'?'Paid':'Mark paid'}</button><button class="x" type="button" data-cancel="${esc(r.id)}">${r.status==='cancelled'?'Restore':'Cancel'}</button></div>
+    <div class="acts"><button class="small paid" type="button" data-paid="${esc(r.id)}" aria-pressed="${r.paid==='yes'}">${r.paid==='yes'?'Paid':'Mark paid'}</button>${r.status==='cancelled'?'':confirmBtn(r)}<button class="x" type="button" data-cancel="${esc(r.id)}">${r.status==='cancelled'?'Restore':'Cancel'}</button></div>
     ${r.notes?`<div class="notes">${esc(r.notes)}</div>`:''}
   </div>`).join('')}</section>`;
+}
+/* ---------- payment confirmed: WhatsApp + email ---------- */
+const emailOf=r=>r.email||((String(r.notes||'').match(/[^\s@·]+@[^\s@·]+\.[^\s@·]+/)||[])[0]||'');
+const memberOf=r=>r.member||((String(r.notes||'').match(/member no:\s*([^·]+)/i)||[])[1]||'').trim();
+const confirmBtn=r=>`<button class="small conf" type="button" data-confirm="${esc(r.id)}" aria-pressed="${r.status==='confirmed'}">${r.status==='confirmed'?'Confirmed · send again':'Paid · send confirmation'}</button>`;
+function confirmMsg(r){
+  const EV=window.ERIKA_EVENT||{},C=window.ERIKA_COMMUNITY||'';
+  return `*Erika Life | Bounce Experiences*
+
+You are in, ${r.name}!
+Your payment is received and your spot is confirmed.
+
+*Place:* ${r.studio}
+*Day:* ${nice(r.date)}
+*Time:* ${(TIMES[r.time]||r.time)} (60 minutes)
+*Boots:* Size ${r.boots}
+*Booking ref:* ${r.id}
+*Location:* ${EV.map||''}
+
+_Before you bounce_
+Comfortable sportswear, socks and water. Arrive 15 minutes early, we fit your boots together.
+${C?`
+*Join our community*
+Guess where and when we bounce next. Follow our steps:
+${C}
+`:''}
+Need to cancel? Message us at least 2 hours before the class for a full refund.
+
+_Land soft. Rise strong. Bloom._`;
+}
+async function confirmBooking(id){
+  const r=DATA.find(x=>x.id===id);if(!r)return;
+  const u=waLink(r.whatsapp)+'?text='+encodeURIComponent(confirmMsg(r));
+  const w=window.open(u,'_blank','noopener');if(!w)alertBar('Allow pop-ups to open WhatsApp.');
+  const prev={...r};r.paid='yes';r.status='confirmed';render();
+  if(!API)return;
+  if(API_V<2){ /* older Apps Script: mark paid and open the email by hand */
+    Object.assign(r,prev);await update(id,{paid:true});const e=emailOf(r);
+    if(e)location.href='mailto:'+e+'?subject='+encodeURIComponent('You are in! Your Erika Life class is confirmed')+'&body='+encodeURIComponent(confirmMsg(r).replace(/[*_]/g,''));
+    alertBar('Marked paid. To send the designed email automatically, update the Apps Script (admin-setup/SETUP.md).');return}
+  try{const res=await fetch(API,{method:'POST',body:JSON.stringify({action:'confirm',key:KEY,id,community:window.ERIKA_COMMUNITY||''})});const j=await res.json();
+    if(!j.ok)throw 0;
+    if(j.ok&&j.emailed)alertBar('Confirmation email sent to '+j.to+'. WhatsApp is open, press send.');
+    else if(j.ok&&j.error==='noemail')alertBar('Marked paid. No email on this booking, WhatsApp only.');
+    else if(j.ok&&j.emailed===false)alertBar('Marked paid, but the email could not be sent. Check the Apps Script mail permission.');
+  }catch(e){Object.assign(r,prev);render();alertBar('Could not save that change. Try again.')}
 }
 async function updateOrder(id,patch){
   const o=ORDERS.find(x=>x.id===id);if(!o)return;const prev={...o};Object.assign(o,patch);render();
@@ -411,7 +462,7 @@ async function update(id,patch){
 function alertBar(m){const n=document.createElement('div');n.className='note';n.innerHTML='<b>'+esc(m)+'</b>';$('#app').prepend(n);setTimeout(()=>n.remove(),4000)}
 $('#refresh').addEventListener('click',load);
 $('#out').addEventListener('click',()=>{KEY='';try{localStorage.removeItem('erika-admin-key')}catch(e){}DATA=null;login()});
-$('#csv').addEventListener('click',()=>{if(!DATA)return;const H=['id','created','studio','date','time','boots','name','whatsapp','first','notes','price','paid','status'];
+$('#csv').addEventListener('click',()=>{if(!DATA)return;const H=['id','created','studio','date','time','boots','name','whatsapp','email','member','first','notes','price','paid','status'];
   const csv=[H.join(',')].concat(DATA.map(r=>H.map(h=>'"'+String(r[h]??'').replace(/"/g,'""')+'"').join(','))).join('\n');
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv'}));a.download='erika-bookings.csv';a.click();
   if(REQS.length){const RH=['id','created','topic','name','email','phone','message','source','page','status'];const c2=[RH.join(',')].concat(REQS.map(r=>RH.map(h=>'"'+String(r[h]??'').replace(/"/g,'""')+'"').join(','))).join('\n');setTimeout(()=>{const b=document.createElement('a');b.href=URL.createObjectURL(new Blob(['\ufeff'+c2],{type:'text/csv'}));b.download='erika-requests.csv';b.click()},400)}});

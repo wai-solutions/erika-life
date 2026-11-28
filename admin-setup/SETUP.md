@@ -33,3 +33,28 @@ The admin panel lives at `admin.html` on the website. It reads bookings from a G
 
 ## Changing the script later
 After editing the script: **Deploy > Manage deployments > Edit > Version: New version > Deploy**. The URL stays the same.
+
+## Update 28 Nov 2026: payment confirmation email (do this once)
+The script now sends a designed confirmation email when you confirm a payment.
+1. Open the Apps Script project **Erika Life Data API** (Erika's account).
+2. Replace everything with the new `admin-setup/Code.gs`. Keep your own `ADMIN_KEY` line.
+3. **Deploy > Manage deployments > Edit > Version: New version > Deploy**.
+4. Google asks for a new permission (**Send email as you**). Allow it. Emails go out from erika.bouncefit@gmail.com.
+5. The URL stays the same. Nothing to change on the website.
+
+Until this is done, the admin button still marks the booking paid and opens WhatsApp, and opens your email app with the confirmation text.
+
+## How a booking works now (Heliopolis Sporting Club, 1 Dec 2026)
+1. The visitor picks a boots size: that pair is reserved at once and shown as taken to everyone else.
+2. They pay with the InstaPay link and share the screenshot on WhatsApp.
+3. In the admin panel, after checking InstaPay, press **Paid · send confirmation**: it marks the booking paid, emails the confirmation, and opens WhatsApp with the confirmation message (press send).
+4. When all 11 pairs are reserved, the booking page shows **Class completed** with a button to message Erika Life.
+
+## WhatsApp community
+1. WhatsApp > Communities > New community, name it **Erika Life**.
+2. Community settings > Invite link > copy it.
+3. Paste it in `js/erika-config.js`: `window.ERIKA_COMMUNITY = 'https://chat.whatsapp.com/...';`
+4. From then on, every "Join our community" button, every confirmation email and every confirmation WhatsApp includes the link.
+
+## Next class settings
+Everything about the next class (place, date, time, map, price, InstaPay link, payment WhatsApp number) lives in `js/erika-config.js`.
