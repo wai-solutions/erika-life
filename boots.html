@@ -57,8 +57,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 .hero h1 em{color:var(--rose)}
 .hero p{font-size:clamp(17px,1.6vw,20px);max-width:36em;margin:16px 0 0;color:#4A3542}
 .ek{display:inline-block;height:1.5em;aspect-ratio:1388/590;vertical-align:-.48em}.ek svg{width:100%;height:100%;display:block}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:clamp(22px,3vw,40px);align-items:start;padding-bottom:80px}
-.eds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(22px,3vw,40px);align-items:start;padding-bottom:80px}
+.eds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.ed-hint{margin:0 0 18px;color:var(--mute);font-size:16px}.ed-hint b{color:var(--rose-d,#A3214F);font-weight:500}
 .ed{background:var(--card);border:1.5px solid var(--line);border-radius:26px;overflow:hidden;cursor:pointer;text-align:left;padding:0;font:inherit;color:inherit;display:flex;flex-direction:column;transition:border-color .25s,box-shadow .25s,transform .35s cubic-bezier(.3,1.6,.5,1)}
 .ed:hover{transform:translateY(-4px)}
 .ed[aria-pressed="true"]{border:3px solid var(--rose);box-shadow:0 0 0 5px rgba(204,51,112,.14),0 22px 44px rgba(204,51,112,.22);transform:translateY(-4px)}
@@ -85,7 +86,15 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 .ed .price small{font:500 13px var(--sans);color:var(--mute)}
 .ed .dots{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
 .ed .dots i{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
-.order{position:sticky;top:calc(88px + var(--snb,0px));background:var(--card);border:1px solid var(--line);border-radius:28px;overflow:hidden;box-shadow:0 30px 60px rgba(42,18,34,.08)}
+.order{position:fixed;top:0;right:0;bottom:0;width:min(500px,100vw);z-index:86;background:var(--card);border-radius:28px 0 0 28px;overflow-y:auto;overscroll-behavior:contain;box-shadow:-30px 0 80px rgba(42,18,34,.3);transform:translateX(105%);visibility:hidden;transition:transform .55s cubic-bezier(.2,.9,.25,1),visibility 0s .55s}
+.order.open{transform:none;visibility:visible;transition:transform .55s cubic-bezier(.2,.9,.25,1)}
+.odim{position:fixed;inset:0;z-index:85;background:rgba(42,18,34,.55);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .4s}
+.odim.on{opacity:1;pointer-events:auto}
+.oclose{position:sticky;top:12px;float:right;margin:12px 12px -56px 0;z-index:2;width:44px;height:44px;border-radius:50%;border:0;background:var(--plum,#2A1222);color:#fff;font-size:22px;line-height:1;cursor:pointer;display:grid;place-items:center}
+.oclose:hover{background:var(--rose)}
+body.o-lock{overflow:hidden}
+@media(max-width:600px){.order{top:auto;left:0;width:100vw;height:92vh;height:92dvh;border-radius:26px 26px 0 0;transform:translateY(105%)}}
+@media(prefers-reduced-motion:reduce){.order,.order.open{transition:none}}
 .order .big{background:#fff;aspect-ratio:1.15;display:grid;place-items:center;border-bottom:1px solid var(--line)}
 .order .big img{width:82%;height:82%;object-fit:contain}
 .order .in{padding:20px 22px 24px}
@@ -144,7 +153,7 @@ footer p{margin:0;line-height:1.7}
 footer nav{display:flex;flex-wrap:wrap;gap:6px 20px;align-content:flex-start}
 footer a{text-decoration:none}footer a:hover{color:var(--rose-l)}
 footer .ek{height:1.7em;vertical-align:-.55em;color:#FBF7F4}
-@media(max-width:980px){.layout{grid-template-columns:minmax(0,1fr)}.order{position:static}}
+@media(max-width:980px){.eds{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.eds{grid-template-columns:minmax(0,1fr)}.sizes{grid-template-columns:repeat(5,minmax(0,1fr))}.top nav .line{display:none}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 .wa-hint{margin:-2px 0 4px;font-size:13px;color:var(--mute,#7a6670);text-align:center}
@@ -161,9 +170,11 @@ footer .ek{height:1.7em;vertical-align:-.55em;color:#FBF7F4}
   </section>
 
   <div class="wrap layout">
-    <section aria-label="Boot editions"><div class="eds" id="eds"></div></section>
+    <section aria-label="Boot editions"><p class="ed-hint"><b>Tap an edition</b> to see its colours and sizes, and reserve your pair.</p><div class="eds" id="eds"></div></section>
 
-    <aside class="order" id="order" aria-label="Your order">
+    <div class="odim" id="odim"></div>
+    <aside class="order" id="order" aria-label="Your order" role="dialog" aria-modal="true" aria-labelledby="oName">
+      <button class="oclose" id="oclose" type="button" aria-label="Close details">&times;</button>
       <div class="big"><img id="bigImg" src="img/boots/b06.jpg" alt=""></div>
       <div class="in">
         <span class="pick">Your pick</span>
@@ -244,11 +255,17 @@ $('#eds').innerHTML=ED.map(e=>`<button class="ed" type="button" data-ed="${e.id}
   <div class="txt"><h3>${esc(e.name)}</h3><div class="sub">${esc(e.line)} · ${e.c.length} ${e.c.length>1?'colours':'colour'}</div>
   <div class="price">${egp(e.price)} <small>· deposit ${egp(e.price/2)}</small></div>
   <div class="dots" aria-hidden="true">${e.c.map(c=>`<i style="background:${c[2]}"></i>`).join('')}</div></div></button>`).join('');
-$$('.ed').forEach(b=>b.addEventListener('click',()=>{st.ed=b.dataset.ed;st.c=0;render(true);if(innerWidth<=980)$('#order').scrollIntoView({behavior:'smooth',block:'start'})}));
+let lastEd=null;
+function openOrder(from){const o=$('#order');lastEd=from||null;o.classList.add('open');$('#odim').classList.add('on');document.body.classList.add('o-lock');o.scrollTop=0;setTimeout(()=>$('#oclose').focus({preventScroll:true}),350)}
+function closeOrder(){const o=$('#order');if(!o.classList.contains('open'))return;o.classList.remove('open');$('#odim').classList.remove('on');document.body.classList.remove('o-lock');if(lastEd)lastEd.focus({preventScroll:true})}
+$$('.ed').forEach(b=>b.addEventListener('click',()=>{const same=st.ed===b.dataset.ed&&$('#eds').classList.contains('has-sel');st.ed=b.dataset.ed;if(!same)st.c=0;render(true);openOrder(b)}));
+$('#oclose').addEventListener('click',closeOrder);$('#odim').addEventListener('click',closeOrder);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#modal').classList.contains('on'))closeOrder()});
 
 function render(bump){
   const e=ED.find(x=>x.id===st.ed),c=e.c[st.c];
-  $$('.ed').forEach(b=>b.setAttribute('aria-pressed',b.dataset.ed===st.ed));$('#eds').classList.add('has-sel');
+  if(bump)st.picked=true;
+  $$('.ed').forEach(b=>b.setAttribute('aria-pressed',!!st.picked&&b.dataset.ed===st.ed));$('#eds').classList.toggle('has-sel',!!st.picked);
   if(bump){const o=$('#order');o.classList.remove('flash');void o.offsetWidth;o.classList.add('flash')}
   $('#oName').textContent=e.name+' edition';$('#oLine').textContent=e.line+' · '+c[0];
   const img=$('#bigImg');img.src=`img/boots/${c[1]}.jpg`;img.alt=`${e.name} edition rebound boots, ${c[0]}`;
