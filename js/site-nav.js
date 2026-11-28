@@ -4,7 +4,7 @@
   var HOME=(file==='index.html'||file==='');
   var WM='<span class="ek" role="img" aria-label="Erika"><svg aria-hidden="true"><use href="#wm"/></svg></span>';
   /* the journey, in the same order as the home page */
-  var J=[['meet','Meet '+WM],['spirit','Feel the bounce'],['levels','Non-stop progress'],['mani','Three beats'],['classes','Next class'],['faq','Questions'],['nature','Back to nature'],['join','Daily life']];
+  var J=[['meet','Meet '+WM],['spirit','Feel the bounce'],['levels','Non-stop progress'],['mani','Three beats'],['classes','Next bounce experience'],['faq','Questions'],['nature','Back to nature'],['join','Daily life']];
   var href=function(id){return HOME?'#'+id:'index.html#'+id};
   var go=HOME?' data-go':'';
   var IG='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></svg>';
@@ -14,7 +14,7 @@
   var cur=function(f){return f===file?' aria-current="page"':''};
 
   var css=''+
-  '.sn{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:12px;padding:12px max(4vw,16px);background:rgba(251,247,244,.97);box-shadow:0 1px 0 rgba(42,18,34,.08);color:#2A1222;font-family:"DM Sans",system-ui,sans-serif;transition:background .4s,color .4s,box-shadow .4s}'+
+  '.sn{position:fixed;top:var(--snb,0px);left:0;right:0;z-index:80;display:flex;align-items:center;gap:12px;padding:12px max(4vw,16px);background:rgba(251,247,244,.97);box-shadow:0 1px 0 rgba(42,18,34,.08);color:#2A1222;font-family:"DM Sans",system-ui,sans-serif;transition:background .4s,color .4s,box-shadow .4s}'+
   '.sn a{color:inherit;text-decoration:none}'+
   '.sn .ek,.sf .ek,.snm .ek{display:inline-block;aspect-ratio:1388/590;vertical-align:middle}.sn .ek svg,.sf .ek svg,.snm .ek svg{width:100%;height:100%;display:block}'+
   '.sn-brand{display:flex;align-items:center;gap:8px;flex:none;margin-right:auto}'+
@@ -76,6 +76,14 @@
   '.sf-c{margin-top:clamp(40px,6vw,70px);padding-top:22px;border-top:1px solid rgba(251,247,244,.14);display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font-size:14px;opacity:.7}'+
   '@media(max-width:860px){.sf-g{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.sf-g>div:first-child{grid-column:1/-1}}'+
   '@media(max-width:480px){.sf-g{grid-template-columns:minmax(0,1fr)}}';
+  /* pink news bar */
+  css+='.snb{position:fixed;top:0;left:0;right:0;z-index:78;height:38px;display:flex;align-items:center;justify-content:center;gap:10px;padding:0 max(4vw,12px);background:#CC3370;color:#fff;font:500 14px/1 "DM Sans",system-ui,sans-serif;text-decoration:none;white-space:nowrap;overflow:hidden}'+
+    '.snb:hover{background:#A3214F}.snb b{font-weight:700}.snb .sep{opacity:.6}.snb .cta{text-decoration:underline;text-underline-offset:3px}'+
+    '.snb .dot{width:8px;height:8px;border-radius:50%;background:#fff;flex:none;animation:snbP 1.6s ease-in-out infinite}@keyframes snbP{50%{opacity:.3}}'+
+    '.snb .lg{overflow:hidden;text-overflow:ellipsis}.snb .sm{display:none}'+
+    '@media(max-width:720px){.snb{font-size:13px}.snb .lg{display:none}.snb .sm{display:inline;overflow:hidden;text-overflow:ellipsis}}'+
+    '@media(prefers-reduced-motion:reduce){.snb .dot{animation:none}}'+
+    'html{scroll-padding-top:110px}';
   var st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
 
   var journey=J.map(function(j){return '<li><a href="'+href(j[0])+'"'+go+'><span>'+j[1]+'</span></a></li>'}).join('');
@@ -86,13 +94,13 @@
     var h=document.createElement('header');h.className='sn';h.id='siteNav';
     h.innerHTML='<a class="sn-brand" href="'+(HOME?'#top':'index.html')+'"'+go+' aria-label="Erika Life, home"><svg aria-hidden="true"><use href="#bloom"/></svg><span class="ek" aria-hidden="true"><svg><use href="#wm"/></svg></span></a>'+
       '<a class="sn-btn sn-boots" href="boots.html"'+cur('boots.html')+'>Get your boots</a>'+
-      '<a class="sn-btn sn-book" href="booking.html"'+cur('booking.html')+'>Book your class</a>'+
+      '<a class="sn-btn sn-book" href="booking.html"'+cur('booking.html')+'>Book your bounce</a>'+
       '<button class="sn-menu" id="snMenu" type="button" aria-expanded="false" aria-controls="snMenuPanel"><i aria-hidden="true"></i><span>Menu</span></button>';
     var m=document.createElement('div');m.className='snm';m.id='snMenuPanel';m.setAttribute('role','dialog');m.setAttribute('aria-label','Menu');
     m.innerHTML='<div class="snm-in">'+
       '<nav aria-label="The journey"><p class="snm-k">The journey</p><ol>'+journey+'</ol></nav>'+
       '<div class="snm-side"><h2>Ready to <em>bounce?</em></h2>'+
-        '<div class="snm-acts"><a class="a1" href="booking.html"'+cur('booking.html')+'>Book your class</a><a class="a2" href="boots.html"'+cur('boots.html')+'>Get your boots</a></div>'+
+        '<div class="snm-acts"><a class="a1" href="booking.html"'+cur('booking.html')+'>Book your bounce</a><a class="a2" href="boots.html"'+cur('boots.html')+'>Get your boots</a></div>'+
         (HOME?'':'<a class="snm-home" href="index.html">← Back to home</a>')+
         '<div class="snm-soc"><p class="snm-k">Follow Erika</p><div class="soc">'+SOC+'</div></div>'+
       '</div></div>';
@@ -107,6 +115,29 @@
     document.addEventListener('keydown',function(e){if(e.key==='Escape'&&m.classList.contains('open')){set(false);B.focus()}});
   }
 
+  /* ---- news bar: next bounce experience (from js/erika-config.js) ---- */
+  function renderBar(){
+    if(!document.querySelector('.sn'))return;
+    var E=(window.ERIKA_EVENTS||[]).filter(function(e){return e.endUTC>Date.now()}),e=E[0];
+    var C=window.ERIKA_COMMUNITY,WA=(window.ERIKA_WHATSAPP||'').replace(/\D/g,'');
+    var bar=document.querySelector('.snb');
+    if(!bar){bar=document.createElement('a');bar.className='snb';document.body.prepend(bar);document.documentElement.style.setProperty('--snb','38px');document.body.style.paddingTop='38px'}
+    var t=function(x){return String(x).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})};
+    if(e){
+      bar.href='booking.html#'+e.id;
+      var more=E.length>1?' <span class="sep">·</span> '+(E.length-1)+' more this month':'';
+      bar.innerHTML='<span class="dot" aria-hidden="true"></span><span class="lg">Next bounce experience <span class="sep">·</span> <b>'+t(e.shortDay)+', '+t(e.startLabel)+'</b> <span class="sep">·</span> '+t(e.place)+(e.audience?' <span class="sep">·</span> '+t(e.audience):'')+more+' <span class="sep">·</span> <span class="cta">Book your spot</span></span>'+
+        '<span class="sm"><b>'+t(e.shortDay)+', '+t(e.startLabel)+'</b> · '+t(e.place)+' · <span class="cta">Book</span></span>';
+      if(window.erikaCounts&&window.erikaSpotsLeft)window.erikaCounts().then(function(j){if(j&&!window.erikaSpotsLeft(e,j)){bar.querySelector('.lg .cta').textContent='Completed, ask about the next one';bar.querySelector('.sm .cta').textContent='Completed'}});
+    }else{
+      bar.href=C||('https://wa.me/'+WA+'?text='+encodeURIComponent('Hi Erika Life! Please add me to your community. I want to follow your next bounce experiences.'));bar.target='_blank';bar.rel='noopener';
+      bar.innerHTML='<span class="dot" aria-hidden="true"></span><span class="lg">New places, new people, new bounce experiences <span class="sep">·</span> <span class="cta">Join our community to follow our bouncing steps</span></span><span class="sm"><span class="cta">Join our community</span></span>';
+    }
+  }
+  window.erikaNewsBar=renderBar;
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',renderBar);else setTimeout(renderBar,0);
+  addEventListener('load',renderBar);
+
   /* ---- footer ---- */
   function renderFooter(){
   var fslot=document.querySelector('[data-site-footer]');
@@ -114,12 +145,12 @@
     var f=document.createElement('footer');f.className='sf';
     f.innerHTML='<div class="sf-g">'+
       '<div><a class="sf-brand" href="'+(HOME?'#top':'index.html')+'"'+go+' aria-label="Erika Life, home"><svg aria-hidden="true"><use href="#bloom"/></svg><span class="ek" aria-hidden="true" style="height:46px"><svg><use href="#wm"/></svg></span></a>'+
-        '<p class="sf-tag">'+WM+' Life | Bounce Experiences | Bouncing classes with boots.<br>From Hungary to Egypt, from Egypt to worldwide.<br>Where joy meets power. Where souls go back to nature.</p></div>'+
+        '<p class="sf-tag">'+WM+' Life | Bounce Experiences | Bounce experience classes with boots. New places, new people, new experiences.<br>From Hungary to Egypt, from Egypt to worldwide.<br>Where joy meets power. Where souls go back to nature.</p></div>'+
       '<nav aria-label="Footer journey"><h3>The journey</h3><ol>'+journey+'</ol></nav>'+
-      '<div><h3>Ready to bounce?</h3><div class="sf-acts"><a class="a1" href="booking.html">Book your class</a><a class="a2" href="boots.html">Get your boots</a></div>'+
+      '<div><h3>Ready to bounce?</h3><div class="sf-acts"><a class="a1" href="booking.html">Book your bounce</a><a class="a2" href="boots.html">Get your boots</a></div>'+
         '<h3 style="margin-top:30px">Follow Erika</h3><div class="soc">'+SOC+'</div></div>'+
       '</div>'+
-      '<div class="sf-c"><span>© 2026 '+WM+' Life</span><span>Rebound boots classes in Egypt</span></div>';
+      '<div class="sf-c"><span>© 2026 '+WM+' Life</span><span>Bounce experiences in Egypt</span></div>';
     fslot.replaceWith(f);
   }
   }
@@ -149,6 +180,6 @@
   if(/^G-[A-Z0-9]{6,}$/.test(GA)){window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config',GA);
     var g=document.createElement('script');g.async=true;g.src='https://www.googletagmanager.com/gtag/js?id='+GA;document.head.appendChild(g)}
   function add(src){var s=document.createElement('script');s.src=src;s.defer=true;document.head.appendChild(s)}
-  if(window.ERIKA_API===undefined)add('js/erika-config.js?v=2');
+  if(window.ERIKA_API===undefined)add('js/erika-config.js?v=4');
   add('js/erika-chat.js?v=7');
 })();

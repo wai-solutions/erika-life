@@ -6,8 +6,8 @@ window.ERIKA_PAY_BOOTS = '000 000 0000';
 /* Erika's WhatsApp number, international format without + or spaces (Egypt: 20 then the number without the first 0, e.g. 201001234567) */
 window.ERIKA_WHATSAPP = '201010078287';
 
-/* ---------- Class payments (change here, the whole site follows) ---------- */
-/* InstaPay payment link for class bookings */
+/* ---------- Payments (change here, the whole site follows) ---------- */
+/* InstaPay payment link for bounce experience bookings */
 window.ERIKA_INSTAPAY_LINK = 'https://ipn.eg/S/inasbakeer/instapay/4CM3ky';
 /* WhatsApp number that receives the InstaPay screenshot (same format as above) */
 window.ERIKA_PAY_WHATSAPP = '201010078287';
@@ -15,19 +15,35 @@ window.ERIKA_PAY_WHATSAPP = '201010078287';
    the "Join our community" buttons then open a WhatsApp chat asking to be added. */
 window.ERIKA_COMMUNITY = '';
 
-/* ---------- Next class (one-day event) ---------- */
-/* Spots = boots pairs per size (also set in Code.gs BOOT_STOCK). key must stay the same after people book. */
-window.ERIKA_EVENT = {
-  key: 'Heliopolis Sporting Club|2026-12-01|19',
-  studio: 'Heliopolis Sporting Club',
-  date: '2026-12-01',
-  time: '19',
-  timeLabel: '7–8 PM',
-  dayLabel: 'Tuesday 1 December 2026',
-  startUTC: Date.UTC(2026, 11, 1, 17, 0, 0), /* 7 PM Cairo (UTC+2) */
-  membersOnly: 'Heliopolis Sporting Club members only',
-  map: 'https://maps.app.goo.gl/rBn8nqgbo6acWSmJ9',
-  price: 500,
-  was: 850,
-  offer: 'December 2026 special, limited time'
-};
+/* ---------- Bounce experiences (one-day classes) ----------
+   Add one line per experience. It appears in the calendar, the news bar and the booking page.
+   id: short unique name, never change it after people book.  time: start hour, 24h ("19" = 7 PM).
+   audience: who can join (leave '' if open to everyone). membersOnly: true asks for a membership number.
+   Spots = boots pairs per size (BOOT_STOCK in admin-setup/Code.gs: S 2, M 8, L 1 = 11). */
+window.ERIKA_EVENTS = [
+  { id: 'hsc-2026-12-01', place: 'Heliopolis Sporting Club', area: 'Heliopolis, Cairo', date: '2026-12-01', time: '19', minutes: 60,
+    audience: 'Heliopolis Club members only', membersOnly: true, map: 'https://maps.app.goo.gl/rBn8nqgbo6acWSmJ9', price: 500, was: 850 }
+];
+window.ERIKA_OFFER = 'December 2026 special, limited time';
+
+/* ---------- derived values (no need to edit) ---------- */
+(function () {
+  var DAYF = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var MONF = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  window.ERIKA_EVENTS.forEach(function (e) {
+    var p = e.date.split('-').map(Number), h = parseInt(e.time, 10), d = new Date(p[0], p[1] - 1, p[2]);
+    e.studio = e.place;
+    e.key = e.place + '|' + e.date + '|' + e.time;
+    e.startUTC = Date.UTC(p[0], p[1] - 1, p[2], h - 2, 0, 0); /* Cairo, UTC+2 */
+    e.endUTC = e.startUTC + (e.minutes || 60) * 60000;
+    e.dayLabel = DAYF[d.getDay()] + ' ' + p[2] + ' ' + MONF[p[1] - 1] + ' ' + p[0];
+    e.shortDay = DAYF[d.getDay()].slice(0, 3) + ' ' + p[2] + ' ' + MONF[p[1] - 1].slice(0, 3);
+    e.startLabel = ((h % 12) || 12) + ':00 ' + (h >= 12 ? 'PM' : 'AM');
+    e.timeLabel = ((h % 12) || 12) + '–' + (((h + 1) % 12) || 12) + (h + 1 >= 12 ? ' PM' : ' AM');
+    e.membersOnly = !!e.membersOnly;
+  });
+  window.ERIKA_EVENTS.sort(function (a, b) { return a.startUTC - b.startUTC; });
+  var now = Date.now();
+  /* next bounce experience = first one that has not ended yet (or the last one) */
+  window.ERIKA_EVENT = window.ERIKA_EVENTS.filter(function (e) { return e.endUTC > now; })[0] || window.ERIKA_EVENTS[window.ERIKA_EVENTS.length - 1] || null;
+})();

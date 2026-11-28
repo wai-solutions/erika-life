@@ -191,10 +191,12 @@ function doPost(e) {
 
 /* ---------- Payment confirmed: mark paid + send the designed confirmation email ---------- */
 const MAP_LINK = 'https://maps.app.goo.gl/rBn8nqgbo6acWSmJ9';
+let MAP_ = MAP_LINK, MEMBERS_ = false;
 function confirm_(b, rows, sh) {
   if (b.key !== ADMIN_KEY) return json_({ ok: false, error: 'key' });
   const r = rows.filter(function (x) { return x.id === b.id; })[0];
   if (!r) return json_({ ok: false, error: 'notfound' });
+  MAP_ = /^https:\/\//.test(b.map || '') ? clean_(b.map, 300) : MAP_LINK; MEMBERS_ = !!b.membersOnly;
   sh.getRange(r._row, HEAD.indexOf('paid') + 1).setValue('yes');
   sh.getRange(r._row, HEAD.indexOf('status') + 1).setValue('confirmed');
   let email = r.email || '';
@@ -205,7 +207,7 @@ function confirm_(b, rows, sh) {
       to: email,
       name: 'Erika Life',
       replyTo: 'erika.bouncefit@gmail.com',
-      subject: 'You are in! Your Erika Life class is confirmed',
+      subject: 'You are in! Your Erika Life bounce experience is confirmed',
       htmlBody: confirmHtml_(r, clean_(b.community, 300)),
       body: confirmText_(r, clean_(b.community, 300))
     });
@@ -221,10 +223,10 @@ function niceDate_(iso) {
 function niceTime_(t) { const h = parseInt(t, 10); return isNaN(h) ? t : ((h % 12) || 12) + ':00 ' + (h >= 12 ? 'PM' : 'AM'); }
 function esc_(v) { return String(v == null ? '' : v).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 function confirmText_(r, community) {
-  return 'Hi ' + r.name + ',\n\nYour payment is received and your spot is confirmed.\n\n' +
+  return 'Hi ' + r.name + ',\n\nYour payment is received and your spot in our bounce experience is confirmed.\n\n' +
     'Place: ' + r.studio + '\nDay: ' + niceDate_(r.date) + '\nTime: ' + niceTime_(r.time) + ' (60 minutes)\nBoots: Size ' + r.boots + '\nBooking ref: ' + r.id + '\n' +
-    'Location: ' + MAP_LINK + '\n\nBring comfortable sportswear, socks and water. Please arrive 15 minutes early to fit your boots.\n' +
-    (community ? '\nJoin our community: ' + community + '\n' : '') +
+    'Location: ' + MAP_ + '\n\nBring comfortable sportswear, socks and water. Please arrive 15 minutes early to fit your boots.\n' +
+    (community ? '\nJoin our community to follow our bouncing steps: ' + community + '\n' : '') +
     '\nNeed to cancel? Reply to this email at least 2 hours before the class for a full refund.\n\nLand soft. Rise strong. Bloom.\nErika Life';
 }
 function confirmHtml_(r, community) {
@@ -238,17 +240,17 @@ function confirmHtml_(r, community) {
       '<img src="https://erikalife.com/img/logo/ERIKA-rounded-icon.png" width="56" height="56" alt="Erika Life" style="display:block;margin:0 auto 14px;border-radius:50%">' +
       '<div style="font-size:13px;color:#FBD0E0;margin-bottom:8px">Erika Life | Bounce Experiences</div>' +
       '<div style="font-family:Georgia,serif;font-size:34px;line-height:1.15">You are <i style="color:#F48FB1">in</i>, ' + esc_(r.name) + '!</div>' +
-      '<div style="font-size:15px;color:rgba(255,255,255,.85);margin-top:10px">Your payment is received and your spot is confirmed.</div>' +
+      '<div style="font-size:15px;color:rgba(255,255,255,.85);margin-top:10px">Your payment is received and your spot in our bounce experience is confirmed.</div>' +
     '</td></tr>' +
     '<tr><td style="padding:28px 32px 8px">' +
       '<table role="presentation" width="100%" cellpadding="0" cellspacing="0">' +
         row('Place', r.studio) + row('Day', niceDate_(r.date)) + row('Time', niceTime_(r.time) + ' · 60 minutes') + row('Your boots', 'Size ' + r.boots) + row('Booking ref', r.id) +
       '</table></td></tr>' +
-    '<tr><td style="padding:18px 32px 6px;text-align:center">' + btn(MAP_LINK, 'Open the location', rose, '#fff') + '</td></tr>' +
+    '<tr><td style="padding:18px 32px 6px;text-align:center">' + btn(MAP_, 'Open the location', rose, '#fff') + '</td></tr>' +
     '<tr><td style="padding:16px 32px"><div style="background:' + blush + ';border-radius:16px;padding:18px 20px;font-size:14px;line-height:1.7">' +
-      '<b style="color:' + rose + '">Before you bounce</b><br>Comfortable sportswear, socks and a bottle of water.<br>Arrive 15 minutes early, we fit your boots together.<br>Bring your club membership card.' +
+      '<b style="color:' + rose + '">Before you bounce</b><br>Comfortable sportswear, socks and a bottle of water.<br>Arrive 15 minutes early, we fit your boots together.' + (MEMBERS_ ? '<br>Bring your club membership card.' : '') +
     '</div></td></tr>' +
-    (community ? '<tr><td style="padding:8px 32px 4px;text-align:center"><div style="font-family:Georgia,serif;font-size:22px;margin-bottom:6px">Join our community</div><div style="font-size:14px;color:' + mute + ';margin-bottom:8px">Guess where and when we bounce next. Follow our steps.</div>' + btn(community, 'Join on WhatsApp', '#fff', plum, plum) + '</td></tr>' : '') +
+    (community ? '<tr><td style="padding:8px 32px 4px;text-align:center"><div style="font-family:Georgia,serif;font-size:22px;margin-bottom:6px">Join our community</div><div style="font-size:14px;color:' + mute + ';margin-bottom:8px">Guess where and when we bounce next. Follow our bouncing steps.</div>' + btn(community, 'Join on WhatsApp', '#fff', plum, plum) + '</td></tr>' : '') +
     '<tr><td style="padding:22px 32px 30px;text-align:center;font-size:13px;color:' + mute + ';line-height:1.6">Need to cancel? Reply to this email at least 2 hours before the class for a full refund.<br><br>' +
       '<span style="font-family:Georgia,serif;font-size:17px;color:' + plum + '">Land soft. Rise strong. Bloom.</span><br><a href="https://erikalife.com" style="color:' + rose + '">erikalife.com</a></td></tr>' +
     '</table></td></tr></table></body></html>';
