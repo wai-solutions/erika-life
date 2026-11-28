@@ -723,7 +723,7 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
   <button class="skip" type="button">Skip intro</button>
 </div>
 
-<div data-site-nav></div><script src="js/site-nav.js?v=11"></script>
+<div data-site-nav></div><script src="js/site-nav.js?v=12"></script>
 
 <div class="stem" aria-hidden="true"><i></i><b><svg><use href="#bloom"/></svg></b></div>
 <div class="cur" aria-hidden="true"></div>
@@ -934,7 +934,7 @@ h2 .ek,h1 .ek{height:1.2em;vertical-align:-.3em}
 
 <div data-site-footer></div>
 
-<script src="js/erika-config.js?v=4"></script>
+<script src="js/erika-config.js?v=5"></script>
 <script src="js/erika-calendar.js?v=1"></script>
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
@@ -1203,7 +1203,7 @@ if(hasG&&!RM){
 })();
 (function(){
   const EV=window.ERIKA_EVENT,API=window.ERIKA_API,WA=(window.ERIKA_WHATSAPP||'').replace(/\D/g,''),C=window.ERIKA_COMMUNITY||'';
-  $$('[data-community]').forEach(a=>{a.href=C||('https://wa.me/'+WA+'?text='+encodeURIComponent('Hi Erika Life! Please add me to your community. I want to follow your next bounce experiences.'));a.target='_blank';a.rel='noopener'});
+  $$('[data-community]').forEach(a=>{a.href=window.erikaCommunityLink();a.target='_blank';a.rel='noopener'});
   if(!EV||!API)return;
   fetch(API+'?action=counts').then(r=>r.json()).then(j=>{if(!j.ok)return;const st=j.stock||{S:2,M:8,L:1},c=(j.counts||{})[EV.key]||{};
     const left=Object.keys(st).reduce((a,k)=>a+Math.max(0,st[k]-(c[k]||0)),0);
