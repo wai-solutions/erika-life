@@ -1117,6 +1117,12 @@ if(hasG&&!RM){
     tl.to(w,{scaleY:1,duration:.25,ease:'elastic.out(1,.4)'},i*1.3+1.1);
   });
   tl.to(ball,{y:()=>P[2].y-60,rotation:360,scale:innerWidth<700?1.15:1.4,duration:.6,ease:'power2.out'},4.1).to({},{duration:.3});
+  /* re-measure the words whenever their size or place changes (fonts loading, news bar, window or preview frame resizing),
+     so the bloom always lands on the word it is lighting */
+  let rt=null,last='';const remeasure=()=>{clearTimeout(rt);rt=setTimeout(()=>{const k=JSON.stringify(pos().map(p=>[Math.round(p.x),Math.round(p.y)]));if(k!==last){last=k;ScrollTrigger.refresh()}},150)};
+  if('ResizeObserver' in window){const ro=new ResizeObserver(remeasure);ro.observe(stage);wds.forEach(w=>ro.observe(w))}
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(remeasure);
+  addEventListener('load',remeasure);
 }
 
 /* ---------- meet: numbers bounce up ---------- */
