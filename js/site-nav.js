@@ -10,7 +10,7 @@
   var IG='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></svg>';
   var TT='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.3 2.2 1.6 3.6 3.9 3.8v3.1c-1.4.1-2.7-.3-3.9-1.1v6.1c0 3.9-3.2 6.1-6.3 5.9-2.9-.2-5.1-2.6-5-5.5.1-3.3 3-5.8 6.4-5.3v3.2c-1.6-.4-3.2.6-3.3 2.1-.1 1.4 1 2.5 2.3 2.5 1.4 0 2.5-1 2.5-2.7V3h3.4z"/></svg>';
   var FB='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.4 21v-7.6h2.6l.4-3h-3V8.5c0-.9.3-1.5 1.5-1.5h1.6V4.3c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.7v3h2.6V21h3.1z"/></svg>';
-  var SOC='<a href="https://www.instagram.com/erikaszenes/" target="_blank" rel="noopener" aria-label="Erika on Instagram">'+IG+'</a><a href="https://www.tiktok.com/@erikaszenes.bouncefit" target="_blank" rel="noopener" aria-label="Erika on TikTok">'+TT+'</a><a href="https://www.facebook.com/ErikaSzenes" target="_blank" rel="noopener" aria-label="Erika on Facebook">'+FB+'</a>';
+  var SOC='<a href="https://www.instagram.com/erikalife.eg/" target="_blank" rel="noopener" aria-label="Erika on Instagram">'+IG+'</a><a href="https://www.tiktok.com/@erikalife.eg" target="_blank" rel="noopener" aria-label="Erika on TikTok">'+TT+'</a><a href="https://www.facebook.com/erikalife.eg" target="_blank" rel="noopener" aria-label="Erika on Facebook">'+FB+'</a>';
   var cur=function(f){return f===file?' aria-current="page"':''};
 
   var css=''+
