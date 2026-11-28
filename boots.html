@@ -61,7 +61,19 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 .eds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .ed{background:var(--card);border:1.5px solid var(--line);border-radius:26px;overflow:hidden;cursor:pointer;text-align:left;padding:0;font:inherit;color:inherit;display:flex;flex-direction:column;transition:border-color .25s,box-shadow .25s,transform .35s cubic-bezier(.3,1.6,.5,1)}
 .ed:hover{transform:translateY(-4px)}
-.ed[aria-pressed="true"]{border-color:var(--rose);box-shadow:0 18px 40px rgba(204,51,112,.18)}
+.ed[aria-pressed="true"]{border:3px solid var(--rose);box-shadow:0 0 0 5px rgba(204,51,112,.14),0 22px 44px rgba(204,51,112,.22);transform:translateY(-4px)}
+.ed[aria-pressed="true"] .txt{background:#FCF0F5;border-top-color:rgba(204,51,112,.25)}
+.ed[aria-pressed="true"] h3{color:var(--rose-d,#A3214F)}
+.ed .chk{position:absolute;right:14px;top:14px;display:none;align-items:center;gap:6px;background:var(--rose);color:#fff;font-size:13px;font-weight:500;border-radius:999px;padding:5px 12px 5px 8px;z-index:1}
+.ed .chk svg{width:16px;height:16px}
+.ed[aria-pressed="true"] .chk{display:inline-flex;animation:chkIn .45s cubic-bezier(.3,1.8,.5,1)}
+@keyframes chkIn{from{transform:scale(.4);opacity:0}}
+.eds.has-sel .ed[aria-pressed="false"]{opacity:.72}
+.eds.has-sel .ed[aria-pressed="false"]:hover{opacity:1}
+.order .pick{display:inline-flex;align-items:center;gap:6px;background:var(--rose);color:#fff;font-size:13px;font-weight:500;border-radius:999px;padding:4px 12px;margin-bottom:10px}
+.order.flash{animation:flash .9s ease-out}
+@keyframes flash{0%{box-shadow:0 0 0 0 rgba(204,51,112,.55),0 30px 60px rgba(42,18,34,.08)}100%{box-shadow:0 0 0 18px rgba(204,51,112,0),0 30px 60px rgba(42,18,34,.08)}}
+@media(prefers-reduced-motion:reduce){.ed[aria-pressed="true"] .chk,.order.flash{animation:none}}
 .ed .pic{background:#fff;aspect-ratio:1;position:relative}
 .ed .pic img{width:100%;height:100%;object-fit:contain;transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
 .ed:hover .pic img{transform:translateY(-8px) rotate(-2deg)}
@@ -73,7 +85,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 .ed .price small{font:500 13px var(--sans);color:var(--mute)}
 .ed .dots{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
 .ed .dots i{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
-.order{position:sticky;top:88px;background:var(--card);border:1px solid var(--line);border-radius:28px;overflow:hidden;box-shadow:0 30px 60px rgba(42,18,34,.08)}
+.order{position:sticky;top:calc(88px + var(--snb,0px));background:var(--card);border:1px solid var(--line);border-radius:28px;overflow:hidden;box-shadow:0 30px 60px rgba(42,18,34,.08)}
 .order .big{background:#fff;aspect-ratio:1.15;display:grid;place-items:center;border-bottom:1px solid var(--line)}
 .order .big img{width:82%;height:82%;object-fit:contain}
 .order .in{padding:20px 22px 24px}
@@ -154,6 +166,7 @@ footer .ek{height:1.7em;vertical-align:-.55em;color:#FBF7F4}
     <aside class="order" id="order" aria-label="Your order">
       <div class="big"><img id="bigImg" src="img/boots/b06.jpg" alt=""></div>
       <div class="in">
+        <span class="pick">Your pick</span>
         <h2 id="oName"></h2>
         <p class="ln" id="oLine"></p>
         <div class="lbl" id="cLbl">Colour</div>
@@ -227,7 +240,7 @@ const st={ed:'basic',c:0,size:null,qty:1};
 const egp=n=>n.toLocaleString('en-US')+' EGP';
 
 $('#eds').innerHTML=ED.map(e=>`<button class="ed" type="button" data-ed="${e.id}" aria-pressed="false">
-  <div class="pic">${e.tag?`<span class="tag">${e.tag}</span>`:''}<img src="img/boots/${e.c[0][1]}.jpg" alt="${esc(e.name)} edition rebound boots, ${esc(e.c[0][0].toLowerCase())}" loading="lazy"></div>
+  <div class="pic">${e.tag?`<span class="tag">${e.tag}</span>`:''}<span class="chk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Selected</span><img src="img/boots/${e.c[0][1]}.jpg" alt="${esc(e.name)} edition rebound boots, ${esc(e.c[0][0].toLowerCase())}" loading="lazy"></div>
   <div class="txt"><h3>${esc(e.name)}</h3><div class="sub">${esc(e.line)} · ${e.c.length} ${e.c.length>1?'colours':'colour'}</div>
   <div class="price">${egp(e.price)} <small>· deposit ${egp(e.price/2)}</small></div>
   <div class="dots" aria-hidden="true">${e.c.map(c=>`<i style="background:${c[2]}"></i>`).join('')}</div></div></button>`).join('');
@@ -235,7 +248,8 @@ $$('.ed').forEach(b=>b.addEventListener('click',()=>{st.ed=b.dataset.ed;st.c=0;r
 
 function render(bump){
   const e=ED.find(x=>x.id===st.ed),c=e.c[st.c];
-  $$('.ed').forEach(b=>b.setAttribute('aria-pressed',b.dataset.ed===st.ed));
+  $$('.ed').forEach(b=>b.setAttribute('aria-pressed',b.dataset.ed===st.ed));$('#eds').classList.add('has-sel');
+  if(bump){const o=$('#order');o.classList.remove('flash');void o.offsetWidth;o.classList.add('flash')}
   $('#oName').textContent=e.name+' edition';$('#oLine').textContent=e.line+' · '+c[0];
   const img=$('#bigImg');img.src=`img/boots/${c[1]}.jpg`;img.alt=`${e.name} edition rebound boots, ${c[0]}`;
   if(bump&&img.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches)img.animate([{transform:'translateY(-30px) scale(.96)'},{transform:'translateY(0) scale(1.03)'},{transform:'scale(1)'}],{duration:520,easing:'cubic-bezier(.3,1.6,.5,1)'});
